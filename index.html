@@ -1,12 +1,63 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post Composer</title>
+    <title>OmniPost // Multi-Channel Publisher</title>
+    <!-- Google Fonts: Orbitron, Space Grotesk, Rajdhani, Inter, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              omni: {
+                green: '#3DDC10',
+                'green-hover': '#34C20C',
+                'green-muted': 'rgba(61, 220, 16, 0.15)',
+                black: '#0A0A0A',
+                surface: '#141414',
+                panel: '#1C1C1C',
+                white: '#FFFFFF',
+                offwhite: '#F8F9FA',
+                border: '#2A2A2A',
+                'border-light': '#E2E8F0',
+                orange: '#FF7A00',
+                gray: '#71717A',
+                darkgray: '#27272A',
+              },
+            },
+            fontFamily: {
+              orbitron: ['Orbitron', 'sans-serif'],
+              space: ['Space Grotesk', 'sans-serif'],
+              rajdhani: ['Rajdhani', 'sans-serif'],
+              inter: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            borderRadius: {
+              DEFAULT: '4px',
+              sm: '3px',
+              md: '4px',
+              lg: '6px',
+              xl: '8px',
+            },
+            boxShadow: {
+              omni: '0 0 15px rgba(61, 220, 16, 0.25)',
+              'omni-lg': '0 0 30px rgba(61, 220, 16, 0.35)',
+              'omni-warning': '0 0 20px rgba(255, 122, 0, 0.3)',
+              'card-white': '0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(61, 220, 16, 0.15)',
+            },
+          },
+        },
+      }
+    </script>
   </head>
-  <body>
+  <body class="bg-[#0A0A0A] text-[#0A0A0A] font-inter antialiased selection:bg-[#3DDC10] selection:text-[#0A0A0A] min-h-screen">
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
