@@ -90,21 +90,6 @@ export const loginThunk = createAsyncThunk<
   return { user: found.user, token };
 });
 
-export const switchRoleThunk = createAsyncThunk<
-  { user: User; token: string },
-  Role,
-  { rejectValue: string }
->("auth/switchRole", async (newRole, { rejectWithValue }) => {
-  const targetUsername = newRole; // 'admin', 'editor', or 'viewer'
-  const found = SEEDED_USERS[targetUsername];
-  if (!found) return rejectWithValue("Invalid role selected");
-
-  const token = generateMockJwtToken(found.user, 3600);
-  setItem("jwt_token", token);
-
-  return { user: found.user, token };
-});
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -143,11 +128,6 @@ const authSlice = createSlice({
       .addCase(loginThunk.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Login failed";
-      })
-      .addCase(switchRoleThunk.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        state.isAuthenticated = true;
       });
   },
 });

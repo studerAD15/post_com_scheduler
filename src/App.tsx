@@ -1,5 +1,6 @@
 /**
  * App.tsx - Root Application component with Tri-Color Balance & 5 Google Fonts.
+ * Features automatic cross-tab Local Storage synchronization and ApiError toast banners.
  */
 
 import React, { useEffect, useState } from "react";
@@ -29,18 +30,22 @@ import {
   fetchDraftsThunk,
   saveDraftThunk,
   deleteDraftThunk,
+  clearDraftsError,
 } from "./features/drafts/draftsSlice";
 import { selectUpcomingScheduledPosts } from "./features/posts/postsSelectors";
+import { STORAGE_PREFIX } from "./utils/storage";
 import { Draft } from "./types/draft";
 import { Post } from "./types/post";
 import { PlatformId } from "./types/platform";
-import { CheckCircle2, Edit3 } from "lucide-react";
+import { CheckCircle2, Edit3, AlertCircle } from "lucide-react";
 
 export function AppContent() {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const user = useAppSelector(selectCurrentUser);
   const feedbackMessage = useAppSelector((state) => state.posts.feedbackMessage);
+  const postsError = useAppSelector((state) => state.posts.error);
+  const draftsError = useAppSelector((state) => state.drafts.error);
   const upcomingScheduled = useAppSelector(selectUpcomingScheduledPosts);
   const drafts = useAppSelector((state) => state.drafts.items);
   const isDraftsLoading = useAppSelector((state) => state.drafts.status === "loading");
@@ -61,13 +66,27 @@ export function AppContent() {
     media: any[];
   } | null>(null);
 
-  // Boot up initial data fetching
+  // Boot up initial data fetching & cross-tab Local Storage sync
   useEffect(() => {
     dispatch(checkTokenExpiration());
     if (isAuthenticated) {
       dispatch(fetchPosts());
       dispatch(fetchDraftsThunk());
     }
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key && e.key.startsWith(STORAGE_PREFIX) && isAuthenticated) {
+        if (e.key.includes("posts")) {
+          dispatch(fetchPosts());
+        }
+        if (e.key.includes("drafts")) {
+          dispatch(fetchDraftsThunk());
+        }
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, [dispatch, isAuthenticated]);
 
   // Clear feedback notification banner
@@ -193,6 +212,24 @@ export function AppContent() {
           <button
             onClick={() => dispatch(clearFeedback())}
             className="text-[#0A0A0A] hover:text-[#3DDC10] text-base font-bold px-1"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Error Notification Banner */}
+      {(postsError || draftsError) && (
+        <div className="bg-[#FFFFFF] border-2 border-[#0A0A0A] border-l-8 border-l-[#FF4D4D] p-4 rounded-sm text-[#0A0A0A] text-xs font-space font-extrabold uppercase tracking-wider flex items-center justify-between shadow-card-white animate-slide-up">
+          <span className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-[#FF4D4D]" /> {postsError || draftsError}
+          </span>
+          <button
+            onClick={() => {
+              dispatch(clearFeedback());
+              dispatch(clearDraftsError());
+            }}
+            className="text-[#0A0A0A] hover:text-[#FF4D4D] text-base font-bold px-1"
           >
             ×
           </button>

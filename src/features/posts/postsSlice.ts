@@ -2,7 +2,7 @@
  * postsSlice.ts - Normalized Post state management with createEntityAdapter.
  *
  * Uses `createEntityAdapter<Post>()` to maintain an efficient { ids, entities } structure.
- * All async operations use typed `createAsyncThunk`.
+ * Async operations are wired to `mockPostsApi` which persists changes in LocalStorage.
  */
 
 import {
@@ -10,7 +10,9 @@ import {
   createEntityAdapter,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import { Post, PostStatus, AddPostPayload, UpdatePostPayload } from "../../types/post";
+import { Post, AddPostPayload, UpdatePostPayload } from "../../types/post";
+import { mockPostsApi } from "../../api/mockPostsApi";
+import { ApiError } from "../../api/apiClient";
 import type { RootState } from "../../app/store";
 
 export const postsAdapter = createEntityAdapter<Post>({
@@ -30,55 +32,21 @@ const initialState = postsAdapter.getInitialState<PostsState>({
   feedbackMessage: null,
 });
 
-// Seed data
-const SEED_POSTS: Post[] = [
-  {
-    id: "post-1",
-    title: "AI Product Announcement",
-    content: "We're launching our new AI-powered workflow automation tools! Automate multi-channel scheduling in seconds. #AI #Automation #Productivity",
-    platforms: ["twitter", "linkedin"],
-    media: [],
-    status: "published",
-    scheduledAt: null,
-    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    updatedAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    authorName: "ADITYA CHHIKARA (Admin)",
-  },
-  {
-    id: "post-2",
-    title: "Design System Showcase",
-    content: "Exploring glassmorphism micro-animations and dark-mode color palettes for web apps. Thoughts on this design? 🎨 #DesignSystem #WebDev",
-    platforms: ["instagram", "facebook"],
-    media: [],
-    status: "scheduled",
-    scheduledAt: new Date(Date.now() + 86400000 * 2).toISOString(),
-    createdAt: new Date(Date.now() - 86400000 * 1).toISOString(),
-    updatedAt: new Date(Date.now() - 86400000 * 1).toISOString(),
-    authorName: "ADITYA CHHIKARA (Editor)",
-  },
-  {
-    id: "post-3",
-    title: "Weekly Tech Newsletter Snippet",
-    content: "TypeScript 5.7 brings improved type inference and performance wins. Here's our summary of top changes for modern frontend engineers.",
-    platforms: ["linkedin", "twitter"],
-    media: [],
-    status: "scheduled",
-    scheduledAt: new Date(Date.now() + 86400000 * 5).toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    authorName: "ADITYA CHHIKARA (Editor)",
-  },
-];
+// Helper for error message extraction
+function getErrorMessage(error: unknown, fallback: string): string {
+  if (error instanceof ApiError) return error.message;
+  if (error instanceof Error) return error.message;
+  return fallback;
+}
 
 // Async Thunks
 export const fetchPosts = createAsyncThunk<Post[], void, { rejectValue: string }>(
   "posts/fetchPosts",
   async (_, { rejectWithValue }) => {
     try {
-      await new Promise((res) => setTimeout(res, 300));
-      return SEED_POSTS;
-    } catch {
-      return rejectWithValue("Failed to fetch posts");
+      return await mockPostsApi.fetchPosts();
+    } catch (err) {
+      return rejectWithValue(getErrorMessage(err, "Failed to fetch posts"));
     }
   }
 );
@@ -87,23 +55,9 @@ export const addPostThunk = createAsyncThunk<Post, AddPostPayload, { rejectValue
   "posts/addPost",
   async (payload, { rejectWithValue }) => {
     try {
-      await new Promise((res) => setTimeout(res, 400));
-      const now = new Date().toISOString();
-      const newPost: Post = {
-        id: `post-${Date.now()}`,
-        title: payload.title || "Untitled Post",
-        content: payload.content,
-        platforms: payload.platforms,
-        media: payload.media || [],
-        status: payload.status || "draft",
-        scheduledAt: payload.scheduledAt || null,
-        createdAt: now,
-        updatedAt: now,
-        authorName: "ADITYA CHHIKARA",
-      };
-      return newPost;
-    } catch {
-      return rejectWithValue("Could not add post");
+      return await mockPostsApi.createPost(payload);
+    } catch (err) {
+      return rejectWithValue(getErrorMessage(err, "Could not add post"));
     }
   }
 );
@@ -112,23 +66,9 @@ export const updatePostThunk = createAsyncThunk<Post, UpdatePostPayload, { rejec
   "posts/updatePost",
   async (payload, { rejectWithValue }) => {
     try {
-      await new Promise((res) => setTimeout(res, 400));
-      const now = new Date().toISOString();
-      const updatedPost: Post = {
-        id: payload.id,
-        title: payload.title,
-        content: payload.content,
-        platforms: payload.platforms,
-        media: payload.media || [],
-        status: payload.status || "draft",
-        scheduledAt: payload.scheduledAt || null,
-        createdAt: now,
-        updatedAt: now,
-        authorName: "ADITYA CHHIKARA",
-      };
-      return updatedPost;
-    } catch {
-      return rejectWithValue("Could not update post");
+      return await mockPostsApi.updatePost(payload);
+    } catch (err) {
+      return rejectWithValue(getErrorMessage(err, "Could not update post"));
     }
   }
 );
@@ -136,56 +76,44 @@ export const updatePostThunk = createAsyncThunk<Post, UpdatePostPayload, { rejec
 export const schedulePostThunk = createAsyncThunk<
   Post,
   { id: string; scheduledAt: string },
-  { rejectValue: string; state: RootState }
->("posts/schedulePost", async ({ id, scheduledAt }, { getState, rejectWithValue }) => {
+  { rejectValue: string }
+>("posts/schedulePost", async ({ id, scheduledAt }, { rejectWithValue }) => {
   try {
-    await new Promise((res) => setTimeout(res, 300));
-    const state = getState();
-    const existing = state.posts.entities[id];
-    if (!existing) return rejectWithValue("Post not found");
-
-    return {
-      ...existing,
-      status: "scheduled" as PostStatus,
-      scheduledAt,
-      updatedAt: new Date().toISOString(),
-      authorName: "ADITYA CHHIKARA",
-    };
-  } catch {
-    return rejectWithValue("Failed to schedule post");
+    return await mockPostsApi.schedulePost(id, scheduledAt);
+  } catch (err) {
+    return rejectWithValue(getErrorMessage(err, "Failed to schedule post"));
   }
 });
 
-export const publishPostThunk = createAsyncThunk<
-  Post,
-  string,
-  { rejectValue: string; state: RootState }
->("posts/publishPost", async (id, { getState, rejectWithValue }) => {
-  try {
-    await new Promise((res) => setTimeout(res, 400));
-    const state = getState();
-    const existing = state.posts.entities[id];
-    if (!existing) return rejectWithValue("Post not found");
-
-    return {
-      ...existing,
-      status: "published" as PostStatus,
-      updatedAt: new Date().toISOString(),
-      authorName: "ADITYA CHHIKARA",
-    };
-  } catch {
-    return rejectWithValue("Failed to publish post");
+export const publishPostThunk = createAsyncThunk<Post, string, { rejectValue: string }>(
+  "posts/publishPost",
+  async (id, { rejectWithValue }) => {
+    try {
+      return await mockPostsApi.publishPost(id);
+    } catch (err) {
+      return rejectWithValue(getErrorMessage(err, "Failed to publish post"));
+    }
   }
-});
+);
 
 export const deletePostThunk = createAsyncThunk<string, string, { rejectValue: string }>(
   "posts/deletePost",
   async (id, { rejectWithValue }) => {
     try {
-      await new Promise((res) => setTimeout(res, 300));
-      return id;
-    } catch {
-      return rejectWithValue("Failed to delete post");
+      return await mockPostsApi.deletePost(id);
+    } catch (err) {
+      return rejectWithValue(getErrorMessage(err, "Failed to delete post"));
+    }
+  }
+);
+
+export const resetPostsThunk = createAsyncThunk<Post[], void, { rejectValue: string }>(
+  "posts/resetPosts",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await mockPostsApi.resetToDefaults();
+    } catch (err) {
+      return rejectWithValue(getErrorMessage(err, "Failed to reset posts"));
     }
   }
 );
@@ -216,12 +144,18 @@ const postsSlice = createSlice({
       // Add Post
       .addCase(addPostThunk.fulfilled, (state, action) => {
         postsAdapter.addOne(state, action.payload);
-        state.feedbackMessage = `Post "${action.payload.title}" created!`;
+        state.feedbackMessage = `Post "${action.payload.title}" created & saved to Local Storage!`;
+      })
+      .addCase(addPostThunk.rejected, (state, action) => {
+        state.error = action.payload || "Could not add post";
       })
       // Update Post
       .addCase(updatePostThunk.fulfilled, (state, action) => {
         postsAdapter.upsertOne(state, action.payload);
-        state.feedbackMessage = `Post updated successfully!`;
+        state.feedbackMessage = `Post updated successfully in Local Storage!`;
+      })
+      .addCase(updatePostThunk.rejected, (state, action) => {
+        state.error = action.payload || "Could not update post";
       })
       // Schedule Post
       .addCase(schedulePostThunk.fulfilled, (state, action) => {
@@ -230,15 +164,29 @@ const postsSlice = createSlice({
           action.payload.scheduledAt!
         ).toLocaleString()}`;
       })
+      .addCase(schedulePostThunk.rejected, (state, action) => {
+        state.error = action.payload || "Failed to schedule post";
+      })
       // Publish Post
       .addCase(publishPostThunk.fulfilled, (state, action) => {
         postsAdapter.upsertOne(state, action.payload);
         state.feedbackMessage = `Post published live!`;
       })
+      .addCase(publishPostThunk.rejected, (state, action) => {
+        state.error = action.payload || "Failed to publish post";
+      })
       // Delete Post
       .addCase(deletePostThunk.fulfilled, (state, action) => {
         postsAdapter.removeOne(state, action.payload);
-        state.feedbackMessage = `Post removed.`;
+        state.feedbackMessage = `Post removed from Local Storage.`;
+      })
+      .addCase(deletePostThunk.rejected, (state, action) => {
+        state.error = action.payload || "Failed to delete post";
+      })
+      // Reset Posts
+      .addCase(resetPostsThunk.fulfilled, (state, action) => {
+        postsAdapter.setAll(state, action.payload);
+        state.feedbackMessage = `Post data reset to default seed items.`;
       });
   },
 });

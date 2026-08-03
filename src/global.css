@@ -67,3 +67,28 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #3DDC10;
 }
+
+/* Container Query for Analytics Grid Layouts */
+.analytics-card-container {
+  container-type: inline-size;
+  container-name: analytics;
+}
+
+@container analytics (max-width: 560px) {
+  .analytics-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .analytics-platform-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@container analytics (max-width: 320px) {
+  .analytics-metrics-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+  .analytics-platform-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
