@@ -11,6 +11,7 @@ import { usePermission } from "../../features/auth/usePermission";
 import { resetPostsThunk, selectAllPosts } from "../../features/posts/postsSlice";
 import { resetDraftsThunk, selectAllDrafts } from "../../features/drafts/draftsSlice";
 import { getStorageStats } from "../../utils/storage";
+import { isOmnitrixMuted, setOmnitrixMuted } from "../omnitrix/soundEngine";
 import {
   PenTool,
   Layers,
@@ -20,6 +21,8 @@ import {
   Radio,
   HardDrive,
   RotateCcw,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 export interface MainLayoutProps {
@@ -44,6 +47,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
 
   const [stats, setStats] = useState({ postsCount: 0, draftsCount: 0, bytesUsed: 0 });
   const [isResetting, setIsResetting] = useState(false);
+  const [muted, setMuted] = useState<boolean>(() => isOmnitrixMuted());
 
   useEffect(() => {
     setStats(getStorageStats());
@@ -101,6 +105,29 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                 <RotateCcw className={`w-3.5 h-3.5 ${isResetting ? "animate-spin text-[#3DDC10]" : ""}`} />
               </button>
             </div>
+
+            {/* Omnitrix Sound Mute Toggle */}
+            <button
+              onClick={() => {
+                const nextMuted = !muted;
+                setMuted(nextMuted);
+                setOmnitrixMuted(nextMuted);
+              }}
+              title={muted ? "Unmute Omnitrix SFX" : "Mute Omnitrix SFX"}
+              className="hidden sm:flex items-center gap-1.5 bg-[#0A0A0A] hover:bg-[#141414] text-[#FFFFFF] px-2.5 py-1.5 rounded-sm border border-[#2A2A2A] hover:border-[#3DDC10] text-[11px] font-mono transition-colors"
+            >
+              {muted ? (
+                <>
+                  <VolumeX className="w-3.5 h-3.5 text-[#FF7A00]" />
+                  <span className="text-[#FF7A00]">SFX: MUTED</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-3.5 h-3.5 text-[#3DDC10]" />
+                  <span className="text-[#3DDC10]">SFX: ACTIVE</span>
+                </>
+              )}
+            </button>
           </div>
 
           {/* Navigation Tabs (Rajdhani Font) */}

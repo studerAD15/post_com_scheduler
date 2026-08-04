@@ -38,6 +38,8 @@ import { Draft } from "./types/draft";
 import { Post } from "./types/post";
 import { PlatformId } from "./types/platform";
 import { CheckCircle2, Edit3, AlertCircle } from "lucide-react";
+import { OmnitrixOverlay } from "./components/omnitrix/OmnitrixOverlay";
+import { OmnitrixCursor } from "./components/omnitrix/OmnitrixCursor";
 
 export function AppContent() {
   const dispatch = useAppDispatch();
@@ -66,9 +68,13 @@ export function AppContent() {
     media: any[];
   } | null>(null);
 
-  // Boot up initial data fetching & cross-tab Local Storage sync
+  // Check token expiration once on initial app boot
   useEffect(() => {
     dispatch(checkTokenExpiration());
+  }, [dispatch]);
+
+  // Fetch initial posts and drafts when authenticated & handle cross-tab storage sync
+  useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchPosts());
       dispatch(fetchDraftsThunk());
@@ -311,6 +317,8 @@ export function AppContent() {
 export function App() {
   return (
     <BrowserRouter>
+      <OmnitrixOverlay />
+      <OmnitrixCursor />
       <Routes>
         <Route path="/unauthorized" element={<UnauthorizedView />} />
         <Route path="/*" element={<AppContent />} />

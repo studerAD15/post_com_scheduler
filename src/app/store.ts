@@ -7,6 +7,7 @@ import postsReducer from "../features/posts/postsSlice";
 import draftsReducer from "../features/drafts/draftsSlice";
 import platformReducer from "../features/platforms/platformSlice";
 import authReducer from "../features/auth/authSlice";
+import { omnitrixMiddleware } from "../components/omnitrix/omnitrixMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat(omnitrixMiddleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

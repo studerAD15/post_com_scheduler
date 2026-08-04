@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="omniMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2A2A2A"/>
+      <stop offset="50%" stop-color="#141414"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <radialGradient id="omniCoreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3DDC10" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#34C20C" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="omniGreenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#55FF22"/>
+      <stop offset="100%" stop-color="#28B007"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="90" fill="url(#omniCoreGlow)" opacity="0.3"/>
+  <circle cx="100" cy="100" r="86" fill="url(#omniMetal)" stroke="#3DDC10" stroke-width="4"/>
+  <circle cx="100" cy="100" r="76" fill="#0A0A0A" stroke="#2A2A2A" stroke-width="3"/>
+  <rect x="95" y="18" width="10" height="12" rx="2" fill="#3DDC10"/>
+  <rect x="95" y="170" width="10" height="12" rx="2" fill="#3DDC10"/>
+  <rect x="18" y="95" width="12" height="10" rx="2" fill="#3DDC10"/>
+  <rect x="170" y="95" width="12" height="10" rx="2" fill="#3DDC10"/>
+  <circle cx="45" cy="45" r="4" fill="#3DDC10" opacity="0.8"/>
+  <circle cx="155" cy="45" r="4" fill="#3DDC10" opacity="0.8"/>
+  <circle cx="45" cy="155" r="4" fill="#3DDC10" opacity="0.8"/>
+  <circle cx="155" cy="155" r="4" fill="#3DDC10" opacity="0.8"/>
+  <circle cx="100" cy="100" r="62" fill="#141414" stroke="#3DDC10" stroke-width="2.5" stroke-dasharray="8 4"/>
+  <g transform="translate(100, 100)">
+    <path d="M-42,-48 L42,-48 L14,-6 L-14,-6 Z" fill="url(#omniGreenGradient)" stroke="#0A0A0A" stroke-width="2"/>
+    <path d="M-42,48 L42,48 L14,6 L-14,6 Z" fill="url(#omniGreenGradient)" stroke="#0A0A0A" stroke-width="2"/>
+    <circle cx="0" cy="0" r="10" fill="#0A0A0A" stroke="#3DDC10" stroke-width="3"/>
+    <circle cx="0" cy="0" r="4" fill="#3DDC10"/>
+  </g>
+  <path d="M 30,100 A 70,70 0 0,1 100,30" fill="none" stroke="#3DDC10" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.5"/>
+  <path d="M 100,170 A 70,70 0 0,1 170,100" fill="none" stroke="#3DDC10" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.5"/>
+</svg>

@@ -48,6 +48,14 @@ export const fetchPosts = createAsyncThunk<Post[], void, { rejectValue: string }
     } catch (err) {
       return rejectWithValue(getErrorMessage(err, "Failed to fetch posts"));
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState() as RootState;
+      if (state.posts.status === "loading") {
+        return false;
+      }
+    },
   }
 );
 

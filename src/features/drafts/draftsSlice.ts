@@ -36,6 +36,14 @@ export const fetchDraftsThunk = createAsyncThunk<Draft[], void, { rejectValue: s
     } catch (err) {
       return rejectWithValue(getErrorMessage(err, "Failed to fetch drafts"));
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState() as RootState;
+      if (state.drafts.status === "loading") {
+        return false;
+      }
+    },
   }
 );
 

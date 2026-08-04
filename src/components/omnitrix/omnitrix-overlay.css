@@ -1,0 +1,91 @@
+/* Custom CSS Animations for Omnitrix Action Transition Overlay */
+
+@keyframes omni-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes omni-counter-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes omni-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(61, 220, 16, 0.4), inset 0 0 15px rgba(61, 220, 16, 0.3);
+    filter: drop-shadow(0 0 10px rgba(61, 220, 16, 0.6));
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(61, 220, 16, 0.8), inset 0 0 30px rgba(61, 220, 16, 0.6);
+    filter: drop-shadow(0 0 25px rgba(61, 220, 16, 0.9));
+  }
+}
+
+@keyframes omni-pulse-orange {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 122, 0, 0.4), inset 0 0 15px rgba(255, 122, 0, 0.3);
+    filter: drop-shadow(0 0 10px rgba(255, 122, 0, 0.6));
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(255, 122, 0, 0.8), inset 0 0 30px rgba(255, 122, 0, 0.6);
+    filter: drop-shadow(0 0 25px rgba(255, 122, 0, 0.9));
+  }
+}
+
+@keyframes omni-radial-expand {
+  0% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(2.5);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+
+@keyframes omni-summon-scale {
+  0% {
+    transform: scale(0.3) rotate(-90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-omni-spin {
+  animation: omni-spin 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-omni-counter-spin {
+  animation: omni-counter-spin 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-omni-pulse {
+  animation: omni-pulse-glow 1.8s ease-in-out infinite;
+}
+
+.animate-omni-pulse-orange {
+  animation: omni-pulse-orange 1.8s ease-in-out infinite;
+}
+
+.animate-omni-radial-expand {
+  animation: omni-radial-expand 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.animate-omni-summon {
+  animation: omni-summon-scale 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
