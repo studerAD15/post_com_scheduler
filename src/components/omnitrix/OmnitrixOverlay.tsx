@@ -1,16 +1,17 @@
 /**
  * OmnitrixOverlay.tsx - Fullscreen Omnitrix Action Transition Overlay Component.
  * Features GPU-accelerated dial spin, radial green/orange flash, sound toggle, and screen-reader accessibility.
+ * Memoized with React.memo and useCallback handlers.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
 import { Check, AlertTriangle, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { useOmnitrixTransition } from "./useOmnitrixTransition";
 import { isOmnitrixMuted, setOmnitrixMuted, preloadOmnitrixSounds } from "./soundEngine";
 import "./omnitrix-overlay.css";
 
-export const OmnitrixOverlay: React.FC = () => {
+export const OmnitrixOverlay: React.FC = React.memo(() => {
   const { activeConfig, phase, skipTransition, isAnimating } = useOmnitrixTransition();
   const [muted, setMuted] = useState<boolean>(false);
 
@@ -20,12 +21,14 @@ export const OmnitrixOverlay: React.FC = () => {
     setMuted(isOmnitrixMuted());
   }, []);
 
-  const handleToggleMute = (e: React.MouseEvent) => {
+  const handleToggleMute = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    const nextMuted = !muted;
-    setMuted(nextMuted);
-    setOmnitrixMuted(nextMuted);
-  };
+    setMuted((prevMuted) => {
+      const nextMuted = !prevMuted;
+      setOmnitrixMuted(nextMuted);
+      return nextMuted;
+    });
+  }, []);
 
   if (!isAnimating || !activeConfig) {
     return (
@@ -56,7 +59,7 @@ export const OmnitrixOverlay: React.FC = () => {
     >
       {/* Background Dim & Radial Flash */}
       <div className="absolute inset-0 bg-[#0A0A0A]/70 backdrop-blur-[2px]" />
-      
+
       {phase === "reveal" && (
         <div className={`absolute inset-0 ${flashBg} animate-omni-radial-expand pointer-events-none`} />
       )}
@@ -163,4 +166,7 @@ export const OmnitrixOverlay: React.FC = () => {
     </div>,
     document.body
   );
-};
+});
+OmnitrixOverlay.displayName = "OmnitrixOverlay";
+
+export default OmnitrixOverlay;

@@ -1,13 +1,15 @@
 /**
  * LoginForm.tsx - Tri-Color Login Panel with 5 Google Fonts.
+ * Memoized with React.memo and useCallback handlers.
  */
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, useCallback, FormEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { loginThunk, selectAuthError, selectAuthStatus } from "./authSlice";
+import { loginThunk, clearAuthError, selectAuthError, selectAuthStatus } from "./authSlice";
 import { Lock, User as UserIcon, Loader2, ArrowRight, Radio, Shield, Sparkles, Eye } from "lucide-react";
+import { LoginBackground } from "./LoginBackground";
 
-export const LoginForm: React.FC = () => {
+export const LoginForm: React.FC = React.memo(() => {
   const dispatch = useAppDispatch();
   const authError = useAppSelector(selectAuthError);
   const authStatus = useAppSelector(selectAuthStatus);
@@ -15,23 +17,47 @@ export const LoginForm: React.FC = () => {
   const [username, setUsername] = useState<string>("admin");
   const [password, setPassword] = useState<string>("password123");
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!username.trim() || !password.trim()) return;
-    dispatch(loginThunk({ username, passwordHash: password }));
-  };
+  const handleUsernameChange = useCallback(
+    (val: string) => {
+      setUsername(val);
+      if (authError) dispatch(clearAuthError());
+    },
+    [authError, dispatch]
+  );
 
-  const handleQuickFill = (role: "admin" | "editor" | "viewer") => {
-    setUsername(role);
-    setPassword("password123");
-  };
+  const handlePasswordChange = useCallback(
+    (val: string) => {
+      setPassword(val);
+      if (authError) dispatch(clearAuthError());
+    },
+    [authError, dispatch]
+  );
+
+  const handleSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      if (!username.trim() || !password.trim()) return;
+      dispatch(loginThunk({ username, passwordHash: password }));
+    },
+    [dispatch, username, password]
+  );
+
+  const handleQuickFill = useCallback(
+    (role: "admin" | "editor" | "viewer") => {
+      setUsername(role);
+      setPassword("password123");
+      if (authError) dispatch(clearAuthError());
+    },
+    [authError, dispatch]
+  );
 
   const isLoading = authStatus === "loading";
+  const isSubmitDisabled = isLoading || !username.trim() || !password.trim();
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center p-4 bg-[#0A0A0A]">
-      <div className="bg-[#FFFFFF] text-[#0A0A0A] border-4 border-[#0A0A0A] rounded-sm p-6 sm:p-8 max-w-md w-full shadow-card-white space-y-6">
-        
+    <div className="relative overflow-hidden min-h-screen flex items-center justify-center p-4 bg-[#0A0A0A]">
+      <LoginBackground />
+      <div className="relative z-10 bg-[#FFFFFF] text-[#0A0A0A] border-4 border-[#0A0A0A] rounded-sm p-6 sm:p-8 max-w-md w-full shadow-card-white space-y-6">
         {/* Header Tile with Omnitrix Logo (Orbitron + Inter) */}
         <div className="text-center space-y-3">
           <div className="w-12 h-12 mx-auto bg-[#0A0A0A] border-2 border-[#3DDC10] rounded-sm flex items-center justify-center shadow-omni transform rotate-45">
@@ -96,7 +122,7 @@ export const LoginForm: React.FC = () => {
                 type="text"
                 required
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => handleUsernameChange(e.target.value)}
                 placeholder="admin, editor, or viewer"
                 className="w-full pl-10 pr-4 py-2.5 rounded-sm bg-[#F8F9FA] border-2 border-[#0A0A0A] text-sm text-[#0A0A0A] placeholder-[#71717A] font-inter focus:outline-none focus:border-[#3DDC10] transition-all"
               />
@@ -113,7 +139,7 @@ export const LoginForm: React.FC = () => {
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => handlePasswordChange(e.target.value)}
                 placeholder="••••••••"
                 className="w-full pl-10 pr-4 py-2.5 rounded-sm bg-[#F8F9FA] border-2 border-[#0A0A0A] text-sm text-[#0A0A0A] placeholder-[#71717A] font-inter focus:outline-none focus:border-[#3DDC10] transition-all"
               />
@@ -122,7 +148,7 @@ export const LoginForm: React.FC = () => {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isSubmitDisabled}
             className="w-full py-3 px-4 rounded-sm bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] font-rajdhani font-extrabold text-sm uppercase tracking-widest border-2 border-[#0A0A0A] transition-all shadow-omni hover:scale-[1.01] flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {isLoading ? (
@@ -143,4 +169,7 @@ export const LoginForm: React.FC = () => {
       </div>
     </div>
   );
-};
+});
+LoginForm.displayName = "LoginForm";
+
+export default LoginForm;

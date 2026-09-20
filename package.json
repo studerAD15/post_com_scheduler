@@ -8,9 +8,12 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "backend": "mvnw.cmd spring-boot:run",
+    "backend:jar": "java -jar backend/target/backend-0.0.1-SNAPSHOT.jar",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "start": "vite preview --host 0.0.0.0"
+    "start": "vite preview --host 0.0.0.0",
+    "test:api": "node scripts/verify_e2e.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",

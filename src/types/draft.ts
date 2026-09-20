@@ -5,6 +5,17 @@
 import { PlatformId } from "./platform";
 import { MediaAttachment, PostStatus } from "./post";
 
+export interface DraftAuditLogEntry {
+  id: string;
+  userId: string;
+  username: string;
+  name: string;
+  role: string;
+  action: "created" | "updated" | "scheduled" | "status_change";
+  timestamp: string;
+  changesSummary: string;
+}
+
 export interface Draft {
   id: string;
   title: string;
@@ -15,6 +26,10 @@ export interface Draft {
   scheduledAt: string | null;
   createdAt: string;
   updatedAt: string;
+  authorId?: string;
+  authorName?: string;
+  authorRole?: string;
+  auditTrail?: DraftAuditLogEntry[];
 }
 
 export type DraftAction =

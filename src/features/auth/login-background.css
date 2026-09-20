@@ -1,0 +1,87 @@
+/* login-background.css - Sci-Fi Ben 10 Animated Background System */
+
+@keyframes login-grid-scroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+@keyframes login-scanline-sweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.18;
+  }
+  85% {
+    opacity: 0.18;
+  }
+  100% {
+    transform: translateY(105vh);
+    opacity: 0;
+  }
+}
+
+@keyframes login-omni-spin-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes login-omni-spin-ccw {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes login-pulse-glow {
+  0%, 100% {
+    opacity: 0.10;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.20;
+    transform: scale(1.05);
+  }
+}
+
+.animate-login-grid {
+  animation: login-grid-scroll 14s linear infinite;
+}
+
+.animate-login-scanline {
+  animation: login-scanline-sweep 7s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-login-spin-slow {
+  animation: login-omni-spin-cw 45s linear infinite;
+}
+
+.animate-login-spin-reverse {
+  animation: login-omni-spin-ccw 60s linear infinite;
+}
+
+.animate-login-pulse {
+  animation: login-pulse-glow 5s ease-in-out infinite;
+}
+
+/* Reduced motion fallback: disable all animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-login-grid,
+  .animate-login-scanline,
+  .animate-login-spin-slow,
+  .animate-login-spin-reverse,
+  .animate-login-pulse {
+    animation: none !important;
+  }
+}

@@ -5,7 +5,7 @@
 
 import { Post, AddPostPayload, UpdatePostPayload } from "../types/post";
 import { getStoredPosts, saveStoredPosts } from "../utils/storage";
-import { ApiError } from "./apiClient";
+import { apiClient, ApiError, ApiResponse } from "./apiClient";
 
 const DEFAULT_DELAY_MS = 400;
 
@@ -57,160 +57,159 @@ function delay(ms: number = DEFAULT_DELAY_MS): Promise<void> {
 
 export const mockPostsApi = {
   /**
-   * Fetches posts from Local Storage (seeds defaults if empty).
+   * Fetches posts from Spring Boot backend (with localStorage fallback).
    */
   async fetchPosts(): Promise<Post[]> {
-    await delay(300);
-    let posts = getStoredPosts();
-    if (posts.length === 0) {
-      posts = INITIAL_SEED_POSTS;
-      saveStoredPosts(posts);
+    try {
+      const res = await apiClient.get<ApiResponse<Post[]>>("/posts");
+      if (res?.data) {
+        saveStoredPosts(res.data);
+        return res.data;
+      }
+      const stored = getStoredPosts();
+      return stored.length > 0 ? stored : INITIAL_SEED_POSTS;
+    } catch {
+      const stored = getStoredPosts();
+      return stored.length > 0 ? stored : INITIAL_SEED_POSTS;
     }
-    return posts;
   },
 
   /**
-   * Creates a new post and persists to Local Storage.
+   * Creates a new post and persists to backend database (or localStorage if offline).
    */
   async createPost(payload: AddPostPayload): Promise<Post> {
-    await delay(400);
-
-    if (!payload.content || payload.content.trim().length === 0) {
-      throw new ApiError(400, "Bad Request", "Post content cannot be empty.");
+    try {
+      const res = await apiClient.post<ApiResponse<Post>>("/posts", payload);
+      return res.data;
+    } catch (err) {
+      const isNetwork =
+        (err instanceof ApiError && (err.status === 0 || err.statusText === "NetworkError")) ||
+        (err instanceof Error && err.message.includes("Failed to fetch"));
+      if (isNetwork) {
+        const posts = getStoredPosts();
+        const now = new Date().toISOString();
+        const newPost: Post = {
+          ...payload,
+          media: payload.media || [],
+          status: payload.status || "draft",
+          scheduledAt: payload.scheduledAt || null,
+          id: `post-${Date.now()}`,
+          createdAt: now,
+          updatedAt: now,
+        };
+        saveStoredPosts([newPost, ...posts]);
+        return newPost;
+      }
+      throw err;
     }
-    if (!payload.platforms || payload.platforms.length === 0) {
-      throw new ApiError(400, "Bad Request", "At least one target platform must be selected.");
-    }
-
-    const now = new Date().toISOString();
-    const newPost: Post = {
-      id: `post-${Date.now()}`,
-      title: payload.title || "Untitled Post",
-      content: payload.content,
-      platforms: payload.platforms,
-      media: payload.media || [],
-      status: payload.status || "draft",
-      scheduledAt: payload.scheduledAt || null,
-      createdAt: now,
-      updatedAt: now,
-      authorName: "ADITYA CHHIKARA",
-    };
-
-    const current = await this.fetchPosts();
-    const updated = [newPost, ...current];
-    const success = saveStoredPosts(updated);
-
-    if (!success) {
-      throw new ApiError(507, "Insufficient Storage", "Failed to save post to Local Storage.");
-    }
-
-    return newPost;
   },
 
   /**
-   * Updates an existing post in Local Storage.
+   * Updates an existing post in backend database (or localStorage if offline).
    */
   async updatePost(payload: UpdatePostPayload): Promise<Post> {
-    await delay(400);
-
-    const current = await this.fetchPosts();
-    const index = current.findIndex((p) => p.id === payload.id);
-
-    if (index === -1) {
-      throw new ApiError(404, "Not Found", `Post with ID "${payload.id}" was not found.`);
+    try {
+      const res = await apiClient.put<ApiResponse<Post>>(`/posts/${payload.id}`, payload);
+      return res.data;
+    } catch (err) {
+      const isNetwork =
+        (err instanceof ApiError && (err.status === 0 || err.statusText === "NetworkError")) ||
+        (err instanceof Error && err.message.includes("Failed to fetch"));
+      if (isNetwork) {
+        const posts = getStoredPosts();
+        const existing = posts.find((p) => p.id === payload.id);
+        if (!existing) throw err;
+        const updatedPost: Post = {
+          ...existing,
+          ...payload,
+          updatedAt: new Date().toISOString(),
+        };
+        saveStoredPosts(posts.map((p) => (p.id === payload.id ? updatedPost : p)));
+        return updatedPost;
+      }
+      throw err;
     }
-
-    const updatedPost: Post = {
-      ...current[index],
-      title: payload.title,
-      content: payload.content,
-      platforms: payload.platforms,
-      media: payload.media || [],
-      status: payload.status || current[index].status,
-      scheduledAt: payload.scheduledAt !== undefined ? payload.scheduledAt : current[index].scheduledAt,
-      updatedAt: new Date().toISOString(),
-    };
-
-    current[index] = updatedPost;
-    saveStoredPosts(current);
-
-    return updatedPost;
   },
 
   /**
    * Schedules a post to a specific ISO date/time.
    */
   async schedulePost(id: string, scheduledAt: string): Promise<Post> {
-    await delay(300);
-
-    const current = await this.fetchPosts();
-    const index = current.findIndex((p) => p.id === id);
-
-    if (index === -1) {
-      throw new ApiError(404, "Not Found", `Post with ID "${id}" was not found for scheduling.`);
+    try {
+      const res = await apiClient.patch<ApiResponse<Post>>(`/posts/${id}/schedule`, { scheduledAt });
+      return res.data;
+    } catch (err) {
+      const isNetwork =
+        (err instanceof ApiError && (err.status === 0 || err.statusText === "NetworkError")) ||
+        (err instanceof Error && err.message.includes("Failed to fetch"));
+      if (isNetwork) {
+        const posts = getStoredPosts();
+        const existing = posts.find((p) => p.id === id);
+        if (!existing) throw err;
+        const updatedPost: Post = {
+          ...existing,
+          status: "scheduled",
+          scheduledAt,
+          updatedAt: new Date().toISOString(),
+        };
+        saveStoredPosts(posts.map((p) => (p.id === id ? updatedPost : p)));
+        return updatedPost;
+      }
+      throw err;
     }
-
-    const scheduledPost: Post = {
-      ...current[index],
-      status: "scheduled",
-      scheduledAt,
-      updatedAt: new Date().toISOString(),
-    };
-
-    current[index] = scheduledPost;
-    saveStoredPosts(current);
-
-    return scheduledPost;
   },
 
   /**
    * Marks a post as published live.
    */
   async publishPost(id: string): Promise<Post> {
-    await delay(400);
-
-    const current = await this.fetchPosts();
-    const index = current.findIndex((p) => p.id === id);
-
-    if (index === -1) {
-      throw new ApiError(404, "Not Found", `Post with ID "${id}" was not found for publishing.`);
+    try {
+      const res = await apiClient.patch<ApiResponse<Post>>(`/posts/${id}/publish`);
+      return res.data;
+    } catch (err) {
+      const isNetwork =
+        (err instanceof ApiError && (err.status === 0 || err.statusText === "NetworkError")) ||
+        (err instanceof Error && err.message.includes("Failed to fetch"));
+      if (isNetwork) {
+        const posts = getStoredPosts();
+        const existing = posts.find((p) => p.id === id);
+        if (!existing) throw err;
+        const updatedPost: Post = {
+          ...existing,
+          status: "published",
+          updatedAt: new Date().toISOString(),
+        };
+        saveStoredPosts(posts.map((p) => (p.id === id ? updatedPost : p)));
+        return updatedPost;
+      }
+      throw err;
     }
-
-    const publishedPost: Post = {
-      ...current[index],
-      status: "published",
-      updatedAt: new Date().toISOString(),
-    };
-
-    current[index] = publishedPost;
-    saveStoredPosts(current);
-
-    return publishedPost;
   },
 
   /**
-   * Deletes a post from Local Storage.
+   * Deletes a post from backend database.
    */
   async deletePost(id: string): Promise<string> {
-    await delay(300);
-
-    const current = await this.fetchPosts();
-    const filtered = current.filter((p) => p.id !== id);
-
-    if (filtered.length === current.length) {
-      throw new ApiError(404, "Not Found", `Post with ID "${id}" does not exist.`);
+    try {
+      await apiClient.delete<ApiResponse<void>>(`/posts/${id}`);
+      return id;
+    } catch (err) {
+      const isNetwork =
+        (err instanceof ApiError && (err.status === 0 || err.statusText === "NetworkError")) ||
+        (err instanceof Error && err.message.includes("Failed to fetch"));
+      if (isNetwork) {
+        const posts = getStoredPosts();
+        saveStoredPosts(posts.filter((p) => p.id !== id));
+        return id;
+      }
+      throw err;
     }
-
-    saveStoredPosts(filtered);
-    return id;
   },
 
   /**
    * Resets posts to default seed values.
    */
   async resetToDefaults(): Promise<Post[]> {
-    await delay(200);
-    saveStoredPosts(INITIAL_SEED_POSTS);
-    return INITIAL_SEED_POSTS;
+    return await this.fetchPosts();
   },
 };

@@ -2,7 +2,7 @@
  * useOmnitrixTransition.ts - Hook and Event Bus for managing the Omnitrix Action Transition overlay state.
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { playActivateSound, playConfirmSound } from "./soundEngine";
 
 export type TransitionStatus = "success" | "error" | "loading";
@@ -31,6 +31,12 @@ export function dismissOmnitrixTransition(): void {
 export function useOmnitrixTransition() {
   const [config, setConfig] = useState<OmnitrixTransitionConfig | null>(null);
   const [phase, setPhase] = useState<TransitionPhase>("idle");
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearTimers = useCallback(() => {
+    timersRef.current.forEach((t) => clearTimeout(t));
+    timersRef.current = [];
+  }, []);
 
   const checkReducedMotion = useCallback(() => {
     return (
@@ -42,12 +48,15 @@ export function useOmnitrixTransition() {
   // Main animation timer state machine
   useEffect(() => {
     const handleTrigger = (newConfig: OmnitrixTransitionConfig | null) => {
+      clearTimers();
+
       if (!newConfig) {
         setPhase("dismiss");
-        setTimeout(() => {
+        const tDismiss = setTimeout(() => {
           setConfig(null);
           setPhase("idle");
         }, 200);
+        timersRef.current.push(tDismiss);
         return;
       }
 
@@ -64,10 +73,8 @@ export function useOmnitrixTransition() {
           setConfig(null);
           setPhase("idle");
         }, 800);
-        return () => {
-          clearTimeout(t1);
-          clearTimeout(t2);
-        };
+        timersRef.current.push(t1, t2);
+        return;
       }
 
       // Full animation sequence (~2300ms total, skippable):
@@ -96,30 +103,28 @@ export function useOmnitrixTransition() {
         setPhase("idle");
       }, 2300);
 
-      return () => {
-        clearTimeout(timerSpin);
-        clearTimeout(timerReveal);
-        clearTimeout(timerDismiss);
-        clearTimeout(timerIdle);
-      };
+      timersRef.current.push(timerSpin, timerReveal, timerDismiss, timerIdle);
     };
 
     listeners.add(handleTrigger);
     return () => {
       listeners.delete(handleTrigger);
+      clearTimers();
     };
-  }, [checkReducedMotion]);
+  }, [checkReducedMotion, clearTimers]);
 
   // Click-to-skip fast-forward handler
   const skipTransition = useCallback(() => {
     if (phase !== "idle" && phase !== "dismiss") {
+      clearTimers();
       setPhase("dismiss");
-      setTimeout(() => {
+      const t = setTimeout(() => {
         setConfig(null);
         setPhase("idle");
       }, 200);
+      timersRef.current.push(t);
     }
-  }, [phase]);
+  }, [phase, clearTimers]);
 
   return {
     activeConfig: config,

@@ -1,3 +1,47 @@
+/* ==========================================
+ * Self-Hosted Web Fonts: Switzer & Tempting
+ * ========================================== */
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer/switzer-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer/switzer-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer/switzer-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer/switzer-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tempting';
+  src: url('/fonts/tempting/tempting-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -213,6 +257,195 @@ body {
 
 .animate-omnitrix-ripple {
   animation: omnitrix-ripple 550ms cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+/* ==========================================
+ * Omnitrix Alien SVG Dynamic Animations
+ * ========================================== */
+
+@keyframes alien-flame {
+  0%, 100% {
+    transform: scaleY(1) translateY(0) rotate(0deg);
+    filter: drop-shadow(0 0 8px rgba(255, 122, 0, 0.7));
+  }
+  25% {
+    transform: scaleY(1.12) translateY(-2px) rotate(-1.5deg);
+    filter: drop-shadow(0 0 14px rgba(255, 77, 0, 0.9));
+  }
+  50% {
+    transform: scaleY(0.95) translateY(1px) rotate(1deg);
+    filter: drop-shadow(0 0 6px rgba(255, 200, 0, 0.8));
+  }
+  75% {
+    transform: scaleY(1.08) translateY(-1px) rotate(-0.5deg);
+    filter: drop-shadow(0 0 12px rgba(255, 100, 0, 0.85));
+  }
+}
+
+@keyframes alien-ember {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-8px) translateX(-3px) scale(0.8);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-16px) translateX(2px) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes alien-circuit-flow {
+  0% {
+    stroke-dashoffset: 60;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes alien-ghost-hover {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1.5deg);
+  }
+}
+
+@keyframes alien-ghost-eye {
+  0%, 100% {
+    transform: translate(0px, 0px);
+  }
+  25% {
+    transform: translate(6px, -2px);
+  }
+  75% {
+    transform: translate(-5px, 2px);
+  }
+}
+
+@keyframes alien-wing-beat {
+  0%, 100% {
+    transform: scaleY(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scaleY(0.3) rotate(8deg);
+    opacity: 0.45;
+  }
+}
+
+@keyframes alien-shimmer-sweep {
+  0% {
+    transform: translateX(-100%) rotate(35deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  70% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(200%) rotate(35deg);
+    opacity: 0;
+  }
+}
+
+@keyframes alien-optic-scanner {
+  0%, 100% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes alien-angler-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    filter: drop-shadow(0 0 3px #00F0FF);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px #00F0FF);
+  }
+}
+
+@keyframes alien-quill-twitch {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-6deg);
+  }
+  40% {
+    transform: rotate(4deg);
+  }
+  60% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes alien-breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.025);
+  }
+}
+
+.animate-alien-flame {
+  animation: alien-flame 1.4s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.animate-alien-ember {
+  animation: alien-ember 1.8s linear infinite;
+}
+
+.animate-alien-circuit {
+  stroke-dasharray: 6 3;
+  animation: alien-circuit-flow 1.5s linear infinite;
+}
+
+.animate-alien-ghost {
+  animation: alien-ghost-hover 3s ease-in-out infinite;
+}
+
+.animate-alien-eye {
+  animation: alien-ghost-eye 4s ease-in-out infinite;
+}
+
+.animate-alien-wing {
+  animation: alien-wing-beat 0.18s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-alien-shimmer {
+  animation: alien-shimmer-sweep 3s ease-in-out infinite;
+}
+
+.animate-alien-optic {
+  animation: alien-optic-scanner 1.8s ease-in-out infinite;
+}
+
+.animate-alien-angler {
+  animation: alien-angler-pulse 2s ease-in-out infinite;
+}
+
+.animate-alien-quill {
+  animation: alien-quill-twitch 2.5s ease-in-out infinite;
+  transform-origin: left center;
+}
+
+.animate-alien-breathe {
+  animation: alien-breathe 3s ease-in-out infinite;
+  transform-origin: center center;
 }
 
 

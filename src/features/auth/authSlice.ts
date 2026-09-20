@@ -1,14 +1,25 @@
 /**
- * authSlice.ts - Redux slice for JWT authentication and current session state.
+ * authSlice.ts - Redux Authentication State & JWT Session Management.
+ *
+ * This slice manages the complete lifecycle of user authentication:
+ * 1. Initial State Hydration: On app boot, inspects `localStorage` for `jwt_token`.
+ *    If found and unexpired, decodes user payload and initializes authenticated state.
+ * 2. Login Flow (`loginThunk`): Dispatches HTTP POST to `/api/auth/login` on Spring Boot.
+ *    On 200 OK, persists JWT token and sets `currentUser`.
+ * 3. Offline Graceful Fallback: If the backend server is temporarily unreachable,
+ *    provides fallback login for demo accounts (`admin`, `editor`, `viewer`).
+ * 4. Logout Flow (`logout`): Clears Redux auth state and removes token from storage.
+ * 5. Token Expiry Guard (`checkTokenExpiration`): Invalidates session when JWT expires.
  */
 
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState, Role, User, DecodedToken } from "../../types/auth";
 import { generateMockJwtToken, decodeToken, isTokenExpired } from "../../utils/jwt";
 import { getItem, setItem, removeItem } from "../../utils/storage";
+import { apiClient, ApiError, ApiResponse } from "../../api/apiClient";
 import type { RootState } from "../../app/store";
 
-// Seeded Users
+// Pre-seeded demo user fixtures for testing and development
 export const SEEDED_USERS: Record<string, { user: User; passwordHash: string }> = {
   admin: {
     user: {
@@ -77,17 +88,38 @@ export const loginThunk = createAsyncThunk<
   { username: string; passwordHash: string },
   { rejectValue: string }
 >("auth/login", async ({ username, passwordHash }, { rejectWithValue }) => {
-  await new Promise((res) => setTimeout(res, 500)); // simulated latency
+  const cleanUsername = username.trim().toLowerCase();
+  try {
+    const res = await apiClient.post<ApiResponse<{ token: string; user: User }>>("/auth/login", {
+      username: cleanUsername,
+      password: passwordHash,
+    });
+    const { user, token } = res.data;
+    setItem("jwt_token", token);
+    return { user, token };
+  } catch (err) {
+    const isNetworkError =
+      (err instanceof ApiError && (err.status === 0 || err.statusText === "NetworkError" || err.message === "Failed to fetch")) ||
+      (err instanceof Error && err.message.includes("Failed to fetch"));
 
-  const found = SEEDED_USERS[username.toLowerCase().trim()];
-  if (!found || found.passwordHash !== passwordHash) {
-    return rejectWithValue("Invalid username or password. Try 'admin' / 'password123'.");
+    // If backend is offline, enable seamless demo fallback for seeded users
+    if (isNetworkError) {
+      const seeded = SEEDED_USERS[cleanUsername];
+      if (seeded && seeded.passwordHash === passwordHash) {
+        const fallbackToken = generateMockJwtToken(seeded.user);
+        setItem("jwt_token", fallbackToken);
+        return { user: seeded.user, token: fallbackToken };
+      }
+      return rejectWithValue(
+        "Backend server is offline (http://localhost:8080). Please run 'npm run backend' in a separate terminal. (Seeded demo accounts: admin, editor, viewer with password123)."
+      );
+    }
+
+    if (err instanceof ApiError) {
+      return rejectWithValue(err.message || "Invalid username or password.");
+    }
+    return rejectWithValue("Failed to connect to authentication server.");
   }
-
-  const token = generateMockJwtToken(found.user, 3600); // 1 hour token
-  setItem("jwt_token", token);
-
-  return { user: found.user, token };
 });
 
 const authSlice = createSlice({
@@ -101,6 +133,9 @@ const authSlice = createSlice({
       state.status = "idle";
       state.error = null;
       removeItem("jwt_token");
+    },
+    clearAuthError(state) {
+      state.error = null;
     },
     checkTokenExpiration(state) {
       if (state.token && isTokenExpired(state.token)) {
@@ -132,7 +167,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, checkTokenExpiration } = authSlice.actions;
+export const { logout, clearAuthError, checkTokenExpiration } = authSlice.actions;
 export default authSlice.reducer;
 
 export const selectCurrentUser = (state: RootState) => state.auth.user;

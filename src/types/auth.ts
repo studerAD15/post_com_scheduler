@@ -11,8 +11,11 @@ export type Permission =
   | "schedule_post"
   | "publish_post"
   | "manage_drafts"
+  | "view_drafts"
   | "view_analytics"
-  | "manage_users";
+  | "manage_users"
+  | "view_draft_audit"
+  | "view_activity_log";
 
 export interface User {
   id: string;

@@ -1,6 +1,18 @@
 /**
- * apiClient.ts - Production-grade Typed API Client with interceptors, timeout,
- * automatic retry logic, query parameter building, and structured ApiError handling.
+ * apiClient.ts - Production-Grade Typed HTTP API Client.
+ *
+ * This utility acts as the single gateway for all frontend communication
+ * with the Spring Boot backend server (`http://localhost:8080/api`).
+ *
+ * Key Architecture Highlights:
+ * 1. Automatic JWT Bearer Auth: Retrieves token from storage and injects
+ *    `Authorization: Bearer <token>` into outgoing request headers.
+ * 2. URL Normalization: Prepends API_BASE_URL to relative paths (e.g., "/auth/login").
+ * 3. Structured Error Handling: Transforms non-2xx HTTP responses into typed
+ *    `ApiError` instances containing status code, server message, and details.
+ * 4. Request Resilience: Built-in configurable timeouts (via AbortController)
+ *    and exponential-backoff retry logic for transient network failures.
+ * 5. Method Shorthands: Exports convenience helpers (`apiClient.get`, `apiClient.post`, etc.).
  */
 
 import { getItem } from "../utils/storage";
@@ -19,7 +31,7 @@ export class ApiError extends Error {
     this.details = details;
     this.timestamp = new Date().toISOString();
 
-    // Restore prototype chain for instanceof checks
+    // Restore prototype chain for instanceof checks in catch blocks
     Object.setPrototypeOf(this, ApiError.prototype);
   }
 }
@@ -37,6 +49,23 @@ export interface RequestOptions extends Omit<RequestInit, "headers"> {
   timeoutMs?: number;
   retries?: number;
   retryDelayMs?: number;
+}
+
+export const API_BASE_URL =
+  typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE_URL
+    ? import.meta.env.VITE_API_BASE_URL
+    : "http://localhost:8080/api";
+
+/**
+ * Resolves a full endpoint URL from a relative or absolute path.
+ */
+export function resolveApiUrl(endpoint: string): string {
+  if (endpoint.startsWith("http://") || endpoint.startsWith("https://")) {
+    return endpoint;
+  }
+  const cleanBase = API_BASE_URL.replace(/\/+$/, "");
+  const cleanEndpoint = endpoint.replace(/^\/?(api\/)?/, "");
+  return `${cleanBase}/${cleanEndpoint}`;
 }
 
 /**
@@ -74,7 +103,8 @@ export async function apiClient<T>(
     ...fetchOptions
   } = options;
 
-  const fullUrl = buildUrlWithParams(url, params);
+  const resolvedUrl = resolveApiUrl(url);
+  const fullUrl = buildUrlWithParams(resolvedUrl, params);
   const token = getItem<string | null>("jwt_token", null);
 
   const headers: Record<string, string> = {

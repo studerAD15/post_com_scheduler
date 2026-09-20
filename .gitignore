@@ -10,4 +10,24 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 *.tsbuildinfo
+*.log
+
+# Archives & Large Files
+*.zip
+project.zip
 .agents.zip
+
+# Java / Maven Builds
+target/
+backend/target/
+*.jar
+*.war
+*.class
+
+# IDE & Editor Configs
+.vscode/
+.idea/
+*.iml
+.classpath
+.project
+.settings/

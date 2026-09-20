@@ -42,6 +42,7 @@ export interface Post {
   updatedAt: string;         // ISO string
   authorId?: string;
   authorName?: string;
+  authorRole?: string;
 }
 
 export interface AddPostPayload {
@@ -51,6 +52,9 @@ export interface AddPostPayload {
   media?: MediaAttachment[];
   status?: PostStatus;
   scheduledAt?: string | null;
+  authorId?: string;
+  authorName?: string;
+  authorRole?: string;
 }
 
 export interface UpdatePostPayload extends AddPostPayload {

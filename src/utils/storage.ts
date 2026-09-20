@@ -53,6 +53,13 @@ export function setItem<T>(key: string, value: T): boolean {
       (error.name === "QuotaExceededError" || error.name === "NS_ERROR_DOM_QUOTA_REACHED")
     ) {
       console.error(`[storage] LocalStorage quota exceeded when writing key "${key}".`);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("storage-quota-exceeded", {
+            detail: { key, message: "Storage quota exceeded. Please clear some items or reset data." },
+          })
+        );
+      }
     } else {
       console.error(`[storage] Error writing key "${key}":`, error);
     }
@@ -133,6 +140,29 @@ export function getStoredPlatformFilter(): PlatformId | "all" {
 
 export function saveStoredPlatformFilter(filter: PlatformId | "all"): boolean {
   return setItem<PlatformId | "all">("platform_filter", filter);
+}
+
+/**
+ * Typed helpers for Activity Log persistence.
+ */
+import { ActivityLogEntry } from "../types/activity";
+
+export function isActivityLogEntry(obj: unknown): obj is ActivityLogEntry {
+  if (typeof obj !== "object" || obj === null) return false;
+  const a = obj as Record<string, unknown>;
+  return typeof a.id === "string" && typeof a.targetId === "string" && typeof a.timestamp === "string";
+}
+
+export function isActivityArray(obj: unknown): obj is ActivityLogEntry[] {
+  return isUnknownArray(obj) && obj.every(isActivityLogEntry);
+}
+
+export function getStoredActivities(): ActivityLogEntry[] {
+  return getItem<ActivityLogEntry[]>("activities", [], isActivityArray);
+}
+
+export function saveStoredActivities(activities: ActivityLogEntry[]): boolean {
+  return setItem<ActivityLogEntry[]>("activities", activities);
 }
 
 /**

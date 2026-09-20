@@ -27,6 +27,8 @@ module.exports = {
         rajdhani: ["Rajdhani", "sans-serif"],
         inter: ["Inter", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
+        tempting: ["Tempting", "cursive"],
+        switzer: ["Switzer", "sans-serif"],
       },
       borderRadius: {
         DEFAULT: "4px",

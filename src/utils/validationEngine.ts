@@ -12,8 +12,13 @@ import { MediaAttachment, ValidationResult, WarningState } from "../types/post";
  * Extracts hashtags from raw post content.
  */
 export function extractHashtags(text: string): string[] {
-  const hashtagRegex = /#[a-zA-Z0-9_]+/g;
-  return text.match(hashtagRegex) || [];
+  if (!text) return [];
+  const matches = text.match(/(?:^|[^\w])#([a-zA-Z0-9_]+)/g);
+  if (!matches) return [];
+  return matches.map((m) => {
+    const hashIndex = m.indexOf("#");
+    return m.substring(hashIndex);
+  });
 }
 
 /**
@@ -36,7 +41,7 @@ export function validateSinglePlatform(
   media: MediaAttachment[]
 ): ValidationResult {
   const config = PLATFORM_CONFIGS[platformId];
-  const charCount = content.length;
+  const charCount = Array.from(content).length;
   const remainingChars = config.maxChars - charCount;
   const charPercentage = Math.min(100, Math.round((charCount / config.maxChars) * 100));
   const warningState = getWarningState(charCount, config.maxChars);

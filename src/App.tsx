@@ -1,9 +1,23 @@
 /**
- * App.tsx - Root Application component with Tri-Color Balance & 5 Google Fonts.
- * Features automatic cross-tab Local Storage synchronization and ApiError toast banners.
+ * App.tsx - Root Application Orchestrator & Screen Switcher.
+ *
+ * ARCHITECTURAL ROLE:
+ * 1. Authentication Gate: If unauthenticated, displays the themed `<LoginForm />`.
+ *    Once logged in with a valid JWT, mounts `<MainLayout />`.
+ * 2. Active Tab Management: Controls switching between views:
+ *    - "composer": Post composition and platform preview (Editor only).
+ *    - "feed": All published and scheduled posts list.
+ *    - "drafts": Saved drafts and revision audit trails.
+ *    - "calendar": Drag-and-drop interactive scheduling calendar.
+ *    - "analytics": Aggregated telemetry KPIs and platform distribution.
+ *    - "activity": Security activity audit log (Admin only).
+ * 3. Role-Based Navigation Guards:
+ *    - Non-editors (Admin, Viewer) lack `create_post` and are redirected away from "composer".
+ *    - Non-admins lack `view_activity_log` and cannot view "activity".
+ * 4. Cross-Tab Synchronization: Listens to window storage events to keep state synced across tabs.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./hooks";
 import {
@@ -15,8 +29,10 @@ import { LoginForm } from "./features/auth/LoginForm";
 import { MainLayout } from "./components/layout/MainLayout";
 import { PostComposer } from "./features/posts/PostComposer";
 import { PostList } from "./features/posts/PostList";
+import { FeedSidebar } from "./features/posts/FeedSidebar";
 import { DraftList } from "./features/drafts/DraftList";
 import { ScheduleCalendar } from "./features/schedule/ScheduleCalendar";
+import { CalendarView } from "./features/schedule/CalendarView";
 import { AnalyticsOverview } from "./features/posts/AnalyticsOverview";
 import { ScheduleModal } from "./features/schedule/ScheduleModal";
 import { UnauthorizedView } from "./components/layout/UnauthorizedView";
@@ -24,13 +40,19 @@ import {
   fetchPosts,
   addPostThunk,
   schedulePostThunk,
+  publishPostThunk,
+  deletePostThunk,
   clearFeedback,
+  selectPostsStatus,
 } from "./features/posts/postsSlice";
+import { ErrorBoundary } from "./components/common/ErrorBoundary";
 import {
   fetchDraftsThunk,
   saveDraftThunk,
   deleteDraftThunk,
   clearDraftsError,
+  selectAllDrafts,
+  selectDraftsStatus,
 } from "./features/drafts/draftsSlice";
 import { selectUpcomingScheduledPosts } from "./features/posts/postsSelectors";
 import { STORAGE_PREFIX } from "./utils/storage";
@@ -41,6 +63,10 @@ import { CheckCircle2, Edit3, AlertCircle } from "lucide-react";
 import { OmnitrixOverlay } from "./components/omnitrix/OmnitrixOverlay";
 import { OmnitrixCursor } from "./components/omnitrix/OmnitrixCursor";
 
+import { usePermission } from "./features/auth/usePermission";
+import { ActivityLogView } from "./features/activity/ActivityLogView";
+import { AssistantWidget } from "./features/assistant/AssistantWidget";
+
 export function AppContent() {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -49,12 +75,27 @@ export function AppContent() {
   const postsError = useAppSelector((state) => state.posts.error);
   const draftsError = useAppSelector((state) => state.drafts.error);
   const upcomingScheduled = useAppSelector(selectUpcomingScheduledPosts);
-  const drafts = useAppSelector((state) => state.drafts.items);
-  const isDraftsLoading = useAppSelector((state) => state.drafts.status === "loading");
+  const drafts = useAppSelector(selectAllDrafts);
+  const draftsStatus = useAppSelector(selectDraftsStatus);
+  const isDraftsLoading = draftsStatus === "loading";
+  const postsStatus = useAppSelector(selectPostsStatus);
+  const isPostsLoading = postsStatus === "loading";
+  const isSubmitting = isPostsLoading || isDraftsLoading;
+
+  const canCreate = usePermission("create_post");
 
   const [activeTab, setActiveTab] = useState<
-    "composer" | "feed" | "drafts" | "calendar" | "analytics"
-  >("composer");
+    "composer" | "feed" | "drafts" | "calendar" | "analytics" | "activity"
+  >(() => (user?.role === "editor" ? "composer" : user?.role === "admin" ? "activity" : "analytics"));
+
+  // Ensure non-editors cannot land or stay on Composer tab
+  useEffect(() => {
+    if (!canCreate && activeTab === "composer") {
+      setActiveTab(user?.role === "admin" ? "activity" : "analytics");
+    } else if (user?.role !== "admin" && activeTab === "activity") {
+      setActiveTab(user?.role === "viewer" ? "analytics" : "feed");
+    }
+  }, [user?.role, canCreate, activeTab]);
 
   // State for editing a draft/post inside composer
   const [editingDraft, setEditingDraft] = useState<Draft | null>(null);
@@ -103,64 +144,69 @@ export function AppContent() {
     }
   }, [feedbackMessage, dispatch]);
 
-  if (!isAuthenticated) {
-    return <LoginForm />;
-  }
+  const handleSaveDraft = useCallback(
+    (postData: {
+      title: string;
+      content: string;
+      platforms: PlatformId[];
+      media: any[];
+    }) => {
+      dispatch(
+        saveDraftThunk({
+          title: postData.title,
+          content: postData.content,
+          platforms: postData.platforms,
+          media: postData.media,
+          status: "draft",
+          scheduledAt: null,
+        })
+      );
+      setActiveTab("drafts");
+    },
+    [dispatch]
+  );
 
-  const handleSaveDraft = (postData: {
-    title: string;
-    content: string;
-    platforms: PlatformId[];
-    media: any[];
-  }) => {
-    dispatch(
-      saveDraftThunk({
+  const handlePublishDirect = useCallback(
+    (postData: {
+      title: string;
+      content: string;
+      platforms: PlatformId[];
+      media: any[];
+    }) => {
+      dispatch(
+        addPostThunk({
+          title: postData.title,
+          content: postData.content,
+          platforms: postData.platforms,
+          media: postData.media,
+          status: "published",
+        })
+      );
+      setEditingDraft(null);
+      setActiveTab("feed");
+    },
+    [dispatch]
+  );
+
+  const handleOpenScheduleFromComposer = useCallback(
+    (postData: {
+      title: string;
+      content: string;
+      platforms: PlatformId[];
+      media: any[];
+      scheduledAt: string;
+    }) => {
+      setScheduleTargetPost({
         title: postData.title,
         content: postData.content,
         platforms: postData.platforms,
         media: postData.media,
-        status: "draft",
-        scheduledAt: null,
-      })
-    );
-    setActiveTab("drafts");
-  };
+      });
+    },
+    []
+  );
 
-  const handlePublishDirect = (postData: {
-    title: string;
-    content: string;
-    platforms: PlatformId[];
-    media: any[];
-  }) => {
-    dispatch(
-      addPostThunk({
-        title: postData.title,
-        content: postData.content,
-        platforms: postData.platforms,
-        media: postData.media,
-        status: "published",
-      })
-    );
-    setEditingDraft(null);
-    setActiveTab("feed");
-  };
-
-  const handleOpenScheduleFromComposer = (postData: {
-    title: string;
-    content: string;
-    platforms: PlatformId[];
-    media: any[];
-    scheduledAt: string;
-  }) => {
-    setScheduleTargetPost({
-      title: postData.title,
-      content: postData.content,
-      platforms: postData.platforms,
-      media: postData.media,
-    });
-  };
-
-  const handleOpenScheduleFromFeed = (post: Post) => {
+  const handleOpenScheduleFromFeed = useCallback((post: Post) => {
     setScheduleTargetPost({
       id: post.id,
       title: post.title,
@@ -168,44 +214,124 @@ export function AppContent() {
       platforms: post.platforms,
       media: post.media,
     });
-  };
+  }, []);
 
-  const handleConfirmScheduleDate = (scheduledIsoString: string) => {
-    if (!scheduleTargetPost) return;
+  const handleConfirmScheduleDate = useCallback(
+    (scheduledIsoString: string) => {
+      if (!scheduleTargetPost) return;
 
-    if (scheduleTargetPost.id) {
-      dispatch(
-        schedulePostThunk({
-          id: scheduleTargetPost.id,
-          scheduledAt: scheduledIsoString,
-        })
-      );
-    } else {
-      dispatch(
-        addPostThunk({
-          title: scheduleTargetPost.title,
-          content: scheduleTargetPost.content,
-          platforms: scheduleTargetPost.platforms,
-          media: scheduleTargetPost.media,
-          status: "scheduled",
-          scheduledAt: scheduledIsoString,
-        })
-      );
-    }
+      if (scheduleTargetPost.id) {
+        dispatch(
+          schedulePostThunk({
+            id: scheduleTargetPost.id,
+            scheduledAt: scheduledIsoString,
+          })
+        );
+      } else {
+        dispatch(
+          addPostThunk({
+            title: scheduleTargetPost.title,
+            content: scheduleTargetPost.content,
+            platforms: scheduleTargetPost.platforms,
+            media: scheduleTargetPost.media,
+            status: "scheduled",
+            scheduledAt: scheduledIsoString,
+          })
+        );
+      }
 
-    setScheduleTargetPost(null);
-    setEditingDraft(null);
-    setActiveTab("calendar");
-  };
+      setScheduleTargetPost(null);
+      setEditingDraft(null);
+      setActiveTab("calendar");
+    },
+    [dispatch, scheduleTargetPost]
+  );
 
-  const handleEditDraftInComposer = (draft: Draft) => {
+  const handleEditDraftInComposer = useCallback((draft: Draft) => {
     setEditingDraft(draft);
     setActiveTab("composer");
-  };
+  }, []);
 
-  const handleDeleteDraft = (draftId: string) => {
-    dispatch(deleteDraftThunk(draftId));
-  };
+  const handleDeleteDraft = useCallback(
+    (draftId: string) => {
+      dispatch(deleteDraftThunk(draftId));
+    },
+    [dispatch]
+  );
+
+  const handleCloseScheduleModal = useCallback(() => {
+    setScheduleTargetPost(null);
+  }, []);
+
+  const handleClearEditingDraft = useCallback(() => {
+    setEditingDraft(null);
+  }, []);
+
+  const handleCreateNewDraft = useCallback(() => {
+    setEditingDraft(null);
+    setActiveTab("composer");
+  }, []);
+
+  const handleDismissFeedback = useCallback(() => {
+    dispatch(clearFeedback());
+  }, [dispatch]);
+
+  const handleDismissErrors = useCallback(() => {
+    dispatch(clearFeedback());
+    dispatch(clearDraftsError());
+  }, [dispatch]);
+
+  const handlePublishNow = useCallback(
+    (postId: string) => {
+      dispatch(publishPostThunk(postId));
+    },
+    [dispatch]
+  );
+
+  const handleDeletePost = useCallback(
+    (postId: string) => {
+      dispatch(deletePostThunk(postId));
+    },
+    [dispatch]
+  );
+
+  const handleEditPostFromCalendar = useCallback((post: Post) => {
+    setEditingDraft({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      platforms: post.platforms,
+      media: post.media,
+      status: post.status,
+      scheduledAt: post.scheduledAt,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+    });
+    setActiveTab("composer");
+  }, []);
+
+  const handleReschedulePostFromCalendar = useCallback((post: Post) => {
+    setScheduleTargetPost({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      platforms: post.platforms,
+      media: post.media,
+    });
+  }, []);
+
+  const handleCreatePostForDateFromCalendar = useCallback((dateStr: string) => {
+    setScheduleTargetPost({
+      title: "",
+      content: "",
+      platforms: ["twitter", "linkedin"],
+      media: [],
+    });
+  }, []);
+
+  if (!isAuthenticated) {
+    return <LoginForm />;
+  }
 
   return (
     <MainLayout activeTab={activeTab} onTabChange={setActiveTab}>
@@ -216,7 +342,9 @@ export function AppContent() {
             <CheckCircle2 className="w-4 h-4 text-[#3DDC10]" /> {feedbackMessage}
           </span>
           <button
-            onClick={() => dispatch(clearFeedback())}
+            type="button"
+            onClick={handleDismissFeedback}
+            aria-label="Dismiss notification"
             className="text-[#0A0A0A] hover:text-[#3DDC10] text-base font-bold px-1"
           >
             ×
@@ -231,10 +359,9 @@ export function AppContent() {
             <AlertCircle className="w-4 h-4 text-[#FF4D4D]" /> {postsError || draftsError}
           </span>
           <button
-            onClick={() => {
-              dispatch(clearFeedback());
-              dispatch(clearDraftsError());
-            }}
+            type="button"
+            onClick={handleDismissErrors}
+            aria-label="Dismiss error notification"
             className="text-[#0A0A0A] hover:text-[#FF4D4D] text-base font-bold px-1"
           >
             ×
@@ -252,7 +379,8 @@ export function AppContent() {
                 <strong className="text-[#0A0A0A]">{editingDraft.title || "Untitled Post"}</strong>
               </span>
               <button
-                onClick={() => setEditingDraft(null)}
+                type="button"
+                onClick={handleClearEditingDraft}
                 className="text-xs font-rajdhani font-bold underline hover:text-[#3DDC10] uppercase"
               >
                 Clear / Create Blank Post
@@ -268,17 +396,21 @@ export function AppContent() {
             onSaveDraft={handleSaveDraft}
             onPublish={handlePublishDirect}
             onSchedule={handleOpenScheduleFromComposer}
+            isSubmitting={isSubmitting}
           />
         </div>
       )}
 
       {activeTab === "feed" && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           <div className="lg:col-span-2 space-y-6">
             <PostList onOpenScheduleModal={handleOpenScheduleFromFeed} />
           </div>
-          <div className="space-y-6">
-            <AnalyticsOverview />
+          <div className="lg:col-span-1">
+            <FeedSidebar
+              onNavigateTab={setActiveTab}
+              onOpenScheduleModal={handleOpenScheduleFromFeed}
+            />
           </div>
         </div>
       )}
@@ -289,23 +421,38 @@ export function AppContent() {
           isLoading={isDraftsLoading}
           onEditDraft={handleEditDraftInComposer}
           onDeleteDraft={handleDeleteDraft}
-          onCreateNew={() => {
-            setEditingDraft(null);
-            setActiveTab("composer");
-          }}
+          onCreateNew={handleCreateNewDraft}
         />
       )}
 
       {activeTab === "calendar" && (
-        <ScheduleCalendar scheduledPosts={upcomingScheduled} />
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2 space-y-6">
+            <CalendarView
+              onPublishNow={handlePublishNow}
+              onEditPost={handleEditPostFromCalendar}
+              onReschedulePost={handleReschedulePostFromCalendar}
+              onDeletePost={handleDeletePost}
+              onCreatePostForDate={handleCreatePostForDateFromCalendar}
+            />
+          </div>
+          <div className="space-y-6">
+            <ScheduleCalendar
+              scheduledPosts={upcomingScheduled}
+              onPublishNow={handlePublishNow}
+            />
+          </div>
+        </div>
       )}
 
       {activeTab === "analytics" && <AnalyticsOverview />}
 
+      {activeTab === "activity" && <ActivityLogView />}
+
       {/* Schedule Modal */}
       <ScheduleModal
         isOpen={Boolean(scheduleTargetPost)}
-        onClose={() => setScheduleTargetPost(null)}
+        onClose={handleCloseScheduleModal}
         onConfirmSchedule={handleConfirmScheduleDate}
         postTitle={scheduleTargetPost?.title}
         platforms={scheduleTargetPost?.platforms}
@@ -316,14 +463,17 @@ export function AppContent() {
 
 export function App() {
   return (
-    <BrowserRouter>
-      <OmnitrixOverlay />
-      <OmnitrixCursor />
-      <Routes>
-        <Route path="/unauthorized" element={<UnauthorizedView />} />
-        <Route path="/*" element={<AppContent />} />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <OmnitrixOverlay />
+        <OmnitrixCursor />
+        <Routes>
+          <Route path="/unauthorized" element={<UnauthorizedView />} />
+          <Route path="/*" element={<AppContent />} />
+        </Routes>
+        <AssistantWidget />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
