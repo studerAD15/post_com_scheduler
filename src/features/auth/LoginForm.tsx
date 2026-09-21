@@ -9,7 +9,7 @@ import { loginThunk, clearAuthError, selectAuthError, selectAuthStatus } from ".
 import { Lock, User as UserIcon, Loader2, ArrowRight, Radio, Shield, Sparkles, Eye } from "lucide-react";
 import { LoginBackground } from "./LoginBackground";
 
-export const LoginForm: React.FC = React.memo(() => {
+export const LoginForm: React.FC<{ isModal?: boolean }> = React.memo(({ isModal = false }) => {
   const dispatch = useAppDispatch();
   const authError = useAppSelector(selectAuthError);
   const authStatus = useAppSelector(selectAuthStatus);
@@ -55,19 +55,19 @@ export const LoginForm: React.FC = React.memo(() => {
   const isSubmitDisabled = isLoading || !username.trim() || !password.trim();
 
   return (
-    <div className="relative overflow-hidden min-h-screen flex items-center justify-center p-4 bg-[#0A0A0A]">
-      <LoginBackground />
+    <div className={`relative overflow-hidden flex items-center justify-center p-4 bg-[#0A0A0A] ${isModal ? "min-h-0" : "min-h-screen"}`}>
+      {!isModal && <LoginBackground />}
       <div className="relative z-10 bg-[#FFFFFF] text-[#0A0A0A] border-4 border-[#0A0A0A] rounded-sm p-6 sm:p-8 max-w-md w-full shadow-card-white space-y-6">
-        {/* Header Tile with Omnitrix Logo (Orbitron + Inter) */}
+        {/* Header Tile with Omnitrix Logo */}
         <div className="text-center space-y-3">
           <div className="w-12 h-12 mx-auto bg-[#0A0A0A] border-2 border-[#3DDC10] rounded-sm flex items-center justify-center shadow-omni transform rotate-45">
             <Radio className="w-6 h-6 text-[#3DDC10] transform -rotate-45" />
           </div>
           <div>
-            <h2 className="text-2xl font-orbitron uppercase font-extrabold text-[#0A0A0A] tracking-wider">
+            <h2 className="text-2xl font-sekuya uppercase font-extrabold text-[#0A0A0A] tracking-wider">
               SYSTEM ACCESS
             </h2>
-            <p className="text-xs font-inter text-[#71717A] mt-1">
+            <p className="text-xs font-switzer text-[#71717A] mt-1">
               Sign in to manage multi-channel social publications.
             </p>
           </div>
@@ -124,7 +124,7 @@ export const LoginForm: React.FC = React.memo(() => {
                 value={username}
                 onChange={(e) => handleUsernameChange(e.target.value)}
                 placeholder="admin, editor, or viewer"
-                className="w-full pl-10 pr-4 py-2.5 rounded-sm bg-[#F8F9FA] border-2 border-[#0A0A0A] text-sm text-[#0A0A0A] placeholder-[#71717A] font-inter focus:outline-none focus:border-[#3DDC10] transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-sm bg-[#F8F9FA] border-2 border-[#0A0A0A] text-sm text-[#0A0A0A] placeholder-[#71717A] font-switzer focus:outline-none focus:border-[#3DDC10] transition-all"
               />
             </div>
           </div>
@@ -141,7 +141,7 @@ export const LoginForm: React.FC = React.memo(() => {
                 value={password}
                 onChange={(e) => handlePasswordChange(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 rounded-sm bg-[#F8F9FA] border-2 border-[#0A0A0A] text-sm text-[#0A0A0A] placeholder-[#71717A] font-inter focus:outline-none focus:border-[#3DDC10] transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-sm bg-[#F8F9FA] border-2 border-[#0A0A0A] text-sm text-[#0A0A0A] placeholder-[#71717A] font-switzer focus:outline-none focus:border-[#3DDC10] transition-all"
               />
             </div>
           </div>

@@ -77,7 +77,7 @@ const PostCardItem: React.FC<PostCardItemProps> = React.memo(
       <div className="bg-[#F8F9FA] text-[#0A0A0A] border-2 border-[#0A0A0A] hover:border-[#3DDC10] rounded-sm p-5 space-y-3 transition-all hover:shadow-md">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <h3 className="text-base font-space font-bold text-[#0A0A0A] break-words">
+            <h3 className="text-base font-sekuya font-bold text-[#0A0A0A] break-words">
               {post.title}
             </h3>
             {post.authorName && (
@@ -196,11 +196,11 @@ export const PostList: React.FC<PostListProps> = React.memo(
           <div>
             <div className="flex items-center gap-2">
               <ListFilter className="w-5 h-5 text-[#3DDC10]" />
-              <h2 className="text-xl font-space uppercase font-bold text-[#0A0A0A] tracking-wider">
+              <h2 className="text-xl font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
                 ALL POSTS ({posts.length})
               </h2>
             </div>
-            <p className="text-xs font-inter text-[#71717A] mt-0.5">
+            <p className="text-xs font-switzer text-[#71717A] mt-0.5">
               View and manage published or scheduled posts across your social channels.
             </p>
           </div>

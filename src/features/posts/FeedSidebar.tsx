@@ -65,7 +65,7 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
         <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-2.5">
           <div className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4 text-[#3DDC10]" />
-            <h3 className="text-xs font-space uppercase font-bold text-[#0A0A0A] tracking-wider">
+            <h3 className="text-xs font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
               TELEMETRY OVERVIEW
             </h3>
           </div>
@@ -139,7 +139,7 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
         <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-2.5">
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-[#3DDC10]" />
-            <h3 className="text-xs font-space uppercase font-bold text-[#0A0A0A] tracking-wider">
+            <h3 className="text-xs font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
               CHANNEL QUICK FILTER
             </h3>
           </div>
@@ -196,7 +196,7 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
         <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-2.5">
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-[#FF7A00]" />
-            <h3 className="text-xs font-space uppercase font-bold text-[#0A0A0A] tracking-wider">
+            <h3 className="text-xs font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
               UPCOMING QUEUE ({upcomingPosts.length})
             </h3>
           </div>

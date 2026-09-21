@@ -25,11 +25,13 @@ export const AvatarPickerModal: React.FC = React.memo(() => {
 
   // Staged selection before user confirms
   const [stagedId, setStagedId] = useState<string>(selectedId);
+  const [isTransforming, setIsTransforming] = useState<boolean>(false);
 
   // Sync stagedId when modal opens
   useEffect(() => {
     if (isOpen) {
       setStagedId(selectedId);
+      setIsTransforming(false);
     }
   }, [isOpen, selectedId]);
 
@@ -37,17 +39,23 @@ export const AvatarPickerModal: React.FC = React.memo(() => {
   const StagedAvatar = stagedAlien.Component;
 
   const handleClose = useCallback(() => {
+    if (isTransforming) return;
     // If user hasn't chosen an alien yet, auto-select the staged one on close
     if (!hasChosenAlien) {
       dispatch(selectAvatar(stagedId));
     }
     dispatch(setAvatarPickerOpen(false));
-  }, [dispatch, hasChosenAlien, stagedId]);
+  }, [dispatch, hasChosenAlien, isTransforming, stagedId]);
 
   const handleConfirm = useCallback(() => {
-    dispatch(selectAvatar(stagedId));
-    dispatch(setAvatarPickerOpen(false));
-  }, [dispatch, stagedId]);
+    if (isTransforming) return;
+    setIsTransforming(true);
+    setTimeout(() => {
+      dispatch(selectAvatar(stagedId));
+      dispatch(setAvatarPickerOpen(false));
+      setIsTransforming(false);
+    }, 350);
+  }, [dispatch, isTransforming, stagedId]);
 
   // Keyboard accessibility: Close on Escape
   useEffect(() => {
@@ -192,7 +200,11 @@ export const AvatarPickerModal: React.FC = React.memo(() => {
               </div>
 
               {/* Large Animated Alien Stage */}
-              <div className="relative w-full aspect-square max-w-[210px] mx-auto bg-[#141414] border-2 border-[#3DDC10] rounded-sm p-4 flex items-center justify-center shadow-omni overflow-hidden group">
+              <div
+                className={`relative w-full aspect-square max-w-[210px] mx-auto bg-[#141414] border-2 border-[#3DDC10] rounded-sm p-4 flex items-center justify-center shadow-omni overflow-hidden group transition-all duration-300 ${
+                  isTransforming ? "scale-110 ring-4 ring-[#3DDC10] shadow-[0_0_35px_#3DDC10]" : ""
+                }`}
+              >
                 {/* Radial Glow Backdrop */}
                 <div
                   className="absolute inset-0 opacity-20 pointer-events-none"
@@ -201,15 +213,24 @@ export const AvatarPickerModal: React.FC = React.memo(() => {
                   }}
                 />
 
+                {/* Transformation Flash Wave */}
+                {isTransforming && (
+                  <div className="absolute inset-0 bg-[#3DDC10]/40 z-20 pointer-events-none animate-pulse" />
+                )}
+
                 {/* Animated Vector */}
-                <div className="w-full h-full relative z-10 flex items-center justify-center">
+                <div
+                  className={`w-full h-full relative z-10 flex items-center justify-center transition-transform duration-300 ${
+                    isTransforming ? "scale-110" : ""
+                  }`}
+                >
                   <StagedAvatar className="w-full h-full" animated={true} />
                 </div>
 
                 {/* Live Movement Badge */}
                 <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-[#0A0A0A]/90 border border-[#2A2A2A] px-1.5 py-0.5 rounded text-[9px] font-mono text-[#3DDC10]">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#3DDC10] animate-ping" />
-                  LIVE ANIMATION
+                  {isTransforming ? "TRANSFORMING..." : "LIVE ANIMATION"}
                 </div>
               </div>
 
@@ -238,10 +259,24 @@ export const AvatarPickerModal: React.FC = React.memo(() => {
               <button
                 type="button"
                 onClick={handleConfirm}
-                className="w-full py-2.5 px-4 bg-[#3DDC10] hover:bg-[#34C20C] active:scale-[0.99] text-[#0A0A0A] font-space font-extrabold uppercase tracking-wider text-xs rounded-sm shadow-omni transition-all flex items-center justify-center gap-2"
+                disabled={isTransforming}
+                className={`w-full py-2.5 px-4 text-[#0A0A0A] font-space font-extrabold uppercase tracking-wider text-xs rounded-sm shadow-omni transition-all flex items-center justify-center gap-2 ${
+                  isTransforming
+                    ? "bg-[#34C20C] ring-2 ring-[#3DDC10] scale-[0.98]"
+                    : "bg-[#3DDC10] hover:bg-[#34C20C] active:scale-[0.99]"
+                }`}
               >
-                <Check className="w-4 h-4 stroke-[3]" />
-                CONFIRM {stagedAlien.name.toUpperCase()} TRANSFORMATION
+                {isTransforming ? (
+                  <>
+                    <Sparkles className="w-4 h-4 animate-spin text-[#0A0A0A]" />
+                    SYNCHRONIZING DNA MATRIX...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4 stroke-[3]" />
+                    CONFIRM {stagedAlien.name.toUpperCase()} TRANSFORMATION
+                  </>
+                )}
               </button>
 
               <p className="text-[10px] font-mono text-center text-[#71717A]">

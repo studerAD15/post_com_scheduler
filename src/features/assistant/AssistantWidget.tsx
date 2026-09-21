@@ -2,7 +2,8 @@
  * AssistantWidget.tsx - Floating Omnitrix AI Assistant with 10 Animated Ben 10 Alien Avatars.
  *
  * Fully styled with Tailwind CSS, features a 10-alien quick-switch carousel bar,
- * first-time alien selection prompt, context-aware intelligence, and keyboard shortcuts.
+ * first-time alien selection prompt, context-aware intelligence, draggable launcher with
+ * persistent viewport placement (>5px drag threshold), and keyboard shortcuts.
  */
 
 import React, { useState, useCallback, useEffect, useRef } from "react";
@@ -29,11 +30,33 @@ import {
   Send,
   Sparkles,
   RotateCcw,
-  Zap,
-  Check,
-  ChevronRight,
-  Shield,
 } from "lucide-react";
+
+interface Position {
+  x: number;
+  y: number;
+}
+
+const STORAGE_POS_KEY = "omni_assistant_pos";
+const LAUNCHER_SIZE = 72; // w-18 h-18 (72px)
+
+const getDefaultPosition = (): Position => {
+  if (typeof window === "undefined") return { x: 100, y: 100 };
+  return {
+    x: Math.max(16, window.innerWidth - LAUNCHER_SIZE - 24),
+    y: Math.max(16, window.innerHeight - LAUNCHER_SIZE - 24),
+  };
+};
+
+const clampPosition = (pos: Position): Position => {
+  if (typeof window === "undefined") return pos;
+  const maxX = Math.max(0, window.innerWidth - LAUNCHER_SIZE - 12);
+  const maxY = Math.max(0, window.innerHeight - LAUNCHER_SIZE - 12);
+  return {
+    x: Math.min(Math.max(12, pos.x), maxX),
+    y: Math.min(Math.max(12, pos.y), maxY),
+  };
+};
 
 export const AssistantWidget: React.FC = React.memo(() => {
   const dispatch = useAppDispatch();
@@ -47,6 +70,44 @@ export const AssistantWidget: React.FC = React.memo(() => {
   const [inputPrompt, setInputPrompt] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
+
+  const [position, setPosition] = useState<Position>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_POS_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (typeof parsed.x === "number" && typeof parsed.y === "number") {
+          return clampPosition(parsed);
+        }
+      }
+    } catch (e) {}
+    return getDefaultPosition();
+  });
+
+  const dragRef = useRef<{
+    isTracking: boolean;
+    hasDragged: boolean;
+    startX: number;
+    startY: number;
+    origX: number;
+    origY: number;
+  }>({
+    isTracking: false,
+    hasDragged: false,
+    startX: 0,
+    startY: 0,
+    origX: 0,
+    origY: 0,
+  });
+
+  // Clamp position on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setPosition((prev) => clampPosition(prev));
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const alienConfig = getAlienConfig(selectedAvatarId);
   const AlienAvatar = alienConfig.Component;
@@ -93,6 +154,66 @@ export const AssistantWidget: React.FC = React.memo(() => {
     [handleSendPrompt, inputPrompt]
   );
 
+  // Drag interaction handlers
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => {
+      if (e.button !== 0) return;
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+      dragRef.current = {
+        isTracking: true,
+        hasDragged: false,
+        startX: e.clientX,
+        startY: e.clientY,
+        origX: position.x,
+        origY: position.y,
+      };
+    },
+    [position.x, position.y]
+  );
+
+  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
+    const info = dragRef.current;
+    if (!info.isTracking) return;
+    const dx = e.clientX - info.startX;
+    const dy = e.clientY - info.startY;
+    const dist = Math.hypot(dx, dy);
+
+    if (!info.hasDragged && dist > 5) {
+      info.hasDragged = true;
+    }
+
+    if (info.hasDragged) {
+      const newPos = clampPosition({
+        x: info.origX + dx,
+        y: info.origY + dy,
+      });
+      setPosition(newPos);
+    }
+  }, []);
+
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => {
+      const info = dragRef.current;
+      if (!info.isTracking) return;
+      info.isTracking = false;
+
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch (err) {}
+
+      if (info.hasDragged) {
+        // Dragged -> persist position and do NOT toggle
+        try {
+          localStorage.setItem(STORAGE_POS_KEY, JSON.stringify(position));
+        } catch (err) {}
+      } else {
+        // Static click -> toggle assistant
+        handleToggle();
+      }
+    },
+    [handleToggle, position]
+  );
+
   // Focus input when opened if alien chosen
   useEffect(() => {
     if (isOpen && hasChosenAlien) {
@@ -114,30 +235,40 @@ export const AssistantWidget: React.FC = React.memo(() => {
 
   return (
     <>
-      {/* 1. Floating Launcher Button (Bottom-Right) */}
-      <div className="fixed bottom-6 right-6 z-50 flex items-center">
-        {!isOpen && (
+      {/* 1. Floating Launcher Button (Draggable across viewport, 72x72) */}
+      {!isOpen && (
+        <div
+          className="fixed z-50 select-none"
+          style={{
+            left: `${position.x}px`,
+            top: `${position.y}px`,
+            touchAction: "none",
+          }}
+        >
           <button
             ref={launcherRef}
             type="button"
-            onClick={handleToggle}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
             aria-label="Open Omnitrix AI Assistant"
-            title={`Omnitrix AI Assistant (${alienConfig.name}) - Click for help`}
-            className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#0A0A0A] border-2 border-[#3DDC10] hover:border-[#34C20C] text-[#3DDC10] shadow-omni hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-[#3DDC10]"
+            title={`Omnitrix AI Assistant (${alienConfig.name}) - Click to open, drag to reposition`}
+            className="group relative flex items-center justify-center w-[72px] h-[72px] rounded-full bg-[#0A0A0A] border-2 border-[#3DDC10] hover:border-[#34C20C] text-[#3DDC10] shadow-omni hover:scale-105 active:scale-95 transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-[#3DDC10] cursor-grab active:cursor-grabbing"
           >
             {/* Animated Pulse Wave */}
             <span className="absolute -inset-1 rounded-full bg-[#3DDC10]/25 animate-ping pointer-events-none" />
 
-            {/* Active Alien Vector Icon */}
-            <div className="w-9 h-9 p-0.5 flex items-center justify-center">
+            {/* Active Alien Vector Icon (48x48) */}
+            <div className="w-12 h-12 p-1 flex items-center justify-center pointer-events-none">
               <AlienAvatar className="w-full h-full transform group-hover:scale-110 transition-transform" />
             </div>
 
             {/* Online Status Dot */}
-            <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-[#3DDC10] rounded-full border-2 border-[#0A0A0A]" />
+            <span className="absolute top-1 right-1 w-4 h-4 bg-[#3DDC10] rounded-full border-2 border-[#0A0A0A]" />
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* 2. Floating Assistant Chat Window */}
       {isOpen && (
@@ -162,7 +293,7 @@ export const AssistantWidget: React.FC = React.memo(() => {
 
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-tempting text-lg text-[#3DDC10] leading-none">
+                  <h3 className="font-sekuya text-base sm:text-lg text-[#3DDC10] leading-none">
                     OmniAssistant
                   </h3>
                   <span className="text-[10px] font-space text-[#A1A1AA] uppercase font-bold truncate">
@@ -253,10 +384,10 @@ export const AssistantWidget: React.FC = React.memo(() => {
               </div>
 
               <div className="space-y-1 max-w-xs">
-                <h4 className="text-sm font-space font-extrabold uppercase tracking-wide text-[#FFFFFF]">
+                <h4 className="text-sm font-sekuya uppercase tracking-wide text-[#FFFFFF]">
                   CALIBRATE OMNITRIX COPILOT
                 </h4>
-                <p className="text-xs font-inter text-[#A1A1AA]">
+                <p className="text-xs font-switzer text-[#A1A1AA]">
                   Please choose your alien transformation form first to activate specialized publishing powers.
                 </p>
               </div>

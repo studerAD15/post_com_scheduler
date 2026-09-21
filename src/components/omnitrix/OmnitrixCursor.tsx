@@ -192,6 +192,20 @@ export const OmnitrixCursor: React.FC = () => {
       }
     };
 
+    const handleSyncCursor = () => {
+      trailPosRef.current.x = mousePosRef.current.x;
+      trailPosRef.current.y = mousePosRef.current.y;
+    };
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        handleSyncCursor();
+      }
+    };
+
+    window.addEventListener("focus", handleSyncCursor);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("mouseleave", handleMouseLeave, { passive: true });
     window.addEventListener("mouseenter", handleMouseEnter, { passive: true });
@@ -199,12 +213,16 @@ export const OmnitrixCursor: React.FC = () => {
     window.addEventListener("mouseup", handleMouseUp, { passive: true });
     window.addEventListener("mouseover", handleMouseOver, { passive: true });
 
+    let isRunning = true;
+
     // Render loop (60-120fps hardware accelerated update)
     const render = () => {
+      if (!isRunning) return;
+
       const mx = mousePosRef.current.x;
       const my = mousePosRef.current.y;
 
-      // Core Omnitrix dial is 1:1 with mouse (0ms delay)
+      // Core Omnitrix dial is 1:1 with mouse (0ms delay, subpixel-crisp)
       if (coreRef.current) {
         coreRef.current.style.transform = `translate3d(${mx - 16}px, ${my - 16}px, 0)`;
       }
@@ -227,7 +245,10 @@ export const OmnitrixCursor: React.FC = () => {
     animFrameIdRef.current = requestAnimationFrame(render);
 
     return () => {
+      isRunning = false;
       document.documentElement.classList.remove("has-custom-cursor");
+      window.removeEventListener("focus", handleSyncCursor);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("mouseenter", handleMouseEnter);
@@ -236,6 +257,7 @@ export const OmnitrixCursor: React.FC = () => {
       window.removeEventListener("mouseover", handleMouseOver);
       if (animFrameIdRef.current) {
         cancelAnimationFrame(animFrameIdRef.current);
+        animFrameIdRef.current = null;
       }
       rippleTimeoutsRef.current.forEach((id) => clearTimeout(id));
       rippleTimeoutsRef.current.clear();
@@ -269,13 +291,14 @@ export const OmnitrixCursor: React.FC = () => {
         aria-hidden="true"
         data-state="default"
         data-visible="false"
-        className="fixed top-0 left-0 w-12 h-12 pointer-events-none z-[999998] will-change-transform opacity-0 scale-50 transition-opacity duration-200 data-[visible=true]:opacity-80 data-[visible=true]:scale-100"
+        className="fixed top-0 left-0 w-12 h-12 pointer-events-none z-[999998] will-change-transform opacity-0 transition-opacity duration-200 data-[visible=true]:opacity-80"
         style={{ transform: "translate3d(-100px, -100px, 0)" }}
       >
-        <svg
-          viewBox="0 0 48 48"
-          className="w-full h-full transition-transform duration-200 group-data-[state=hover]:rotate-45 group-data-[state=hover]:scale-110 group-data-[state=danger]:rotate-45 group-data-[state=danger]:scale-125 group-data-[state=active]:rotate-90 group-data-[state=active]:scale-90"
-        >
+        <div className="w-full h-full transition-transform duration-200 scale-75 [div[data-visible=true]_&]:scale-100">
+          <svg
+            viewBox="0 0 48 48"
+            className="w-full h-full transition-transform duration-200 group-data-[state=hover]:rotate-45 group-data-[state=hover]:scale-110 group-data-[state=danger]:rotate-45 group-data-[state=danger]:scale-125 group-data-[state=active]:rotate-90 group-data-[state=active]:scale-90"
+          >
           <circle
             cx="24"
             cy="24"
@@ -295,6 +318,7 @@ export const OmnitrixCursor: React.FC = () => {
           <path d="M 12 42 L 6 42 L 6 36" fill="none" stroke="currentColor" strokeWidth="1.2" opacity="0.7" className="text-[#3DDC10] [div[data-state=hover]_&]:text-[#55FF22] [div[data-state=danger]_&]:text-[#FF2233]" />
           <path d="M 36 42 L 42 42 L 42 36" fill="none" stroke="currentColor" strokeWidth="1.2" opacity="0.7" className="text-[#3DDC10] [div[data-state=hover]_&]:text-[#55FF22] [div[data-state=danger]_&]:text-[#FF2233]" />
         </svg>
+        </div>
       </div>
 
       {/* Main Omnitrix Dial Core Cursor (32x32 px centered) */}

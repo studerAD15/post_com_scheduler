@@ -169,11 +169,11 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
           {/* Header Bar using Orbitron + Inter */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-[#0A0A0A] pb-4">
             <div>
-              <h2 className="text-xl font-orbitron uppercase font-extrabold text-[#0A0A0A] flex items-center gap-2 tracking-wider">
+              <h2 className="text-xl font-sekuya uppercase font-extrabold text-[#0A0A0A] flex items-center gap-2 tracking-wider">
                 <Zap className="w-5 h-5 text-[#3DDC10] fill-[#3DDC10]" />
                 POST COMPOSER
               </h2>
-              <p className="text-xs text-[#71717A] font-inter mt-0.5">
+              <p className="text-xs text-[#71717A] font-switzer mt-0.5">
                 Draft and format your content for multiple channels simultaneously.
               </p>
             </div>
@@ -352,7 +352,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
           {/* Platform Character Diagnostics Tiles */}
           {selectedPlatforms.length > 0 && (
             <div className="space-y-3 pt-2">
-              <h3 className="text-xs font-space font-bold uppercase tracking-widest text-[#0A0A0A]">
+              <h3 className="text-xs font-sekuya font-bold uppercase tracking-widest text-[#0A0A0A]">
                 CHARACTER LIMIT DIAGNOSTICS
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

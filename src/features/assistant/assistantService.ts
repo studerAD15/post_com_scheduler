@@ -29,7 +29,7 @@ export interface AssistantResponse {
  * SECURITY RULE: Never expose private API keys in client-side frontend code.
  * Always proxy requests through your secure backend.
  */
-const ENABLE_EXTERNAL_LLM = false;
+const ENABLE_EXTERNAL_LLM = true;
 
 async function queryExternalLLM(
   prompt: string,
@@ -38,16 +38,23 @@ async function queryExternalLLM(
   if (!ENABLE_EXTERNAL_LLM) return null;
 
   try {
+    const token = localStorage.getItem("omni_token");
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
     const res = await fetch("/api/assistant/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ prompt, context }),
     });
     if (!res.ok) return null;
-    const data = await res.json();
+    const json = await res.json();
+    const payload = json.data || json;
+    if (!payload || (!payload.reply && !payload.content)) return null;
     return {
-      content: data.reply || data.content,
-      suggestions: data.suggestions || ["What can my current role do?", "How do I schedule a post?"],
+      content: payload.reply || payload.content,
+      suggestions: payload.suggestions || ["What can my current role do?", "How do I schedule a post?"],
     };
   } catch (err) {
     console.warn("External LLM proxy failed, falling back to local knowledge engine:", err);

@@ -26,6 +26,7 @@ import {
   selectCurrentUser,
 } from "./features/auth/authSlice";
 import { LoginForm } from "./features/auth/LoginForm";
+import { LandingPage } from "./features/landing/LandingPage";
 import { MainLayout } from "./components/layout/MainLayout";
 import { PostComposer } from "./features/posts/PostComposer";
 import { PostList } from "./features/posts/PostList";
@@ -330,7 +331,7 @@ export function AppContent() {
   }, []);
 
   if (!isAuthenticated) {
-    return <LoginForm />;
+    return <LandingPage />;
   }
 
   return (

@@ -90,7 +90,7 @@ export const ScheduleModal: React.FC<ScheduleModalProps> = React.memo(
           <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-3">
             <div className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-[#3DDC10]" />
-              <h3 id="schedule-modal-title" className="text-base font-space uppercase font-bold text-[#0A0A0A] tracking-wider">
+              <h3 id="schedule-modal-title" className="text-base font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
                 SCHEDULE PUBLICATION
               </h3>
             </div>

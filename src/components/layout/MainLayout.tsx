@@ -77,14 +77,14 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
     const handleTabActivity = useCallback(() => onTabChange("activity"), [onTabChange]);
 
     return (
-      <div className="min-h-screen bg-[#0A0A0A] text-[#0A0A0A] font-inter flex flex-col selection:bg-[#3DDC10] selection:text-[#0A0A0A]">
+      <div className="min-h-screen bg-[#0A0A0A] text-[#0A0A0A] font-switzer flex flex-col selection:bg-[#3DDC10] selection:text-[#0A0A0A]">
         {/* Unified Sticky Header Container (Role Switcher + Navigation Header) */}
         <div className="sticky top-0 z-40 shadow-card-white">
           <RoleSwitcherBar />
           {/* Main Tri-Color Header (White Container Panel with Black Borders & Green Highlights) */}
           <header className="border-b-4 border-[#3DDC10] bg-[#FFFFFF]">
           <div className="max-w-7xl mx-auto px-4 py-3.5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            {/* Logo Badge & Branding (Orbitron + Space Grotesk) */}
+            {/* Logo Badge & Branding */}
             <div className="flex items-center justify-between lg:justify-start gap-3">
               <div className="flex items-center gap-3">
                 <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
@@ -93,11 +93,11 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
                   </div>
                 </div>
                 <div>
-                  <span className="text-[10px] font-orbitron font-extrabold tracking-widest text-[#0A0A0A] uppercase flex items-center gap-1.5">
+                  <span className="text-[10px] font-mono font-extrabold tracking-widest text-[#0A0A0A] uppercase flex items-center gap-1.5">
                     <span className="w-2 h-2 bg-[#3DDC10] animate-ping rounded-full"></span>
                     OMNITRIX SOCIAL SUITE
                   </span>
-                  <h1 className="text-xl font-space font-extrabold text-[#0A0A0A] uppercase tracking-wider">
+                  <h1 className="text-xl font-sekuya font-extrabold text-[#0A0A0A] uppercase tracking-wider">
                     POST MANAGER <span className="text-[#3DDC10] bg-[#0A0A0A] px-1.5 py-0.5 rounded-sm">&amp; SCHEDULER</span>
                   </h1>
                 </div>

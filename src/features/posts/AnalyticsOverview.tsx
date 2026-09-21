@@ -223,7 +223,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-base sm:text-lg font-space uppercase font-extrabold text-[#0A0A0A] tracking-wider truncate">
+              <h2 className="text-base sm:text-lg font-sekuya uppercase font-extrabold text-[#0A0A0A] tracking-wider truncate">
                 ANALYTICS &amp; TELEMETRY BOARD
               </h2>
               {isViewer && (
@@ -232,7 +232,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
                 </span>
               )}
             </div>
-            <p className="text-xs font-inter text-[#71717A] truncate">
+            <p className="text-xs font-switzer text-[#71717A] truncate">
               Detailed post distribution, audience engagement, and multi-channel publication metrics.
             </p>
           </div>
@@ -317,7 +317,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
         <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-2.5">
           <div className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-[#3DDC10]" />
-            <h3 className="text-xs sm:text-sm font-space uppercase font-extrabold text-[#FFFFFF] tracking-wider">
+            <h3 className="text-xs sm:text-sm font-sekuya uppercase font-extrabold text-[#FFFFFF] tracking-wider">
               MULTI-CHANNEL AUDIENCE REACH &amp; ENGAGEMENT
             </h3>
           </div>
@@ -360,7 +360,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
           <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-2">
             <div className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-[#3DDC10]" />
-              <h3 className="text-xs sm:text-sm font-space uppercase font-bold text-[#FFFFFF] tracking-wider">
+              <h3 className="text-xs sm:text-sm font-sekuya uppercase font-bold text-[#FFFFFF] tracking-wider">
                 POSTING FREQUENCY OVER TIME
               </h3>
             </div>
@@ -423,7 +423,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
           <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-2">
             <div className="flex items-center gap-2">
               <Radio className="w-4 h-4 text-[#3DDC10]" />
-              <h3 className="text-xs sm:text-sm font-space uppercase font-bold text-[#FFFFFF] tracking-wider">
+              <h3 className="text-xs sm:text-sm font-sekuya uppercase font-bold text-[#FFFFFF] tracking-wider">
                 POST STATUS BREAKDOWN
               </h3>
             </div>
@@ -509,7 +509,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
         <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-2">
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-[#FF7A00]" />
-            <h3 className="text-xs sm:text-sm font-space uppercase font-bold text-[#0A0A0A] tracking-wider">
+            <h3 className="text-xs sm:text-sm font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
               UPCOMING SCHEDULED POSTS SUMMARY (READ-ONLY)
             </h3>
           </div>
@@ -519,7 +519,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
         </div>
 
         {upcomingScheduled.length === 0 ? (
-          <p className="text-xs font-inter text-[#71717A] italic py-2 text-center bg-[#F8F9FA] rounded border border-dashed border-[#0A0A0A]">
+          <p className="text-xs font-switzer text-[#71717A] italic py-2 text-center bg-[#F8F9FA] rounded border border-dashed border-[#0A0A0A]">
             No upcoming scheduled posts currently in queue.
           </p>
         ) : (
@@ -527,7 +527,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
             {upcomingScheduled.map((post) => (
               <div
                 key={post.id}
-                className="bg-[#F8F9FA] border-2 border-[#0A0A0A] rounded-sm p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-inter"
+                className="bg-[#F8F9FA] border-2 border-[#0A0A0A] rounded-sm p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-switzer"
               >
                 <div className="space-y-1 min-w-0 flex-1">
                   <div className="flex items-center gap-2">
@@ -539,7 +539,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
                         minute: "2-digit",
                       })}
                     </span>
-                    <h4 className="font-space font-bold text-[#0A0A0A] truncate max-w-xs">{post.title}</h4>
+                    <h4 className="font-sekuya font-bold text-[#0A0A0A] truncate max-w-xs">{post.title}</h4>
                   </div>
                   <p className="text-[11px] text-[#71717A] truncate">{post.content}</p>
                 </div>
@@ -567,7 +567,7 @@ export const AnalyticsOverview: React.FC = React.memo(() => {
       {/* PLATFORM ACTIVITY & TELEMETRY BREAKDOWN SECTION */}
       <div className="pt-1 space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-xs sm:text-sm font-space uppercase font-bold text-[#0A0A0A] tracking-wider flex items-center gap-2 truncate min-w-0">
+          <h3 className="text-xs sm:text-sm font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider flex items-center gap-2 truncate min-w-0">
             <span className="w-2.5 h-2.5 bg-[#3DDC10] rounded-full animate-pulse shrink-0"></span>
             <span className="truncate">DETAILED PLATFORM BREAKDOWN &amp; METRICS</span>
           </h3>

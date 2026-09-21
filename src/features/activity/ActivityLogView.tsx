@@ -203,14 +203,14 @@ export const ActivityLogView: React.FC = React.memo(() => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-space uppercase font-extrabold text-[#FFFFFF] tracking-wider">
+                <h2 className="text-xl font-sekuya uppercase font-extrabold text-[#FFFFFF] tracking-wider">
                   SYSTEM ACTIVITY &amp; AUDIT TRAIL
                 </h2>
                 <span className="bg-[#3DDC10] text-[#0A0A0A] font-mono text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest">
                   ADMIN ONLY
                 </span>
               </div>
-              <p className="text-xs font-inter text-[#71717A]">
+              <p className="text-xs font-switzer text-[#71717A]">
                 Comprehensive audit trail tracking draft creation, post modifications, scheduling, and deletions.
               </p>
             </div>
@@ -366,7 +366,7 @@ export const ActivityLogView: React.FC = React.memo(() => {
       {/* Activity Timeline List */}
       <div className="bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm p-5 space-y-4 shadow-card-white text-[#0A0A0A]">
         <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-3">
-          <h3 className="text-base font-space uppercase font-bold text-[#0A0A0A] flex items-center gap-2">
+          <h3 className="text-base font-sekuya uppercase font-bold text-[#0A0A0A] flex items-center gap-2">
             <History className="w-5 h-5 text-[#3DDC10]" />
             AUDIT TRAIL TIMELINE ({filteredActivities.length})
           </h3>

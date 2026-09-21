@@ -178,7 +178,26 @@ export const assistantSlice = createSlice({
           timestamp: new Date().toISOString(),
           suggestions: ["How do I schedule a post?", "What can my current role do?"],
         });
-      });
+      })
+      // Auto-open assistant on successful login
+      .addMatcher(
+        (action) => action.type === "auth/login/fulfilled",
+        (state) => {
+          state.isOpen = true;
+          if (!state.hasChosenAlien) {
+            state.isPickerOpen = true;
+          }
+        }
+      )
+      // Reset assistant and close on logout
+      .addMatcher(
+        (action) => action.type === "auth/logout",
+        (state) => {
+          state.isOpen = false;
+          state.isPickerOpen = false;
+          state.messages = [createGreetingMessage(state.selectedAvatarId)];
+        }
+      );
   },
 });
 

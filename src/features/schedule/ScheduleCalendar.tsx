@@ -52,12 +52,12 @@ const ScheduledPostItem: React.FC<ScheduledPostItemProps> = React.memo(
                 minute: "2-digit",
               })}
             </span>
-            <h4 className="text-sm font-space font-bold text-[#0A0A0A] truncate">
+            <h4 className="text-sm font-sekuya font-bold text-[#0A0A0A] truncate">
               {post.title}
             </h4>
           </div>
 
-          <p className="text-xs font-inter text-[#71717A] line-clamp-1 leading-relaxed">
+          <p className="text-xs font-switzer text-[#71717A] line-clamp-1 leading-relaxed">
             {post.content}
           </p>
 
@@ -102,7 +102,7 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = React.memo(
         <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-4">
           <div className="flex items-center gap-2">
             <CalendarIcon className="w-5 h-5 text-[#3DDC10]" />
-            <h2 className="text-xl font-space uppercase font-extrabold text-[#0A0A0A] tracking-wider">
+            <h2 className="text-xl font-sekuya uppercase font-extrabold text-[#0A0A0A] tracking-wider">
               SCHEDULE CALENDAR ({scheduledPosts.length})
             </h2>
           </div>
@@ -112,7 +112,7 @@ export const ScheduleCalendar: React.FC<ScheduleCalendarProps> = React.memo(
         {scheduledPosts.length === 0 ? (
           <div className="bg-[#F8F9FA] border-2 border-dashed border-[#0A0A0A] rounded-sm p-10 text-center space-y-2">
             <Clock className="w-8 h-8 text-[#71717A] mx-auto" />
-            <p className="text-xs font-space uppercase font-bold text-[#0A0A0A]">
+            <p className="text-xs font-sekuya uppercase font-bold text-[#0A0A0A]">
               NO SCHEDULED POSTS QUEUED
             </p>
             <p className="text-[11px] font-inter text-[#71717A]">

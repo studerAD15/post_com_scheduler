@@ -29,6 +29,7 @@ module.exports = {
         mono: ["JetBrains Mono", "monospace"],
         tempting: ["Tempting", "cursive"],
         switzer: ["Switzer", "sans-serif"],
+        sekuya: ["Sekuya", "serif"],
       },
       borderRadius: {
         DEFAULT: "4px",

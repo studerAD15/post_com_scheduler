@@ -516,7 +516,7 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
           <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-3 shrink-0">
             <div className="flex items-center gap-2">
               <CalendarIcon className="w-5 h-5 text-[#3DDC10]" />
-              <h3 className="text-base font-space uppercase font-bold text-[#0A0A0A] tracking-wider">
+              <h3 className="text-base font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
                 POSTS FOR {dateStr} ({posts.length})
               </h3>
             </div>
@@ -587,10 +587,10 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-space font-bold text-[#0A0A0A]">
+                      <h4 className="text-sm font-sekuya font-bold text-[#0A0A0A]">
                         {post.title || "Untitled Post"}
                       </h4>
-                      <p className="text-xs font-inter text-[#71717A] mt-1 line-clamp-3 leading-relaxed">
+                      <p className="text-xs font-switzer text-[#71717A] mt-1 line-clamp-3 leading-relaxed">
                         {post.content}
                       </p>
                     </div>
@@ -1016,12 +1016,12 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
               <CalendarIcon className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-space uppercase font-extrabold text-[#0A0A0A] tracking-wider flex items-center gap-2">
+              <h2 className="text-xl font-sekuya uppercase font-extrabold text-[#0A0A0A] tracking-wider flex items-center gap-2">
                 {viewMode === "month"
                   ? `${monthGrid.monthName} ${monthGrid.year}`
                   : `${weekGrid.startDateStr} – ${weekGrid.endDateStr}`}
               </h2>
-              <p className="text-xs font-inter text-[#71717A]">
+              <p className="text-xs font-switzer text-[#71717A]">
                 Drag &amp; drop post chips between day cells to reschedule instantly across channels.
               </p>
             </div>

@@ -100,7 +100,7 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
 
           {/* Title & Status Badge */}
           <div className="flex items-start justify-between gap-2">
-            <h3 className="text-base font-space font-bold text-[#0A0A0A] line-clamp-1 group-hover:text-[#3DDC10] transition-colors">
+            <h3 className="text-base font-sekuya font-bold text-[#0A0A0A] line-clamp-1 group-hover:text-[#3DDC10] transition-colors">
               {draft.title || "Untitled Post Draft"}
             </h3>
             <span className="shrink-0 px-2.5 py-0.5 rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider bg-[#0A0A0A] text-[#3DDC10] border border-[#3DDC10]">
@@ -109,7 +109,7 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
           </div>
 
           {/* Content Snippet */}
-          <p className="text-xs font-inter text-[#71717A] line-clamp-2 leading-relaxed">
+          <p className="text-xs font-switzer text-[#71717A] line-clamp-2 leading-relaxed">
             {draft.content || <span className="italic text-[#71717A]">No post content</span>}
           </p>
 
@@ -340,13 +340,13 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
               <Layers className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-xl font-space uppercase font-extrabold text-[#FFFFFF] tracking-wider flex items-center gap-2">
+              <h2 className="text-xl font-sekuya uppercase font-extrabold text-[#FFFFFF] tracking-wider flex items-center gap-2">
                 SAVED DRAFTS{" "}
                 <span className="text-[#3DDC10] font-mono">
                   ({filteredDrafts.length})
                 </span>
               </h2>
-              <p className="text-xs font-inter text-[#71717A]">
+              <p className="text-xs font-switzer text-[#71717A]">
                 {isAdmin
                   ? "Admin User Audit Console: Inspecting draft activity across User IDs."
                   : isEditor
@@ -373,7 +373,7 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5 text-[#3DDC10]" />
                 <div>
-                  <h3 className="text-xs sm:text-sm font-space uppercase font-extrabold text-[#FFFFFF] tracking-wider">
+                  <h3 className="text-xs sm:text-sm font-sekuya uppercase font-extrabold text-[#FFFFFF] tracking-wider">
                     ADMIN DRAFT USER AUDIT CONSOLE
                   </h3>
                   <p className="text-[11px] font-mono text-[#71717A]">
@@ -455,10 +455,10 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
             <div className="w-12 h-12 rounded-sm bg-[#0A0A0A] border-2 border-[#3DDC10] flex items-center justify-center mx-auto text-[#3DDC10] shadow-omni">
               <FileText className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-space uppercase font-bold text-[#0A0A0A]">
+            <h3 className="text-base font-sekuya uppercase font-bold text-[#0A0A0A]">
               NO DRAFTS FOUND
             </h3>
-            <p className="text-xs text-[#71717A] max-w-sm mx-auto font-inter">
+            <p className="text-xs text-[#71717A] max-w-sm mx-auto font-switzer">
               {selectedUserIdFilter !== "all"
                 ? `No draft activity recorded for User ID "${selectedUserIdFilter}".`
                 : "No post drafts stored in the platform queue."}
@@ -501,16 +501,16 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
                   <AlertTriangle className="w-6 h-6" />
                 </div>
                 <div>
-                  <h4 id="delete-draft-title" className="text-base font-space uppercase font-bold text-[#0A0A0A]">
+                  <h4 id="delete-draft-title" className="text-base font-sekuya uppercase font-bold text-[#0A0A0A]">
                     DELETE DRAFT?
                   </h4>
-                  <p className="text-xs font-inter text-[#71717A]">
+                  <p className="text-xs font-switzer text-[#71717A]">
                     This action cannot be undone.
                   </p>
                 </div>
               </div>
 
-              <p className="text-xs font-inter text-[#0A0A0A] bg-[#F8F9FA] p-3 rounded-sm border border-[#0A0A0A]">
+              <p className="text-xs font-switzer text-[#0A0A0A] bg-[#F8F9FA] p-3 rounded-sm border border-[#0A0A0A]">
                 Are you sure you want to delete this draft permanently?
               </p>
 
