@@ -29,7 +29,7 @@ function formatMessageContent(text: string): React.ReactNode {
     const formattedLine = parts.map((part, pIdx) => {
       if (part.startsWith("**") && part.endsWith("**")) {
         return (
-          <strong key={pIdx} className="font-bold text-[#FFFFFF]">
+          <strong key={pIdx} className="font-bold text-[#0A0A0A]">
             {part.slice(2, -2)}
           </strong>
         );
@@ -58,7 +58,7 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = React.memo(
     }, [messages, isTyping]);
 
     return (
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 font-switzer">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 font-switzer bg-[#FFFFFF]">
         {messages.map((msg) => {
           const isAssistant = msg.role === "assistant";
 
@@ -72,7 +72,7 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = React.memo(
               {/* Left Avatar for Assistant */}
               {isAssistant && (
                 <div
-                  className="w-8 h-8 rounded-sm p-1 bg-[#141414] border border-[#3DDC10] text-[#3DDC10] shrink-0 mt-0.5 shadow-sm"
+                  className="w-8 h-8 rounded-sm p-1 bg-[#FFFFFF] border-2 border-[#0A0A0A] text-[#0A0A0A] shrink-0 mt-0.5 shadow-sm"
                   title={`${alienConfig.name} (${alienConfig.codename})`}
                 >
                   <AlienAvatarComponent className="w-full h-full" />
@@ -83,8 +83,8 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = React.memo(
               <div
                 className={`max-w-[85%] rounded-sm p-3 text-xs leading-relaxed ${
                   isAssistant
-                    ? "bg-[#1C1C1C] text-[#E2E8F0] border border-[#2A2A2A]"
-                    : "bg-[#3DDC10] text-[#0A0A0A] font-medium border border-[#3DDC10]"
+                    ? "bg-[#F4F4F5] text-[#0A0A0A] border border-[#E5E7EB]"
+                    : "bg-[#3DDC10] text-[#0A0A0A] font-medium border-2 border-[#0A0A0A]"
                 }`}
               >
                 {/* Header info in bubble */}
@@ -107,8 +107,8 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = React.memo(
 
                 {/* Optional Suggestions */}
                 {isAssistant && msg.suggestions && msg.suggestions.length > 0 && (
-                  <div className="mt-3 pt-2.5 border-t border-[#2A2A2A] space-y-1.5">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#3DDC10] font-bold block">
+                  <div className="mt-3 pt-2.5 border-t border-[#E5E7EB] space-y-1.5">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#15803D] font-bold block">
                       SUGGESTED QUERIES:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
@@ -117,7 +117,7 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = React.memo(
                           key={sIdx}
                           type="button"
                           onClick={() => onSelectSuggestion(sug)}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[#141414] hover:bg-[#0A0A0A] text-[#3DDC10] border border-[#3DDC10]/40 hover:border-[#3DDC10] text-[10.5px] font-mono font-bold transition-colors text-left"
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[#FFFFFF] hover:bg-[#0A0A0A] hover:text-[#FFFFFF] text-[#0A0A0A] border border-[#0A0A0A] text-[10.5px] font-mono font-bold transition-colors text-left"
                         >
                           <ArrowRight className="w-2.5 h-2.5 shrink-0" />
                           <span>{sug}</span>
@@ -130,7 +130,7 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = React.memo(
 
               {/* Right Avatar for User */}
               {!isAssistant && (
-                <div className="w-8 h-8 rounded-sm p-1.5 bg-[#0A0A0A] border border-[#2A2A2A] text-[#FFFFFF] shrink-0 mt-0.5 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-sm p-1.5 bg-[#0A0A0A] border border-[#0A0A0A] text-[#FFFFFF] shrink-0 mt-0.5 flex items-center justify-center">
                   <UserIcon className="w-4 h-4" />
                 </div>
               )}

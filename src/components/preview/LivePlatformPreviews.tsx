@@ -74,14 +74,14 @@ export const LivePlatformPreviews: React.FC<LivePlatformPreviewsProps> = React.m
 
     if (selectedPlatforms.length === 0) {
       return (
-        <div className="bg-[#141414] border border-[#2A2A2A] rounded p-8 text-center space-y-3">
-          <div className="w-12 h-12 rounded bg-[#1C1C1C] border border-[#2A2A2A] flex items-center justify-center mx-auto text-[#A0A0A0]">
+        <div className="bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm p-8 text-center space-y-3 shadow-card-white">
+          <div className="w-12 h-12 rounded bg-[#F8F9FA] border border-[#E5E7EB] flex items-center justify-center mx-auto text-[#71717A]">
             <ImageIcon className="w-6 h-6" />
           </div>
-          <p className="text-xs font-display uppercase tracking-widest text-[#A0A0A0]">
+          <p className="text-xs font-display uppercase tracking-widest text-[#0A0A0A]">
             NO PLATFORMS SELECTED
           </p>
-          <p className="text-xs text-[#666666]">
+          <p className="text-xs text-[#52525B]">
             Select one or more social platforms above to see real-time native previews.
           </p>
         </div>
@@ -89,18 +89,18 @@ export const LivePlatformPreviews: React.FC<LivePlatformPreviewsProps> = React.m
     }
 
     return (
-      <div className="bg-[#141414] border border-[#2A2A2A] rounded p-4 sm:p-5 space-y-4 shadow-lg">
+      <div className="bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm p-4 sm:p-5 space-y-4 shadow-card-white text-[#0A0A0A]">
         {/* Preview Header Bar with Hazard Accent */}
-        <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-3">
           <div className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 bg-[#3DDC10]"></div>
-            <h3 className="text-xs font-display font-bold uppercase tracking-wider text-[#F5F5F5]">
+            <h3 className="text-xs font-display font-bold uppercase tracking-wider text-[#0A0A0A]">
               LIVE NATIVE PREVIEWS
             </h3>
           </div>
 
           {/* Platform Switcher Chips inside Preview Header */}
-          <div className="flex items-center gap-1 bg-[#0A0A0A] p-1 rounded border border-[#2A2A2A]">
+          <div className="flex items-center gap-1 bg-[#F8F9FA] p-1 rounded-sm border-2 border-[#0A0A0A]">
             {selectedPlatforms.map((pId) => {
               const isActive = currentTab === pId;
               return (
@@ -111,7 +111,7 @@ export const LivePlatformPreviews: React.FC<LivePlatformPreviewsProps> = React.m
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-[11px] font-display uppercase tracking-wider transition-all ${
                     isActive
                       ? "bg-[#3DDC10] text-[#0A0A0A] font-bold"
-                      : "text-[#A0A0A0] hover:text-[#F5F5F5] hover:bg-[#1C1C1C]"
+                      : "text-[#52525B] hover:text-[#0A0A0A] hover:bg-[#FFFFFF]"
                   }`}
                 >
                   {pId === "twitter" && <TwitterIcon className="w-3 h-3" />}

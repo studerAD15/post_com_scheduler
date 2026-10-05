@@ -28,9 +28,9 @@ export const RoleSwitcherBar: React.FC = React.memo(() => {
   const RoleIcon = ROLE_DESCRIPTIONS[currentUser.role]?.icon || Shield;
 
   return (
-    <div className="bg-[#0A0A0A] border-b border-[#2A2A2A] px-4 py-2 text-xs">
+    <div className="bg-[#FFFFFF] border-b border-[#E5E7EB] px-4 py-2 text-xs text-[#0A0A0A]">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-        {/* User Info Tile (White badge on black surface) */}
+        {/* User Info Tile */}
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-sm bg-[#FFFFFF] border-2 border-[#3DDC10] flex items-center justify-center overflow-hidden shrink-0 shadow-omni">
             {currentUser.avatarUrl ? (
@@ -41,7 +41,7 @@ export const RoleSwitcherBar: React.FC = React.memo(() => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="font-space uppercase font-bold text-[#FFFFFF] tracking-wider text-xs">
+            <span className="font-space uppercase font-bold text-[#0A0A0A] tracking-wider text-xs">
               {currentUser.name}
             </span>
             <span className="px-2 py-0.5 rounded-sm text-[10px] font-mono font-bold uppercase tracking-widest bg-[#3DDC10] text-[#0A0A0A] flex items-center gap-1">
@@ -53,8 +53,8 @@ export const RoleSwitcherBar: React.FC = React.memo(() => {
 
         {/* Active Authenticated Session Badge & Sign Out Button */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-[#141414] border border-[#2A2A2A] rounded-sm px-3 py-1 text-xs">
-            <span className="text-[10px] font-mono text-[#A1A1AA] uppercase tracking-wider flex items-center gap-1">
+          <div className="flex items-center gap-2 bg-[#F8F9FA] border border-[#E5E7EB] rounded-sm px-3 py-1 text-xs">
+            <span className="text-[10px] font-mono text-[#52525B] uppercase tracking-wider flex items-center gap-1">
               <Lock className="w-3 h-3 text-[#3DDC10]" /> ACTIVE ROLE:
             </span>
             <span
@@ -62,8 +62,8 @@ export const RoleSwitcherBar: React.FC = React.memo(() => {
                 currentUser.role === "admin"
                   ? "bg-[#3DDC10] text-[#0A0A0A]"
                   : currentUser.role === "editor"
-                  ? "bg-[#3DDC10]/20 text-[#3DDC10] border border-[#3DDC10]/50"
-                  : "bg-[#71717A]/20 text-[#FFFFFF] border border-[#71717A]/50"
+                  ? "bg-[#3DDC10]/20 text-[#0A0A0A] border border-[#3DDC10]/50"
+                  : "bg-[#F4F4F5] text-[#0A0A0A] border border-[#E5E7EB]"
               }`}
             >
               <RoleIcon className="w-3.5 h-3.5" />

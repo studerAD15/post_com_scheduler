@@ -167,32 +167,32 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
           }`}
         >
           {/* Header Bar using Orbitron + Inter */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-[#0A0A0A] pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E5E7EB] pb-4">
             <div>
               <h2 className="text-xl font-sekuya uppercase font-extrabold text-[#0A0A0A] flex items-center gap-2 tracking-wider">
                 <Zap className="w-5 h-5 text-[#3DDC10] fill-[#3DDC10]" />
                 POST COMPOSER
               </h2>
-              <p className="text-xs text-[#71717A] font-switzer mt-0.5">
+              <p className="text-xs text-[#52525B] font-inter font-normal mt-0.5">
                 Draft and format your content for multiple channels simultaneously.
               </p>
             </div>
 
             <div className="flex items-center gap-2">
               {isOverallValid ? (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm text-xs font-mono font-bold uppercase tracking-wider bg-[#0A0A0A] text-[#3DDC10] border border-[#3DDC10]">
-                  <CheckCircle2 className="w-4 h-4 text-[#3DDC10]" /> READY
+                <span className="badge-omni badge-omni-green">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#3DDC10]" /> READY
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm text-xs font-mono font-bold uppercase tracking-wider bg-[#FF7A00]/10 text-[#FF7A00] border border-[#FF7A00]/40">
-                  <AlertCircle className="w-4 h-4" /> CHECK RULES
+                <span className="badge-omni badge-omni-warning">
+                  <AlertCircle className="w-3.5 h-3.5 text-[#FF7A00]" /> CHECK RULES
                 </span>
               )}
             </div>
           </div>
 
           {!canCreate && (
-            <div className="bg-[#FFFFFF] border-2 border-[#FF7A00] p-3.5 rounded-sm text-xs font-space text-[#0A0A0A] flex items-center gap-2 shadow-omni-warning">
+            <div className="bg-[#F8F9FA] border border-[#FF7A00] p-3.5 rounded-sm text-xs font-inter text-[#0A0A0A] flex items-center gap-2 shadow-sm">
               <AlertTriangle className="w-4 h-4 text-[#FF7A00] shrink-0" />
               <span>
                 EDITOR ROLE RESTRICTION: Only users with the <strong className="text-[#3DDC10] uppercase">Editor</strong> role are responsible for creating, editing, scheduling, and publishing posts.
@@ -202,7 +202,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
 
           {/* Target Platforms Brand Selector Chips */}
           <div className="space-y-2.5">
-            <label className="block text-xs font-space font-bold uppercase tracking-widest text-[#0A0A0A]">
+            <label className="block text-xs font-mono font-bold uppercase tracking-widest text-[#52525B]">
               SELECT TARGET CHANNELS <span className="text-[#FF7A00]">*</span>
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -218,15 +218,15 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                     onClick={() => handlePlatformToggle(platformId)}
                     className={`flex items-center gap-3 p-3 rounded-sm border-2 transition-all text-left ${
                       isSelected
-                        ? "bg-[#0A0A0A] border-[#3DDC10] text-[#FFFFFF] shadow-omni scale-[1.02]"
-                        : "bg-[#F8F9FA] border-[#0A0A0A] text-[#0A0A0A] hover:bg-[#FFFFFF] hover:border-[#3DDC10]"
+                        ? "bg-[#FFFFFF] border-[#3DDC10] text-[#0A0A0A] shadow-omni scale-[1.01]"
+                        : "bg-[#F8F9FA] border-[#E5E7EB] text-[#52525B] hover:border-[#0A0A0A] hover:text-[#0A0A0A]"
                     }`}
                   >
                     <div
                       className={`w-8 h-8 rounded-sm flex items-center justify-center shrink-0 transition-all ${
                         isSelected
                           ? "bg-[#3DDC10] text-[#0A0A0A] font-bold"
-                          : "bg-[#0A0A0A] text-[#FFFFFF]"
+                          : "bg-[#FFFFFF] text-[#0A0A0A] border border-[#E5E7EB]"
                       }`}
                     >
                       <IconComponent className="w-4 h-4" />
@@ -243,7 +243,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                       className={`w-3.5 h-3.5 rounded-sm border transition-all flex items-center justify-center ${
                         isSelected
                           ? "bg-[#3DDC10] border-[#3DDC10] text-[#0A0A0A]"
-                          : "border-[#0A0A0A] bg-[#FFFFFF]"
+                          : "border-[#D4D4D8] bg-[#FFFFFF]"
                       }`}
                     >
                       {isSelected && <CheckCircle2 className="w-3 h-3 stroke-[3]" />}
@@ -261,7 +261,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
 
           {/* Campaign Title Input */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-space font-bold uppercase tracking-widest text-[#0A0A0A]">
+            <label className="block text-xs font-mono font-bold uppercase tracking-widest text-[#52525B]">
               POST TITLE / CAMPAIGN REF
             </label>
             <input
@@ -269,17 +269,17 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Q3 Omni Launch Announcement"
-              className="w-full px-4 py-2.5 rounded-sm bg-[#F8F9FA] border-2 border-[#0A0A0A] text-[#0A0A0A] placeholder-[#71717A] text-sm font-inter focus:outline-none focus:border-[#3DDC10] transition-all"
+              className="w-full px-4 py-2.5 rounded-sm bg-[#FFFFFF] border-2 border-[#0A0A0A] text-[#0A0A0A] placeholder-[#A1A1AA] text-sm font-inter focus:outline-none focus:border-[#3DDC10] transition-all"
             />
           </div>
 
           {/* Post Content Textarea */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <label className="block text-xs font-space font-bold uppercase tracking-widest text-[#0A0A0A]">
+              <label className="block text-xs font-mono font-bold uppercase tracking-widest text-[#52525B]">
                 POST CONTENT <span className="text-[#FF7A00]">*</span>
               </label>
-              <span className="text-xs text-[#0A0A0A] font-mono flex items-center gap-1 font-bold">
+              <span className="text-xs text-[#71717A] font-mono flex items-center gap-1 font-bold">
                 <Hash className="w-3.5 h-3.5 text-[#3DDC10]" /> Hashtags:{" "}
                 {extractHashtags(content).length}
               </span>
@@ -289,17 +289,17 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Write your post message here... Add #hashtags or @mentions..."
-              className="w-full p-4 rounded-sm bg-[#F8F9FA] border-2 border-[#0A0A0A] text-[#0A0A0A] placeholder-[#71717A] text-sm leading-relaxed focus:outline-none focus:border-[#3DDC10] transition-all resize-y font-inter"
+              className="w-full p-4 rounded-sm bg-[#FFFFFF] border-2 border-[#0A0A0A] text-[#0A0A0A] placeholder-[#A1A1AA] text-sm leading-relaxed focus:outline-none focus:border-[#3DDC10] transition-all resize-y font-inter font-normal"
             />
           </div>
 
           {/* Media Attachments Section */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-space font-bold uppercase tracking-widest text-[#0A0A0A] flex items-center gap-1.5">
+              <label className="text-xs font-mono font-bold uppercase tracking-widest text-[#A1A1AA] flex items-center gap-1.5">
                 <ImageIcon className="w-4 h-4 text-[#3DDC10]" /> MEDIA ATTACHMENTS ({media.length})
               </label>
-              <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-rajdhani font-bold uppercase tracking-wider bg-[#0A0A0A] text-[#3DDC10] hover:bg-[#3DDC10] hover:text-[#0A0A0A] border border-[#0A0A0A] transition-all shadow-sm">
+              <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-rajdhani font-bold uppercase tracking-wider bg-[#FFFFFF] text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-[#FFFFFF] border-2 border-[#0A0A0A] transition-all shadow-sm">
                 <ImageIcon className="w-3.5 h-3.5" /> ATTACH FILE
                 <input
                   type="file"
@@ -312,11 +312,11 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
             </div>
 
             {media.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#F8F9FA] p-3 rounded-sm border-2 border-[#0A0A0A]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#F8F9FA] p-3 rounded-sm border border-[#E5E7EB]">
                 {media.map((item) => (
                   <div
                     key={item.id}
-                    className="relative group rounded-sm bg-[#FFFFFF] border border-[#0A0A0A] p-2 flex flex-col justify-between overflow-hidden shadow-sm"
+                    className="relative group rounded-sm bg-[#FFFFFF] border border-[#E5E7EB] p-2 flex flex-col justify-between overflow-hidden shadow-sm"
                   >
                     <div className="flex items-center justify-between gap-1 mb-1">
                       <span className="text-[10px] font-mono text-[#0A0A0A] font-bold truncate max-w-[100px]">
@@ -331,13 +331,13 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                         <X className="w-3.5 h-3.5" />
                       </button>
                     </div>
-                    <div className="h-20 rounded-sm bg-[#0A0A0A] flex items-center justify-center overflow-hidden border border-[#0A0A0A]">
+                    <div className="h-20 rounded-sm bg-[#F4F4F5] flex items-center justify-center overflow-hidden border border-[#E5E7EB]">
                       {item.type.startsWith("image/") ? (
                         <img src={item.url} alt={item.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="text-center p-2">
                           <ImageIcon className="w-5 h-5 mx-auto text-[#3DDC10]" />
-                          <span className="text-[10px] text-[#FFFFFF] uppercase font-mono">
+                          <span className="text-[10px] text-[#0A0A0A] uppercase font-mono">
                             {item.type.split("/")[1] || "FILE"}
                           </span>
                         </div>
@@ -361,10 +361,11 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                   const config = PLATFORM_CONFIGS[platformId];
                   if (!res) return null;
 
-                  let borderStyle = "border-[#0A0A0A]";
-                  let badgeStyle = "text-[#3DDC10] bg-[#0A0A0A] border-[#0A0A0A]";
+                  let borderStyle = "border-[#E5E7EB]";
+                  let badgeStyle = "text-[#0A0A0A] bg-[#FFFFFF] border-2 border-[#3DDC10]";
                   if (res.warningState === "warning") {
-                    badgeStyle = "text-[#FF7A00] bg-[#0A0A0A] border-[#FF7A00]";
+                    badgeStyle = "text-[#FF7A00] bg-[#FFF7ED] border-[#FF7A00]/40";
+                    borderStyle = "border-[#FF7A00]/40";
                   } else if (res.warningState === "over-limit") {
                     borderStyle = "border-[#FF7A00]";
                     badgeStyle = "text-[#FFFFFF] bg-[#FF7A00] border-[#FF7A00]";
@@ -373,7 +374,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                   return (
                     <div
                       key={platformId}
-                      className={`bg-[#F8F9FA] border-2 ${borderStyle} rounded-sm p-3.5 space-y-2`}
+                      className={`bg-[#F8F9FA] border ${borderStyle} rounded-sm p-3.5 space-y-2`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-rajdhani font-bold uppercase text-[#0A0A0A] flex items-center gap-2">
@@ -396,7 +397,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                       )}
 
                       {res.isValid && res.warnings.length === 0 && (
-                        <p className="text-[11px] font-mono text-[#0A0A0A] font-bold flex items-center gap-1">
+                        <p className="text-[11px] font-mono text-[#52525B] font-bold flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5 text-[#3DDC10]" /> Limits verified.
                         </p>
                       )}
@@ -409,13 +410,13 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
 
           {/* Action Footer Bar (Desktop) */}
           {canCreate && (
-            <div className="hidden sm:flex border-t-2 border-[#0A0A0A] pt-4 items-center justify-between gap-3">
+            <div className="hidden sm:flex border-t border-[#E5E7EB] pt-4 items-center justify-between gap-3">
               {canManageDrafts && (
                 <button
                   type="button"
                   onClick={handleSaveDraftClick}
                   disabled={isSubmitting}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm bg-[#0A0A0A] hover:bg-[#141414] text-[#FFFFFF] font-rajdhani font-bold text-xs uppercase tracking-wider transition-all border-2 border-[#0A0A0A] disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="btn-omni-secondary h-10 px-4 inline-flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed border-2 border-[#0A0A0A]"
                 >
                   <Save className="w-4 h-4 text-[#3DDC10]" /> SAVE DRAFT
                 </button>
@@ -427,7 +428,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                     type="button"
                     onClick={handleScheduleClick}
                     disabled={!isOverallValid || isSubmitting}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-sm bg-[#0A0A0A] text-[#3DDC10] hover:bg-[#3DDC10] hover:text-[#0A0A0A] border-2 border-[#0A0A0A] font-rajdhani font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="btn-omni-secondary h-10 px-4 inline-flex items-center gap-2 text-[#0A0A0A] border-2 border-[#0A0A0A] hover:border-[#3DDC10] disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Calendar className="w-4 h-4" /> SCHEDULE POST
                   </button>
@@ -438,7 +439,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                     type="button"
                     onClick={handlePublishClick}
                     disabled={!isOverallValid || isSubmitting}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-sm bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] font-rajdhani font-extrabold text-xs uppercase tracking-widest transition-all shadow-omni hover:scale-[1.02] border-2 border-[#0A0A0A] disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="btn-omni-primary h-10 px-6 inline-flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed border-2 border-[#0A0A0A]"
                   >
                     <Send className="w-4 h-4" /> PUBLISH NOW
                   </button>
@@ -459,13 +460,13 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
 
         {/* STICKY ACTION BAR FOR MOBILE */}
         {canCreate && (
-          <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF] border-t-4 border-[#3DDC10] p-3 flex items-center justify-between gap-2 shadow-card-white">
+          <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF] border-t-2 border-[#0A0A0A] p-3 flex items-center justify-between gap-2 shadow-omni-lg">
             {canManageDrafts && (
               <button
                 type="button"
                 onClick={handleSaveDraftClick}
                 disabled={isSubmitting}
-                className="flex-1 py-2 px-2 rounded-sm bg-[#0A0A0A] text-[#FFFFFF] font-rajdhani font-bold text-xs uppercase border border-[#0A0A0A] disabled:opacity-40 disabled:cursor-not-allowed"
+                className="btn-omni-secondary h-9 flex-1 text-xs disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Draft
               </button>
@@ -475,7 +476,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                 type="button"
                 onClick={handleScheduleClick}
                 disabled={!isOverallValid || isSubmitting}
-                className="flex-1 py-2 px-2 rounded-sm bg-[#0A0A0A] text-[#3DDC10] border border-[#0A0A0A] font-rajdhani font-bold text-xs uppercase disabled:opacity-40 disabled:cursor-not-allowed"
+                className="btn-omni-secondary h-9 flex-1 text-xs text-[#3DDC10] border-[#3DDC10]/40 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Schedule
               </button>
@@ -485,7 +486,7 @@ export const PostComposer: React.FC<PostComposerProps> = React.memo(
                 type="button"
                 onClick={handlePublishClick}
                 disabled={!isOverallValid || isSubmitting}
-                className="flex-1 py-2 px-2 rounded-sm bg-[#3DDC10] text-[#0A0A0A] font-rajdhani font-extrabold text-xs uppercase shadow-omni disabled:opacity-40 disabled:cursor-not-allowed"
+                className="btn-omni-primary h-9 flex-1 text-xs disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Publish
               </button>

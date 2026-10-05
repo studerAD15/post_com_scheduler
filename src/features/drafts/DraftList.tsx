@@ -79,37 +79,37 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
     }, [onToggleAudit, draft.id]);
 
     return (
-      <div className="bg-[#FFFFFF] text-[#0A0A0A] border-2 border-[#0A0A0A] hover:border-[#3DDC10] rounded-sm p-5 flex flex-col justify-between transition-all hover:shadow-card-white group relative">
+      <div className="bg-[#FFFFFF] text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-sm p-5 flex flex-col justify-between transition-all group relative hover:border-[#3DDC10] shadow-card-white">
         <div className="space-y-3.5">
           {/* Author User ID Header Badge */}
-          <div className="flex items-center justify-between gap-2 border-b border-[#0A0A0A]/10 pb-2">
+          <div className="flex items-center justify-between gap-2 border-b border-[#E5E7EB] pb-2.5">
             <div className="flex items-center gap-1.5 min-w-0">
-              <UserCheck className="w-3.5 h-3.5 text-[#3DDC10] shrink-0" />
-              <span className="text-[11px] font-mono font-bold text-[#0A0A0A] truncate">
+              <UserCheck className="w-3.5 h-3.5 text-[#15803D] shrink-0" />
+              <span className="text-[11px] font-mono font-bold text-[#71717A] truncate">
                 AUTHOR:{" "}
-                <strong className="text-[#3DDC10] bg-[#0A0A0A] px-1.5 py-0.5 rounded">
+                <strong className="text-[#15803D] bg-[#F4F4F5] px-1.5 py-0.5 rounded-sm border border-[#E5E7EB]">
                   {authorName}
                 </strong>
               </span>
             </div>
 
-            <span className="text-[10px] font-mono bg-[#F8F9FA] border border-[#0A0A0A] text-[#0A0A0A] px-2 py-0.5 rounded font-bold uppercase shrink-0">
+            <span className="badge-omni badge-omni-neutral shrink-0">
               ID: {authorId}
             </span>
           </div>
 
           {/* Title & Status Badge */}
           <div className="flex items-start justify-between gap-2">
-            <h3 className="text-base font-sekuya font-bold text-[#0A0A0A] line-clamp-1 group-hover:text-[#3DDC10] transition-colors">
+            <h3 className="text-base font-sekuya font-bold text-[#0A0A0A] line-clamp-1 group-hover:text-[#15803D] transition-colors">
               {draft.title || "Untitled Post Draft"}
             </h3>
-            <span className="shrink-0 px-2.5 py-0.5 rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider bg-[#0A0A0A] text-[#3DDC10] border border-[#3DDC10]">
+            <span className="badge-omni badge-omni-green shrink-0">
               DRAFT
             </span>
           </div>
 
           {/* Content Snippet */}
-          <p className="text-xs font-switzer text-[#71717A] line-clamp-2 leading-relaxed">
+          <p className="text-xs font-inter font-normal text-[#52525B] line-clamp-2 leading-relaxed">
             {draft.content || <span className="italic text-[#71717A]">No post content</span>}
           </p>
 
@@ -120,7 +120,7 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
               return (
                 <span
                   key={pId}
-                  className="inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-sm bg-[#0A0A0A] text-[#3DDC10] border border-[#0A0A0A]"
+                  className="badge-omni badge-omni-neutral inline-flex items-center gap-1"
                 >
                   <IconComp className="w-3 h-3" />
                   {pId}
@@ -131,22 +131,22 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
 
           {/* ADMIN DRAFT AUDIT TRAIL TIMELINE (Expandable) */}
           {auditTrail.length > 0 && (
-            <div className="pt-2 border-t border-[#0A0A0A]/10 space-y-2">
+            <div className="pt-2 border-t border-[#E5E7EB] space-y-2">
               <button
                 type="button"
                 onClick={handleToggleAuditClick}
-                className="w-full flex items-center justify-between text-[11px] font-mono font-bold text-[#0A0A0A] hover:text-[#3DDC10] bg-[#F8F9FA] p-2 rounded border border-[#0A0A0A] transition-colors"
+                className="w-full flex items-center justify-between text-[11px] font-mono font-bold text-[#0A0A0A] hover:text-[#15803D] bg-[#F8F9FA] p-2 rounded-sm border border-[#E5E7EB] hover:border-[#0A0A0A] transition-colors"
               >
                 <span className="flex items-center gap-1.5">
-                  <History className="w-3.5 h-3.5 text-[#3DDC10]" />
+                  <History className="w-3.5 h-3.5 text-[#15803D]" />
                   USER ID REVISION TRAIL ({auditTrail.length})
                 </span>
                 <span>{isAuditExpanded ? "▲ Hide Log" : "▼ View Audit Trail"}</span>
               </button>
 
               {isAuditExpanded && (
-                <div className="bg-[#0A0A0A] text-[#FFFFFF] p-3 rounded-sm space-y-2.5 text-[11px] font-mono border border-[#3DDC10]">
-                  <p className="text-[10px] font-bold text-[#3DDC10] uppercase border-b border-[#2A2A2A] pb-1 flex items-center gap-1">
+                <div className="bg-[#F8F9FA] text-[#0A0A0A] p-3 rounded-sm space-y-2.5 text-[11px] font-mono border-2 border-[#0A0A0A]">
+                  <p className="text-[10px] font-bold text-[#15803D] uppercase border-b border-[#E5E7EB] pb-1 flex items-center gap-1">
                     <Shield className="w-3 h-3" /> USER ID CHANGE TIMELINE
                   </p>
 
@@ -154,9 +154,9 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
                     {auditTrail.map((entry) => (
                       <div
                         key={entry.id}
-                        className="bg-[#141414] p-2 rounded border border-[#2A2A2A] space-y-1 text-[10px]"
+                        className="bg-[#FFFFFF] p-2 rounded-sm border border-[#E5E7EB] space-y-1 text-[10px]"
                       >
-                        <div className="flex items-center justify-between text-[#3DDC10]">
+                        <div className="flex items-center justify-between text-[#15803D]">
                           <span className="font-bold flex items-center gap-1">
                             <span className="w-1.5 h-1.5 bg-[#3DDC10] rounded-full"></span>
                             {entry.name} ({entry.userId})
@@ -169,10 +169,10 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
                           </span>
                         </div>
 
-                        <p className="text-[#FFFFFF]">{entry.changesSummary}</p>
+                        <p className="text-[#0A0A0A] font-inter font-normal">{entry.changesSummary}</p>
 
                         <div className="flex items-center justify-between text-[9px] text-[#71717A] pt-0.5">
-                          <span className="uppercase text-[#FF7A00]">
+                          <span className="uppercase text-[#C2410C]">
                             ACTION: {entry.action}
                           </span>
                           <span className="uppercase">ROLE: {entry.role}</span>
@@ -187,9 +187,9 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
         </div>
 
         {/* Card Footer */}
-        <div className="mt-5 pt-3 border-t-2 border-[#0A0A0A]/10 flex items-center justify-between text-[11px] text-[#71717A] font-mono">
+        <div className="mt-5 pt-3 border-t border-[#E5E7EB] flex items-center justify-between text-[11px] text-[#71717A] font-mono">
           <span className="flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-[#3DDC10]" />
+            <Clock className="w-3.5 h-3.5 text-[#15803D]" />
             {new Date(draft.updatedAt).toLocaleDateString(undefined, {
               month: "short",
               day: "numeric",
@@ -198,13 +198,13 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
             })}
           </span>
 
-          <div className="flex items-center gap-2 font-rajdhani text-xs font-bold uppercase">
+          <div className="flex items-center gap-2">
             {canEditDraft && (
               <button
                 type="button"
                 onClick={handleEditClick}
                 disabled={isLoading}
-                className="inline-flex items-center gap-1 text-[#0A0A0A] hover:text-[#3DDC10] font-bold px-2.5 py-1 rounded-sm bg-[#F8F9FA] hover:bg-[#0A0A0A] border border-[#0A0A0A] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="btn-omni-secondary h-8 px-3 text-xs inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Edit3 className="w-3.5 h-3.5" /> EDIT
               </button>
@@ -214,7 +214,7 @@ const DraftCardItem: React.FC<DraftCardItemProps> = React.memo(
                 type="button"
                 onClick={handleDeleteClick}
                 disabled={isLoading}
-                className="inline-flex items-center gap-1 text-[#71717A] hover:text-[#FF7A00] font-bold px-2.5 py-1 rounded-sm hover:bg-[#FF7A00]/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="btn-omni-ghost h-8 px-3 text-xs text-[#FF7A00] hover:text-[#FF7A00] hover:bg-[#FF7A00]/10 inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Trash2 className="w-3.5 h-3.5" /> DELETE
               </button>
@@ -310,7 +310,7 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
 
     if (isLoading && drafts.length === 0) {
       return (
-        <div className="bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm p-10 text-center space-y-4 shadow-card-white">
+        <div className="card-omni p-10 text-center space-y-4">
           <Loader2 className="w-8 h-8 text-[#3DDC10] animate-spin mx-auto" />
           <p className="text-xs font-space uppercase font-bold text-[#0A0A0A]">
             LOADING SAVED DRAFTS...
@@ -321,12 +321,12 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
 
     if (error) {
       return (
-        <div className="bg-[#FFFFFF] border-2 border-[#FF7A00] rounded-sm p-6 text-center space-y-3 shadow-omni-warning">
+        <div className="bg-[#FFFFFF] border-2 border-[#FF7A00] rounded-sm p-6 text-center space-y-3 shadow-sm">
           <AlertTriangle className="w-8 h-8 text-[#FF7A00] mx-auto" />
           <p className="text-sm font-space uppercase font-bold text-[#FF7A00]">
             COULD NOT LOAD DRAFTS
           </p>
-          <p className="text-xs text-[#0A0A0A] font-inter">{error}</p>
+          <p className="text-xs text-[#52525B] font-inter font-normal">{error}</p>
         </div>
       );
     }
@@ -336,17 +336,17 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
         {/* Top Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-sm bg-[#0A0A0A] text-[#3DDC10] flex items-center justify-center border border-[#3DDC10] shrink-0 shadow-omni">
+            <div className="w-8 h-8 rounded-sm bg-[#FFFFFF] text-[#15803D] flex items-center justify-center border-2 border-[#0A0A0A] shrink-0 shadow-sm">
               <Layers className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-xl font-sekuya uppercase font-extrabold text-[#FFFFFF] tracking-wider flex items-center gap-2">
+              <h2 className="text-xl font-sekuya uppercase font-extrabold text-[#0A0A0A] tracking-wider flex items-center gap-2">
                 SAVED DRAFTS{" "}
-                <span className="text-[#3DDC10] font-mono">
+                <span className="text-[#15803D] font-mono">
                   ({filteredDrafts.length})
                 </span>
               </h2>
-              <p className="text-xs font-switzer text-[#71717A]">
+              <p className="text-xs font-inter font-normal text-[#71717A]">
                 {isAdmin
                   ? "Admin User Audit Console: Inspecting draft activity across User IDs."
                   : isEditor
@@ -359,7 +359,7 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
           {canCreate && onCreateNew && (
             <button
               onClick={onCreateNew}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-sm bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] font-rajdhani uppercase font-extrabold text-xs tracking-widest transition-all shadow-omni hover:scale-[1.02] border-2 border-[#0A0A0A] shrink-0 self-start sm:self-auto"
+              className="btn-omni-primary h-10 px-5 inline-flex items-center gap-2 shrink-0 self-start sm:self-auto"
             >
               <Plus className="w-4 h-4" /> CREATE NEW POST
             </button>
@@ -368,15 +368,15 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
 
         {/* ADMIN DRAFT USER AUDIT LOG CONSOLE (Visible to Admin Role) */}
         {isAdmin && (
-          <div className="bg-[#0A0A0A] border-2 border-[#3DDC10] rounded-sm p-4 sm:p-5 space-y-4 text-[#FFFFFF] shadow-omni">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#2A2A2A] pb-3">
+          <div className="bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm p-4 sm:p-5 space-y-4 text-[#0A0A0A] shadow-card-white">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E5E7EB] pb-3">
               <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-[#3DDC10]" />
+                <Shield className="w-5 h-5 text-[#15803D]" />
                 <div>
-                  <h3 className="text-xs sm:text-sm font-sekuya uppercase font-extrabold text-[#FFFFFF] tracking-wider">
+                  <h3 className="text-xs sm:text-sm font-sekuya uppercase font-extrabold text-[#0A0A0A] tracking-wider">
                     ADMIN DRAFT USER AUDIT CONSOLE
                   </h3>
-                  <p className="text-[11px] font-mono text-[#71717A]">
+                  <p className="text-[11px] font-inter font-normal text-[#71717A]">
                     Tracking revisions and edits performed by draft users across different User IDs.
                   </p>
                 </div>
@@ -384,14 +384,14 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
 
               {/* Filter by User ID */}
               <div className="flex items-center gap-2 shrink-0">
-                <Filter className="w-3.5 h-3.5 text-[#3DDC10]" />
-                <span className="text-[11px] font-mono text-[#71717A]">
+                <Filter className="w-3.5 h-3.5 text-[#15803D]" />
+                <span className="text-[11px] font-mono text-[#52525B]">
                   FILTER USER ID:
                 </span>
                 <select
                   value={selectedUserIdFilter}
                   onChange={(e) => setSelectedUserIdFilter(e.target.value)}
-                  className="bg-[#141414] text-[#3DDC10] border border-[#3DDC10]/60 rounded px-2.5 py-1 text-xs font-mono font-bold focus:outline-none"
+                  className="bg-[#FFFFFF] text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-sm px-2.5 py-1 text-xs font-mono font-bold focus:outline-none"
                 >
                   <option value="all">ALL USER IDs ({allUserIds.length})</option>
                   {allUserIds.map((uId) => (
@@ -404,27 +404,27 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
-              <div className="bg-[#141414] p-3 rounded border border-[#2A2A2A] space-y-1">
-                <span className="text-[#71717A] text-[10px] block">
+              <div className="bg-[#F8F9FA] p-3 rounded-sm border border-[#E5E7EB] space-y-1">
+                <span className="text-[#71717A] text-[10px] block font-inter">
                   TOTAL USER REVISIONS
                 </span>
-                <span className="text-lg font-bold text-[#3DDC10]">
+                <span className="text-lg font-bold text-[#15803D]">
                   {totalRevisionsCount} Changes
                 </span>
               </div>
-              <div className="bg-[#141414] p-3 rounded border border-[#2A2A2A] space-y-1">
-                <span className="text-[#71717A] text-[10px] block">
+              <div className="bg-[#F8F9FA] p-3 rounded-sm border border-[#E5E7EB] space-y-1">
+                <span className="text-[#71717A] text-[10px] block font-inter">
                   ACTIVE DRAFT AUTHORS
                 </span>
-                <span className="text-lg font-bold text-[#FFFFFF]">
+                <span className="text-lg font-bold text-[#0A0A0A]">
                   {allUserIds.length} User IDs
                 </span>
               </div>
-              <div className="bg-[#141414] p-3 rounded border border-[#2A2A2A] space-y-1">
-                <span className="text-[#71717A] text-[10px] block">
+              <div className="bg-[#F8F9FA] p-3 rounded-sm border border-[#E5E7EB] space-y-1">
+                <span className="text-[#71717A] text-[10px] block font-inter">
                   RESPONSIBLE POST ROLE
                 </span>
-                <span className="text-lg font-bold text-[#FF7A00]">Editor Only</span>
+                <span className="text-lg font-bold text-[#C2410C]">Editor Only</span>
               </div>
             </div>
           </div>
@@ -432,18 +432,18 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
 
         {/* Non-Editor Notice Banner */}
         {!isEditor && (
-          <div className="bg-[#FFFFFF] border-2 border-[#0A0A0A] border-l-8 border-l-[#FF7A00] p-3.5 rounded-sm text-xs text-[#0A0A0A] font-space flex items-center justify-between shadow-card-white">
+          <div className="bg-[#FFF7ED] border border-[#FED7AA] border-l-4 border-l-[#FF7A00] p-3.5 rounded-sm text-xs text-[#9A3412] font-inter flex items-center justify-between shadow-sm">
             <span className="flex items-center gap-2">
-              <Lock className="w-4 h-4 text-[#FF7A00]" />
+              <Lock className="w-4 h-4 text-[#C2410C]" />
               <span>
                 ROLE RESTRICTION:{" "}
-                <strong className="uppercase text-[#FF7A00]">
+                <strong className="uppercase text-[#C2410C]">
                   {currentUser?.role}
                 </strong>{" "}
                 MODE. Editor is the only role responsible for creating, editing, or deleting posts.
               </span>
             </span>
-            <span className="text-[10px] font-mono font-bold bg-[#0A0A0A] text-[#3DDC10] px-2 py-0.5 rounded">
+            <span className="badge-omni badge-omni-warning">
               READ-ONLY
             </span>
           </div>
@@ -451,14 +451,14 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
 
         {/* Empty State */}
         {filteredDrafts.length === 0 ? (
-          <div className="bg-[#FFFFFF] text-[#0A0A0A] border-2 border-dashed border-[#0A0A0A] rounded-sm p-12 text-center space-y-3 shadow-card-white">
-            <div className="w-12 h-12 rounded-sm bg-[#0A0A0A] border-2 border-[#3DDC10] flex items-center justify-center mx-auto text-[#3DDC10] shadow-omni">
+          <div className="bg-[#FFFFFF] border-2 border-dashed border-[#E5E7EB] rounded-sm p-12 text-center space-y-3">
+            <div className="w-12 h-12 rounded-sm bg-[#F8F9FA] border border-[#E5E7EB] flex items-center justify-center mx-auto text-[#15803D]">
               <FileText className="w-6 h-6" />
             </div>
             <h3 className="text-base font-sekuya uppercase font-bold text-[#0A0A0A]">
               NO DRAFTS FOUND
             </h3>
-            <p className="text-xs text-[#71717A] max-w-sm mx-auto font-switzer">
+            <p className="text-xs text-[#71717A] max-w-sm mx-auto font-inter font-normal">
               {selectedUserIdFilter !== "all"
                 ? `No draft activity recorded for User ID "${selectedUserIdFilter}".`
                 : "No post drafts stored in the platform queue."}
@@ -486,40 +486,40 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
         {/* Delete Confirmation Modal */}
         {deleteTargetId && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A0A0A]/85 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A0A0A]/60 backdrop-blur-sm"
             onClick={() => !isLoading && setDeleteTargetId(null)}
             role="dialog"
             aria-modal="true"
             aria-labelledby="delete-draft-title"
           >
             <div
-              className="bg-[#FFFFFF] border-4 border-[#FF7A00] rounded-sm p-6 max-w-sm w-full space-y-4 shadow-omni-warning text-[#0A0A0A]"
+              className="bg-[#FFFFFF] border-2 border-[#FF7A00] rounded-sm p-6 max-w-sm w-full space-y-4 shadow-2xl text-[#0A0A0A]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center gap-3 text-[#FF7A00]">
-                <div className="p-3 rounded-sm bg-[#FF7A00]/10 border border-[#FF7A00]/40">
-                  <AlertTriangle className="w-6 h-6" />
+                <div className="p-3 rounded-sm bg-[#FFF7ED] border border-[#FED7AA]">
+                  <AlertTriangle className="w-6 h-6 text-[#C2410C]" />
                 </div>
                 <div>
                   <h4 id="delete-draft-title" className="text-base font-sekuya uppercase font-bold text-[#0A0A0A]">
                     DELETE DRAFT?
                   </h4>
-                  <p className="text-xs font-switzer text-[#71717A]">
+                  <p className="text-xs font-inter text-[#71717A]">
                     This action cannot be undone.
                   </p>
                 </div>
               </div>
 
-              <p className="text-xs font-switzer text-[#0A0A0A] bg-[#F8F9FA] p-3 rounded-sm border border-[#0A0A0A]">
+              <p className="text-xs font-inter text-[#52525B] bg-[#F8F9FA] p-3 rounded-sm border border-[#E5E7EB]">
                 Are you sure you want to delete this draft permanently?
               </p>
 
-              <div className="flex items-center gap-2 pt-2 justify-end font-rajdhani text-xs font-bold uppercase">
+              <div className="flex items-center gap-2 pt-2 justify-end">
                 <button
                   type="button"
                   onClick={() => setDeleteTargetId(null)}
                   disabled={isLoading}
-                  className="px-4 py-2 rounded-sm bg-[#F8F9FA] hover:bg-[#0A0A0A] hover:text-[#FFFFFF] text-[#0A0A0A] transition-colors border border-[#0A0A0A] disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="btn-omni-secondary h-9 px-4 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   CANCEL
                 </button>
@@ -527,7 +527,7 @@ export const DraftList: React.FC<DraftListProps> = React.memo(
                   type="button"
                   onClick={confirmDelete}
                   disabled={isLoading}
-                  className="px-4 py-2 rounded-sm bg-[#FF7A00] hover:bg-[#E06C00] text-[#FFFFFF] transition-all shadow-sm border border-[#0A0A0A] disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
+                  className="btn-omni-primary h-9 px-4 !bg-[#FF7A00] hover:!bg-[#E06C00] !border-[#FF7A00] !text-[#FFFFFF] disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
                 >
                   {isLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   DELETE DRAFT

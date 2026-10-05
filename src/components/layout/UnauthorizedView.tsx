@@ -8,7 +8,7 @@ import { ShieldAlert, ArrowLeft } from "lucide-react";
 
 export const UnauthorizedView: React.FC = () => {
   return (
-    <div className="min-h-[75vh] flex items-center justify-center p-4 bg-[#0A0A0A]">
+    <div className="min-h-[75vh] flex items-center justify-center p-4 bg-[#FFFFFF]">
       <div className="bg-[#FFFFFF] text-[#0A0A0A] border-4 border-[#FF7A00] rounded-sm p-8 max-w-md w-full text-center space-y-5 shadow-omni-warning">
         <div className="w-16 h-16 rounded-sm bg-[#FF7A00]/10 border-2 border-[#FF7A00] text-[#FF7A00] flex items-center justify-center mx-auto">
           <ShieldAlert className="w-8 h-8" />
@@ -24,7 +24,7 @@ export const UnauthorizedView: React.FC = () => {
         </div>
 
         <div className="bg-[#F8F9FA] p-3.5 rounded-sm border-2 border-[#0A0A0A] text-xs font-inter text-[#0A0A0A]">
-          Use the account switcher in the top navigation bar to switch to an <strong className="text-[#3DDC10] bg-[#0A0A0A] px-1 rounded-sm">Admin</strong> or <strong className="text-[#3DDC10] bg-[#0A0A0A] px-1 rounded-sm">Editor</strong> account.
+          Use the account switcher in the top navigation bar to switch to an <strong className="text-[#0A0A0A] bg-[#FFFFFF] border border-[#0A0A0A] px-1.5 py-0.5 rounded-sm">Admin</strong> or <strong className="text-[#0A0A0A] bg-[#FFFFFF] border border-[#0A0A0A] px-1.5 py-0.5 rounded-sm">Editor</strong> account.
         </div>
 
         <Link

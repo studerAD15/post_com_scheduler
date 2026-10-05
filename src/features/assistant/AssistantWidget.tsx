@@ -270,173 +270,188 @@ export const AssistantWidget: React.FC = React.memo(() => {
         </div>
       )}
 
-      {/* 2. Floating Assistant Chat Window */}
+      {/* 2. Docked Right Assistant Chat Panel (Full-height, Contained Scroll, No Element Clipping) */}
       {isOpen && (
-        <div
-          role="region"
-          aria-label="Omnitrix AI Assistant Window"
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[410px] h-[580px] max-h-[calc(100vh-2rem)] bg-[#141414] text-[#FFFFFF] border-2 border-[#3DDC10] rounded-sm shadow-omni-lg flex flex-col overflow-hidden animate-fadeIn"
-        >
-          {/* Header */}
-          <div className="bg-[#0A0A0A] border-b border-[#2A2A2A] px-3.5 py-2.5 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-2.5 min-w-0">
-              {/* Clickable Animated Alien Avatar Thumbnail */}
-              <button
-                type="button"
-                onClick={handleTogglePicker}
-                title="Click to switch alien hero"
-                className="w-9 h-9 rounded-sm bg-[#1C1C1C] border border-[#3DDC10] p-1 text-[#3DDC10] hover:bg-[#3DDC10] hover:text-[#0A0A0A] transition-colors shrink-0 flex items-center justify-center relative group shadow-sm"
-              >
-                <AlienAvatar className="w-full h-full" />
-                <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#3DDC10] border border-[#0A0A0A]" />
-              </button>
+        <>
+          {/* Subtle Dimmer Backdrop on Small Screens (< xl) */}
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs xl:hidden animate-fadeIn"
+            onClick={handleClose}
+          />
 
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <h3 className="font-sekuya text-base sm:text-lg text-[#3DDC10] leading-none">
-                    OmniAssistant
-                  </h3>
-                  <span className="text-[10px] font-space text-[#A1A1AA] uppercase font-bold truncate">
-                    // {alienConfig.name}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className="w-1.5 h-1.5 bg-[#3DDC10] rounded-full animate-pulse" />
-                  <span className="text-[9px] font-mono text-[#71717A] uppercase tracking-wider truncate">
-                    {currentUser ? `ROLE: ${currentUser.role}` : "GUEST MODE"} • {alienConfig.element}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Header Action Buttons */}
-            <div className="flex items-center gap-1 shrink-0 text-[#71717A]">
-              <button
-                type="button"
-                onClick={handleTogglePicker}
-                title="Choose Alien Hero (10 Forms)"
-                aria-label="Choose Alien Hero"
-                className="p-1.5 rounded-sm hover:text-[#3DDC10] hover:bg-[#1C1C1C] transition-colors"
-              >
-                <Sparkles className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleClear}
-                title="Reset Conversation"
-                aria-label="Reset Conversation"
-                className="p-1.5 rounded-sm hover:text-[#FF7A00] hover:bg-[#1C1C1C] transition-colors"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleClose}
-                title="Close Assistant (Esc)"
-                aria-label="Close Assistant"
-                className="p-1.5 rounded-sm hover:text-[#FFFFFF] hover:bg-[#1C1C1C] transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Quick-Select Alien Hero Carousel Strip (Choose alien directly) */}
-          <div className="bg-[#0D0D0D] border-b border-[#2A2A2A] px-2.5 py-1.5 flex items-center gap-1.5 overflow-x-auto shrink-0 no-scrollbar">
-            <span className="text-[9px] font-mono text-[#71717A] font-bold uppercase tracking-wider shrink-0 pr-1">
-              HERO:
-            </span>
-            {ALIEN_REGISTRY.map((alien: AlienAvatarConfig) => {
-              const isCurrent = alien.id === selectedAvatarId;
-              const MiniAlien = alien.Component;
-              return (
+          <div
+            role="region"
+            aria-label="Omnitrix AI Assistant Panel"
+            className="fixed top-0 right-0 h-full w-full sm:w-[400px] xl:w-[420px] z-50 bg-[#FFFFFF] text-[#0A0A0A] border-l-2 border-[#0A0A0A] shadow-2xl flex flex-col overflow-hidden animate-slideInRight"
+          >
+            {/* Header */}
+            <div className="bg-[#FFFFFF] border-b border-[#E5E7EB] px-4 py-3 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2.5 min-w-0">
+                {/* Clickable Animated Alien Avatar Thumbnail */}
                 <button
-                  key={alien.id}
                   type="button"
-                  onClick={() => handleQuickSelectAlien(alien.id)}
-                  title={`${alien.name} (${alien.element})`}
-                  className={`w-7 h-7 rounded-sm p-0.5 shrink-0 flex items-center justify-center border transition-all ${
-                    isCurrent
-                      ? "bg-[#0A0A0A] border-[#3DDC10] shadow-[0_0_6px_#3DDC10] scale-110"
-                      : "bg-[#181818] border-[#2A2A2A] hover:border-[#3DDC10]/60 opacity-60 hover:opacity-100"
-                  }`}
+                  onClick={handleTogglePicker}
+                  title="Click to open full DNA roster"
+                  className="w-9 h-9 rounded-sm bg-[#FFFFFF] border-2 border-[#0A0A0A] p-1 text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-[#FFFFFF] transition-colors shrink-0 flex items-center justify-center relative group shadow-sm"
                 >
-                  <MiniAlien className="w-full h-full" />
+                  <AlienAvatar className="w-full h-full" />
+                  <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#3DDC10] border border-[#0A0A0A]" />
                 </button>
-              );
-            })}
-            <button
-              type="button"
-              onClick={handleTogglePicker}
-              className="text-[9px] font-mono text-[#3DDC10] hover:underline font-bold uppercase shrink-0 pl-1"
-            >
-              ALL 10 →
-            </button>
-          </div>
 
-          {/* If user hasn't chosen an alien hero yet, show prominent Choice Prompt */}
-          {!hasChosenAlien ? (
-            <div className="flex-1 p-5 flex flex-col items-center justify-center text-center space-y-4 bg-[#0A0A0A]">
-              <div className="w-16 h-16 rounded-sm bg-[#141414] border-2 border-[#3DDC10] p-2 flex items-center justify-center shadow-omni">
-                <AlienAvatar className="w-full h-full" />
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="font-sekuya text-base sm:text-lg text-[#0A0A0A] leading-none">
+                      OmniAssistant
+                    </h3>
+                    <span className="text-[10px] font-space text-[#71717A] uppercase font-bold truncate">
+                      {alienConfig.name}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className="w-1.5 h-1.5 bg-[#3DDC10] rounded-full animate-pulse" />
+                    <span className="text-[9px] font-mono text-[#71717A] uppercase tracking-wider truncate">
+                      {currentUser ? `ROLE: ${currentUser.role}` : "GUEST MODE"} • {alienConfig.element}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-1 max-w-xs">
-                <h4 className="text-sm font-sekuya uppercase tracking-wide text-[#FFFFFF]">
-                  CALIBRATE OMNITRIX COPILOT
-                </h4>
-                <p className="text-xs font-switzer text-[#A1A1AA]">
-                  Please choose your alien transformation form first to activate specialized publishing powers.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleTogglePicker}
-                className="py-2 px-5 bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] font-space font-extrabold uppercase tracking-wider text-xs rounded-sm shadow-omni transition-all flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4" />
-                CHOOSE ALIEN HERO (10 FORMS)
-              </button>
-            </div>
-          ) : (
-            <>
-              {/* Message Stream */}
-              <ChatMessageList
-                messages={messages}
-                selectedAvatarId={selectedAvatarId}
-                isTyping={isTyping}
-                onSelectSuggestion={handleSendPrompt}
-              />
-
-              {/* Input Form Bar */}
-              <form
-                onSubmit={handleSubmit}
-                className="p-2.5 bg-[#0A0A0A] border-t border-[#2A2A2A] flex items-center gap-2 shrink-0 font-switzer"
-              >
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={inputPrompt}
-                  onChange={(e) => setInputPrompt(e.target.value)}
-                  placeholder={`Ask ${alienConfig.name} about limits, scheduling, roles...`}
-                  disabled={isTyping}
-                  className="flex-1 bg-[#141414] border border-[#2A2A2A] focus:border-[#3DDC10] rounded-sm px-3 py-2 text-xs text-[#FFFFFF] placeholder-[#71717A] focus:outline-none transition-colors"
-                />
+              {/* Header Action Buttons */}
+              <div className="flex items-center gap-1 shrink-0 text-[#71717A]">
                 <button
-                  type="submit"
-                  disabled={!inputPrompt.trim() || isTyping}
-                  aria-label="Send message"
-                  className="p-2 rounded-sm bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+                  type="button"
+                  onClick={handleTogglePicker}
+                  title="Choose Alien Hero (10 Forms)"
+                  aria-label="Choose Alien Hero"
+                  className="p-1.5 rounded-sm hover:text-[#0A0A0A] hover:bg-[#F4F4F5] transition-colors"
                 >
-                  <Send className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4" />
                 </button>
-              </form>
-            </>
-          )}
-        </div>
+
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  title="Reset Conversation"
+                  aria-label="Reset Conversation"
+                  className="p-1.5 rounded-sm hover:text-[#FF7A00] hover:bg-[#F4F4F5] transition-colors"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  title="Dock / Close Assistant (Esc)"
+                  aria-label="Dock / Close Assistant"
+                  className="p-1.5 rounded-sm hover:text-[#0A0A0A] hover:bg-[#F4F4F5] transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Quick-Select Alien Hero Matrix (All 10 Forms visible without clipping) */}
+            <div className="bg-[#F8F9FA] border-b border-[#E5E7EB] p-2.5 shrink-0">
+              <div className="flex items-center justify-between mb-2 text-[10px] font-mono">
+                <span className="text-[#71717A] uppercase font-bold tracking-wider flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3DDC10] animate-pulse" />
+                  ACTIVE HERO MATRIX
+                </span>
+                <button
+                  type="button"
+                  onClick={handleTogglePicker}
+                  className="text-[#15803D] hover:underline font-bold uppercase tracking-wider text-[10px] flex items-center gap-1"
+                >
+                  ALL 10 →
+                </button>
+              </div>
+              <div className="grid grid-cols-5 gap-1.5">
+                {ALIEN_REGISTRY.map((alien: AlienAvatarConfig) => {
+                  const isCurrent = alien.id === selectedAvatarId;
+                  const MiniAlien = alien.Component;
+                  return (
+                    <button
+                      key={alien.id}
+                      type="button"
+                      onClick={() => handleQuickSelectAlien(alien.id)}
+                      title={`${alien.name} (${alien.element})`}
+                      className={`h-8 rounded-sm p-1 flex items-center justify-center border transition-all ${
+                        isCurrent
+                          ? "bg-[#FFFFFF] border-2 border-[#0A0A0A] shadow-sm ring-1 ring-[#0A0A0A]"
+                          : "bg-[#FFFFFF] border border-[#E5E7EB] hover:border-[#0A0A0A] opacity-80 hover:opacity-100"
+                      }`}
+                    >
+                      <MiniAlien className="w-full h-full" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* If user hasn't chosen an alien hero yet, show prominent Choice Prompt */}
+            {!hasChosenAlien ? (
+              <div className="flex-1 p-5 flex flex-col items-center justify-center text-center space-y-4 bg-[#FFFFFF]">
+                <div className="w-16 h-16 rounded-sm bg-[#FFFFFF] border-2 border-[#0A0A0A] p-2 flex items-center justify-center shadow-omni">
+                  <AlienAvatar className="w-full h-full" />
+                </div>
+
+                <div className="space-y-1.5 max-w-xs">
+                  <h4 className="text-sm font-sekuya uppercase tracking-wide text-[#0A0A0A]">
+                    CALIBRATE OMNITRIX COPILOT
+                  </h4>
+                  <p className="text-xs font-inter font-normal leading-relaxed text-[#71717A]">
+                    Choose your alien transformation form first to activate specialized publishing powers.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleTogglePicker}
+                  className="btn-omni-primary"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  CHOOSE ALIEN HERO (10 FORMS)
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* Contained Internal Message Stream */}
+                <div className="flex-1 min-h-0 overflow-y-auto bg-[#FFFFFF]">
+                  <ChatMessageList
+                    messages={messages}
+                    selectedAvatarId={selectedAvatarId}
+                    isTyping={isTyping}
+                    onSelectSuggestion={handleSendPrompt}
+                  />
+                </div>
+
+                {/* Fixed Input Form Bar at Bottom */}
+                <form
+                  onSubmit={handleSubmit}
+                  className="p-3 bg-[#FFFFFF] border-t border-[#E5E7EB] flex items-center gap-2 shrink-0 font-inter"
+                >
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputPrompt}
+                    onChange={(e) => setInputPrompt(e.target.value)}
+                    placeholder={`Ask ${alienConfig.name} about limits, scheduling, roles...`}
+                    disabled={isTyping}
+                    className="flex-1 bg-[#FFFFFF] border-2 border-[#0A0A0A] focus:border-[#3DDC10] rounded-sm px-3 py-2 text-xs font-inter text-[#0A0A0A] placeholder-[#71717A] focus:outline-none transition-colors"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!inputPrompt.trim() || isTyping}
+                    aria-label="Send message"
+                    className="p-2 rounded-sm bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm shrink-0 border-2 border-[#0A0A0A]"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
+        </>
       )}
 
       {/* 3. Alien Avatar Picker Modal */}

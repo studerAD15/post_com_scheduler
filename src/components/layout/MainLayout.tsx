@@ -11,6 +11,7 @@ import { selectCurrentUser } from "../../features/auth/authSlice";
 import { usePermission } from "../../features/auth/usePermission";
 import { resetPostsThunk, selectAllPosts } from "../../features/posts/postsSlice";
 import { resetDraftsThunk, selectAllDrafts } from "../../features/drafts/draftsSlice";
+import { selectIsAssistantOpen } from "../../features/assistant/assistantSlice";
 import { getStorageStats } from "../../utils/storage";
 import { isOmnitrixMuted, setOmnitrixMuted } from "../omnitrix/soundEngine";
 import {
@@ -38,6 +39,7 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
     const dispatch = useAppDispatch();
     const posts = useAppSelector(selectAllPosts);
     const drafts = useAppSelector(selectAllDrafts);
+    const isAssistantOpen = useAppSelector(selectIsAssistantOpen);
 
     const canCreate = usePermission("create_post");
     const canManageDrafts = usePermission("manage_drafts");
@@ -77,44 +79,48 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
     const handleTabActivity = useCallback(() => onTabChange("activity"), [onTabChange]);
 
     return (
-      <div className="min-h-screen bg-[#0A0A0A] text-[#0A0A0A] font-switzer flex flex-col selection:bg-[#3DDC10] selection:text-[#0A0A0A]">
+      <div
+        className={`min-h-screen bg-[#FFFFFF] text-[#0A0A0A] font-inter flex flex-col selection:bg-[#3DDC10] selection:text-[#0A0A0A] transition-[margin] duration-300 ${
+          isAssistantOpen ? "xl:mr-[420px]" : "mr-0"
+        }`}
+      >
         {/* Unified Sticky Header Container (Role Switcher + Navigation Header) */}
-        <div className="sticky top-0 z-40 shadow-card-white">
+        <div className="sticky top-0 z-40 shadow-sm">
           <RoleSwitcherBar />
-          {/* Main Tri-Color Header (White Container Panel with Black Borders & Green Highlights) */}
-          <header className="border-b-4 border-[#3DDC10] bg-[#FFFFFF]">
-          <div className="max-w-7xl mx-auto px-4 py-3.5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            {/* Logo Badge & Branding */}
-            <div className="flex items-center justify-between lg:justify-start gap-3">
-              <div className="flex items-center gap-3">
-                <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 bg-[#0A0A0A] border-2 border-[#3DDC10] rounded-sm flex items-center justify-center shadow-omni transform rotate-45">
-                    <Radio className="w-5 h-5 text-[#3DDC10] transform -rotate-45" />
+          {/* Main Header (Clean White Surface with Hazard Green Underline) */}
+          <header className="border-b border-[#E5E7EB] bg-[#FFFFFF]/95 backdrop-blur-md">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              {/* Logo Badge & Branding */}
+              <div className="flex items-center justify-between lg:justify-start gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-9 h-9 flex items-center justify-center shrink-0">
+                    <div className="w-9 h-9 bg-[#0A0A0A] border-2 border-[#3DDC10] rounded-sm flex items-center justify-center shadow-omni transform rotate-45">
+                      <Radio className="w-4 h-4 text-[#3DDC10] transform -rotate-45" />
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono font-bold tracking-widest text-[#71717A] uppercase flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 bg-[#3DDC10] animate-ping rounded-full"></span>
+                      OMNITRIX SOCIAL SUITE
+                    </span>
+                    <h1 className="text-lg font-sekuya font-bold text-[#0A0A0A] uppercase tracking-wider">
+                      POST MANAGER <span className="text-[#3DDC10]">&amp; SCHEDULER</span>
+                    </h1>
                   </div>
                 </div>
-                <div>
-                  <span className="text-[10px] font-mono font-extrabold tracking-widest text-[#0A0A0A] uppercase flex items-center gap-1.5">
-                    <span className="w-2 h-2 bg-[#3DDC10] animate-ping rounded-full"></span>
-                    OMNITRIX SOCIAL SUITE
-                  </span>
-                  <h1 className="text-xl font-sekuya font-extrabold text-[#0A0A0A] uppercase tracking-wider">
-                    POST MANAGER <span className="text-[#3DDC10] bg-[#0A0A0A] px-1.5 py-0.5 rounded-sm">&amp; SCHEDULER</span>
-                  </h1>
-                </div>
-              </div>
 
               {/* Storage Badge */}
-              <div className="hidden sm:flex items-center gap-2 bg-[#0A0A0A] text-[#FFFFFF] px-2.5 py-1.5 rounded-sm border border-[#3DDC10] text-[11px] font-mono">
+              <div className="hidden sm:flex items-center gap-2 bg-[#FFFFFF] text-[#0A0A0A] px-2.5 py-1.5 rounded-sm border-2 border-[#0A0A0A] text-[11px] font-mono">
                 <HardDrive className="w-3.5 h-3.5 text-[#3DDC10]" />
                 <span>
-                  STORAGE: <strong className="text-[#3DDC10]">{stats.postsCount}</strong> POSTS /{" "}
-                  <strong className="text-[#3DDC10]">{stats.draftsCount}</strong> DRAFTS
+                  STORAGE: <strong className="text-[#0A0A0A]">{stats.postsCount}</strong> POSTS /{" "}
+                  <strong className="text-[#0A0A0A]">{stats.draftsCount}</strong> DRAFTS
                 </span>
                 <button
                   onClick={handleResetData}
                   disabled={isResetting}
                   title="Reset Local Storage data to defaults"
-                  className="ml-1 text-[#FFFFFF] hover:text-[#3DDC10] transition-colors p-0.5 rounded focus:outline-none"
+                  className="ml-1 text-[#0A0A0A] hover:text-[#3DDC10] transition-colors p-0.5 rounded focus:outline-none"
                 >
                   <RotateCcw className={`w-3.5 h-3.5 ${isResetting ? "animate-spin text-[#3DDC10]" : ""}`} />
                 </button>
@@ -124,7 +130,7 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
               <button
                 onClick={handleToggleMute}
                 title={muted ? "Unmute Omnitrix SFX" : "Mute Omnitrix SFX"}
-                className="hidden sm:flex items-center gap-1.5 bg-[#0A0A0A] hover:bg-[#141414] text-[#FFFFFF] px-2.5 py-1.5 rounded-sm border border-[#2A2A2A] hover:border-[#3DDC10] text-[11px] font-mono transition-colors"
+                className="hidden sm:flex items-center gap-1.5 bg-[#FFFFFF] hover:bg-[#F8F9FA] text-[#0A0A0A] px-2.5 py-1.5 rounded-sm border-2 border-[#0A0A0A] hover:border-[#3DDC10] text-[11px] font-mono transition-colors"
               >
                 {muted ? (
                   <>
@@ -134,20 +140,20 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
                 ) : (
                   <>
                     <Volume2 className="w-3.5 h-3.5 text-[#3DDC10]" />
-                    <span className="text-[#3DDC10]">SFX: ACTIVE</span>
+                    <span className="text-[#0A0A0A]">SFX: ACTIVE</span>
                   </>
                 )}
               </button>
             </div>
 
             {/* Navigation Tabs (Rajdhani Font) */}
-            <nav className="flex items-center gap-1.5 bg-[#0A0A0A] p-1.5 rounded-sm border-2 border-[#0A0A0A] overflow-x-auto w-full lg:w-auto">
+            <nav className="flex items-center gap-1.5 bg-[#F8F9FA] p-1.5 rounded-sm border-2 border-[#0A0A0A] overflow-x-auto w-full lg:w-auto">
               <button
                 onClick={handleTabFeed}
                 className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-rajdhani uppercase tracking-widest font-bold transition-all shrink-0 ${
                   activeTab === "feed"
                     ? "bg-[#3DDC10] text-[#0A0A0A] shadow-omni scale-[1.02]"
-                    : "text-[#FFFFFF] hover:text-[#3DDC10] hover:bg-[#141414]"
+                    : "text-[#0A0A0A] hover:text-[#3DDC10] hover:bg-[#FFFFFF]"
                 }`}
               >
                 <ListFilter className="w-4 h-4" /> ALL POSTS
@@ -159,7 +165,7 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
                   className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-rajdhani uppercase tracking-widest font-bold transition-all shrink-0 ${
                     activeTab === "composer"
                       ? "bg-[#3DDC10] text-[#0A0A0A] shadow-omni scale-[1.02]"
-                      : "text-[#FFFFFF] hover:text-[#3DDC10] hover:bg-[#141414]"
+                      : "text-[#0A0A0A] hover:text-[#3DDC10] hover:bg-[#FFFFFF]"
                   }`}
                 >
                   <PenTool className="w-4 h-4" /> CREATE POST
@@ -172,7 +178,7 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
                   className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-rajdhani uppercase tracking-widest font-bold transition-all shrink-0 ${
                     activeTab === "drafts"
                       ? "bg-[#3DDC10] text-[#0A0A0A] shadow-omni scale-[1.02]"
-                      : "text-[#FFFFFF] hover:text-[#3DDC10] hover:bg-[#141414]"
+                      : "text-[#0A0A0A] hover:text-[#3DDC10] hover:bg-[#FFFFFF]"
                   }`}
                 >
                   <Layers className="w-4 h-4" /> SAVED DRAFTS
@@ -184,7 +190,7 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
                 className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-rajdhani uppercase tracking-widest font-bold transition-all shrink-0 ${
                   activeTab === "calendar"
                     ? "bg-[#3DDC10] text-[#0A0A0A] shadow-omni scale-[1.02]"
-                    : "text-[#FFFFFF] hover:text-[#3DDC10] hover:bg-[#141414]"
+                    : "text-[#0A0A0A] hover:text-[#3DDC10] hover:bg-[#FFFFFF]"
                 }`}
               >
                 <Calendar className="w-4 h-4" /> CALENDAR
@@ -196,7 +202,7 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
                   className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-rajdhani uppercase tracking-widest font-bold transition-all shrink-0 ${
                     activeTab === "analytics"
                       ? "bg-[#3DDC10] text-[#0A0A0A] shadow-omni scale-[1.02]"
-                      : "text-[#FFFFFF] hover:text-[#3DDC10] hover:bg-[#141414]"
+                      : "text-[#0A0A0A] hover:text-[#3DDC10] hover:bg-[#FFFFFF]"
                   }`}
                 >
                   <BarChart3 className="w-4 h-4" /> ANALYTICS
@@ -209,7 +215,7 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
                   className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-rajdhani uppercase tracking-widest font-bold transition-all shrink-0 ${
                     activeTab === "activity"
                       ? "bg-[#3DDC10] text-[#0A0A0A] shadow-omni scale-[1.02]"
-                      : "text-[#FFFFFF] hover:text-[#3DDC10] hover:bg-[#141414]"
+                      : "text-[#0A0A0A] hover:text-[#3DDC10] hover:bg-[#FFFFFF]"
                   }`}
                 >
                   <Shield className="w-4 h-4 text-[#3DDC10]" /> ACTIVITY LOG
@@ -225,14 +231,14 @@ export const MainLayout: React.FC<MainLayoutProps> = React.memo(
           {children}
         </main>
 
-        {/* Tri-Color Footer (White Background with Black Text and Green Accent) */}
-        <footer className="border-t-2 border-[#0A0A0A] bg-[#FFFFFF] py-4 px-4 text-center text-xs text-[#0A0A0A] w-full">
+        {/* Omnitrix Themed Footer */}
+        <footer className="border-t border-[#E5E7EB] bg-[#FFFFFF] py-4 px-4 text-center text-xs text-[#71717A] w-full">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 w-full">
             <p className="font-orbitron font-extrabold text-[#0A0A0A] tracking-widest uppercase text-[11px] flex items-center justify-center gap-2">
               <span className="w-2 h-2 bg-[#3DDC10] rounded-full"></span>
               OMNITRIX MULTI-CHANNEL SCHEDULING PLATFORM
             </p>
-            <div className="flex items-center gap-3 text-[11px] font-mono text-[#0A0A0A]">
+            <div className="flex items-center gap-3 text-[11px] font-mono text-[#71717A]">
               <span>PERSISTENCE: LOCALSTORAGE</span>
               <span>•</span>
               <span>API: TYPED CLIENT</span>

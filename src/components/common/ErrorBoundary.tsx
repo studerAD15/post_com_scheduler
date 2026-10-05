@@ -56,32 +56,32 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
 
       return (
-        <div className="min-h-screen bg-[#0A0A0A] text-[#FFFFFF] flex items-center justify-center p-4 selection:bg-[#3DDC10] selection:text-[#0A0A0A]">
-          <div className="max-w-lg w-full bg-[#141414] border-4 border-[#FF7A00] rounded-sm p-6 sm:p-8 space-y-6 shadow-omni-warning">
+        <div className="min-h-screen bg-[#FFFFFF] text-[#0A0A0A] flex items-center justify-center p-4 selection:bg-[#3DDC10] selection:text-[#0A0A0A]">
+          <div className="max-w-lg w-full bg-[#FFFFFF] border-4 border-[#0A0A0A] rounded-sm p-6 sm:p-8 space-y-6 shadow-omni">
             {/* Header */}
-            <div className="flex items-center gap-3 border-b-2 border-[#2A2A2A] pb-4">
+            <div className="flex items-center gap-3 border-b-2 border-[#0A0A0A] pb-4">
               <div className="w-12 h-12 rounded-sm bg-[#FF7A00]/10 border-2 border-[#FF7A00] text-[#FF7A00] flex items-center justify-center shrink-0">
                 <ShieldAlert className="w-7 h-7" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl font-space font-extrabold uppercase text-[#FFFFFF] tracking-wider">
+                <h1 className="text-lg sm:text-xl font-space font-extrabold uppercase text-[#0A0A0A] tracking-wider">
                   OMNITRIX SYSTEM OVERLOAD
                 </h1>
-                <p className="text-xs font-mono text-[#FF7A00] mt-0.5">
+                <p className="text-xs font-mono text-[#C2410C] mt-0.5">
                   CORE RUNTIME EXCEPTION DETECTED
                 </p>
               </div>
             </div>
 
             {/* Error Message Box */}
-            <div className="bg-[#0A0A0A] border-2 border-[#2A2A2A] rounded-sm p-4 space-y-2 font-mono text-xs">
-              <p className="text-[#FF7A00] font-bold flex items-center gap-1.5">
+            <div className="bg-[#F8F9FA] border-2 border-[#0A0A0A] rounded-sm p-4 space-y-2 font-mono text-xs">
+              <p className="text-[#C2410C] font-bold flex items-center gap-1.5">
                 <AlertTriangle className="w-4 h-4 shrink-0" />
                 {this.state.error?.name || "ApplicationError"}:{" "}
                 {this.state.error?.message || "An unexpected client-side error occurred."}
               </p>
               {this.state.errorInfo?.componentStack && (
-                <pre className="text-[10px] text-[#71717A] max-h-32 overflow-y-auto whitespace-pre-wrap leading-relaxed">
+                <pre className="text-[10px] text-[#52525B] max-h-32 overflow-y-auto whitespace-pre-wrap leading-relaxed">
                   {this.state.errorInfo.componentStack}
                 </pre>
               )}
@@ -99,7 +99,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               <button
                 type="button"
                 onClick={this.handleResetState}
-                className="w-full sm:w-1/2 py-2.5 px-4 rounded-sm bg-[#0A0A0A] hover:bg-[#202020] text-[#FFFFFF] hover:text-[#FF7A00] flex items-center justify-center gap-2 border-2 border-[#2A2A2A] hover:border-[#FF7A00] transition-colors cursor-pointer"
+                className="w-full sm:w-1/2 py-2.5 px-4 rounded-sm bg-[#FFFFFF] hover:bg-[#0A0A0A] text-[#0A0A0A] hover:text-[#FFFFFF] flex items-center justify-center gap-2 border-2 border-[#0A0A0A] transition-colors cursor-pointer"
               >
                 <Trash2 className="w-4 h-4 text-[#FF7A00]" /> RESET CACHED STATE
               </button>

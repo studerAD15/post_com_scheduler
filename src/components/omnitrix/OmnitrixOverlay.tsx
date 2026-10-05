@@ -73,7 +73,7 @@ export const OmnitrixOverlay: React.FC = React.memo(() => {
       <button
         onClick={handleToggleMute}
         title={muted ? "Unmute Omnitrix SFX" : "Mute Omnitrix SFX"}
-        className="absolute top-4 right-4 z-50 p-2.5 bg-[#141414] hover:bg-[#1C1C1C] border border-[#2A2A2A] hover:border-[#3DDC10] text-[#FFFFFF] rounded-sm transition-all shadow-md flex items-center gap-2 text-xs font-orbitron uppercase tracking-wider"
+        className="absolute top-4 right-4 z-50 p-2.5 bg-[#FFFFFF] hover:bg-[#0A0A0A] hover:text-[#FFFFFF] border-2 border-[#0A0A0A] text-[#0A0A0A] rounded-sm transition-all shadow-md flex items-center gap-2 text-xs font-orbitron uppercase tracking-wider"
       >
         {muted ? (
           <>
@@ -82,8 +82,8 @@ export const OmnitrixOverlay: React.FC = React.memo(() => {
           </>
         ) : (
           <>
-            <Volume2 className="w-4 h-4 text-[#3DDC10]" />
-            <span className="hidden sm:inline text-[#3DDC10]">SFX ON</span>
+            <Volume2 className="w-4 h-4 text-[#15803D]" />
+            <span className="hidden sm:inline text-[#15803D]">SFX ON</span>
           </>
         )}
       </button>
@@ -151,8 +151,8 @@ export const OmnitrixOverlay: React.FC = React.memo(() => {
 
         {/* Status Readout Banner */}
         <div className="mt-6 flex flex-col items-center gap-1.5 text-center">
-          <div className="flex items-center gap-2 px-4 py-1.5 bg-[#141414] border-2 border-[#2A2A2A] rounded-sm shadow-md">
-            {isLoading && <Loader2 className="w-4 h-4 text-[#3DDC10] animate-spin" />}
+          <div className="flex items-center gap-2 px-4 py-1.5 bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm shadow-omni">
+            {isLoading && <Loader2 className="w-4 h-4 text-[#15803D] animate-spin" />}
             <span className={`text-xs sm:text-sm font-orbitron font-extrabold uppercase tracking-widest ${accentColor}`}>
               {activeConfig.message}
             </span>

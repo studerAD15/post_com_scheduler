@@ -59,12 +59,12 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
   );
 
   return (
-    <aside className="space-y-4 lg:sticky lg:top-36">
+    <aside className="space-y-4 lg:sticky lg:top-28">
       {/* 1. Quick Metrics Mini-Board */}
       <div className="bg-[#FFFFFF] text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-sm p-4 space-y-3 shadow-card-white">
-        <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-2.5">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2.5">
           <div className="flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-[#3DDC10]" />
+            <BarChart3 className="w-4 h-4 text-[#15803D]" />
             <h3 className="text-xs font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
               TELEMETRY OVERVIEW
             </h3>
@@ -73,7 +73,7 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
             <button
               type="button"
               onClick={() => onNavigateTab("analytics")}
-              className="text-[10px] font-mono text-[#0A0A0A] hover:text-[#3DDC10] flex items-center gap-1 font-bold uppercase transition-colors"
+              className="text-[10px] font-mono text-[#52525B] hover:text-[#15803D] flex items-center gap-1 font-bold uppercase transition-colors"
             >
               FULL BOARD <ArrowRight className="w-3 h-3" />
             </button>
@@ -83,25 +83,25 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
         {/* 4 Mini KPI Badges */}
         <div className="grid grid-cols-2 gap-2">
           {/* Total */}
-          <div className="bg-[#0A0A0A] text-[#FFFFFF] p-2.5 rounded-sm border border-[#3DDC10] space-y-0.5">
+          <div className="bg-[#F8F9FA] text-[#0A0A0A] p-2.5 rounded-sm border border-[#E5E7EB] space-y-0.5">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-rajdhani font-bold text-[#3DDC10] uppercase">
+              <span className="text-[10px] font-rajdhani font-bold text-[#71717A] uppercase">
                 TOTAL
               </span>
-              <Layers className="w-3 h-3 text-[#3DDC10]" />
+              <Layers className="w-3 h-3 text-[#71717A]" />
             </div>
-            <p className="text-xl font-mono font-bold">{metrics.total}</p>
+            <p className="text-xl font-mono font-bold text-[#0A0A0A]">{metrics.total}</p>
           </div>
 
           {/* Published */}
-          <div className="bg-[#0A0A0A] text-[#FFFFFF] p-2.5 rounded-sm border border-[#3DDC10] space-y-0.5">
+          <div className="bg-[#F8F9FA] text-[#0A0A0A] p-2.5 rounded-sm border border-[#3DDC10] space-y-0.5">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-rajdhani font-bold text-[#3DDC10] uppercase">
+              <span className="text-[10px] font-rajdhani font-bold text-[#15803D] uppercase">
                 LIVE
               </span>
-              <CheckCircle2 className="w-3 h-3 text-[#3DDC10]" />
+              <CheckCircle2 className="w-3 h-3 text-[#15803D]" />
             </div>
-            <p className="text-xl font-mono font-bold text-[#3DDC10]">
+            <p className="text-xl font-mono font-bold text-[#15803D]">
               {metrics.byStatus.published}
             </p>
           </div>
@@ -109,25 +109,25 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
           {/* Scheduled */}
           <div className="bg-[#F8F9FA] text-[#0A0A0A] p-2.5 rounded-sm border border-[#FF7A00] space-y-0.5">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-rajdhani font-bold text-[#FF7A00] uppercase">
+              <span className="text-[10px] font-rajdhani font-bold text-[#C2410C] uppercase">
                 QUEUED
               </span>
-              <Clock className="w-3 h-3 text-[#FF7A00]" />
+              <Clock className="w-3 h-3 text-[#C2410C]" />
             </div>
-            <p className="text-xl font-mono font-bold text-[#FF7A00]">
+            <p className="text-xl font-mono font-bold text-[#C2410C]">
               {metrics.byStatus.scheduled}
             </p>
           </div>
 
           {/* Drafts */}
-          <div className="bg-[#F8F9FA] text-[#0A0A0A] p-2.5 rounded-sm border border-[#0A0A0A] space-y-0.5">
+          <div className="bg-[#F8F9FA] text-[#0A0A0A] p-2.5 rounded-sm border border-[#E5E7EB] space-y-0.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-rajdhani font-bold text-[#71717A] uppercase">
                 DRAFTS
               </span>
-              <FileText className="w-3 h-3 text-[#0A0A0A]" />
+              <FileText className="w-3 h-3 text-[#71717A]" />
             </div>
-            <p className="text-xl font-mono font-bold text-[#0A0A0A]">
+            <p className="text-xl font-mono font-bold text-[#52525B]">
               {metrics.byStatus.draft}
             </p>
           </div>
@@ -136,9 +136,9 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
 
       {/* 2. Channel Filter Widget */}
       <div className="bg-[#FFFFFF] text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-sm p-4 space-y-3 shadow-card-white">
-        <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-2.5">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2.5">
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-[#3DDC10]" />
+            <Filter className="w-4 h-4 text-[#15803D]" />
             <h3 className="text-xs font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
               CHANNEL QUICK FILTER
             </h3>
@@ -147,7 +147,7 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
             <button
               type="button"
               onClick={() => handlePlatformClick("all")}
-              className="text-[10px] font-mono text-[#FF7A00] hover:underline font-bold uppercase"
+              className="text-[10px] font-mono text-[#C2410C] hover:underline font-bold uppercase"
             >
               RESET
             </button>
@@ -166,10 +166,10 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
                 key={pId}
                 type="button"
                 onClick={() => handlePlatformClick(isSelected ? "all" : pId)}
-                className={`flex items-center justify-between p-2 rounded-sm border transition-all text-left ${
+                className={`flex items-center justify-between p-2 rounded-sm border-2 transition-all text-left ${
                   isSelected
-                    ? "bg-[#0A0A0A] text-[#FFFFFF] border-[#3DDC10] shadow-sm"
-                    : "bg-[#F8F9FA] text-[#0A0A0A] border-[#0A0A0A] hover:border-[#3DDC10]"
+                    ? "bg-[#0A0A0A] text-[#FFFFFF] border-[#0A0A0A] shadow-sm"
+                    : "bg-[#F8F9FA] text-[#0A0A0A] border-[#E5E7EB] hover:border-[#0A0A0A]"
                 }`}
               >
                 <div className="flex items-center gap-1.5 min-w-0">
@@ -179,8 +179,8 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
                   </span>
                 </div>
                 <span
-                  className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded shrink-0 ${
-                    isSelected ? "bg-[#3DDC10] text-[#0A0A0A]" : "bg-[#0A0A0A] text-[#3DDC10]"
+                  className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                    isSelected ? "bg-[#3DDC10] text-[#0A0A0A]" : "bg-[#FFFFFF] text-[#0A0A0A] border border-[#E5E7EB]"
                   }`}
                 >
                   {count}
@@ -193,9 +193,9 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
 
       {/* 3. Upcoming Queue Snippet */}
       <div className="bg-[#FFFFFF] text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-sm p-4 space-y-3 shadow-card-white">
-        <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-2.5">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2.5">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-[#FF7A00]" />
+            <Clock className="w-4 h-4 text-[#C2410C]" />
             <h3 className="text-xs font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
               UPCOMING QUEUE ({upcomingPosts.length})
             </h3>
@@ -203,14 +203,14 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
           <button
             type="button"
             onClick={() => onNavigateTab("calendar")}
-            className="text-[10px] font-mono text-[#0A0A0A] hover:text-[#3DDC10] flex items-center gap-1 font-bold uppercase transition-colors"
+            className="text-[10px] font-mono text-[#52525B] hover:text-[#15803D] flex items-center gap-1 font-bold uppercase transition-colors"
           >
             CALENDAR <ArrowRight className="w-3 h-3" />
           </button>
         </div>
 
         {upcomingPosts.length === 0 ? (
-          <div className="p-4 bg-[#F8F9FA] border border-dashed border-[#0A0A0A] rounded text-center space-y-1">
+          <div className="p-4 bg-[#F8F9FA] border border-dashed border-[#E5E7EB] rounded text-center space-y-1">
             <Calendar className="w-5 h-5 text-[#71717A] mx-auto" />
             <p className="text-[11px] font-space text-[#71717A] uppercase font-bold">
               No scheduled posts
@@ -223,10 +223,10 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
               return (
                 <div
                   key={post.id}
-                  className="bg-[#F8F9FA] border border-[#0A0A0A] rounded-sm p-2.5 space-y-1.5 text-xs"
+                  className="bg-[#F8F9FA] border border-[#E5E7EB] rounded-sm p-2.5 space-y-1.5 text-xs text-[#0A0A0A]"
                 >
                   <div className="flex items-center justify-between gap-1">
-                    <span className="text-[10px] font-mono font-bold text-[#FF7A00] bg-[#FF7A00]/10 px-1.5 py-0.5 rounded border border-[#FF7A00]/40">
+                    <span className="badge-omni badge-omni-warning text-[9px] px-1.5 py-0.5">
                       {scheduledDate.toLocaleString(undefined, {
                         month: "short",
                         day: "numeric",
@@ -241,7 +241,7 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
                         return (
                           <span
                             key={pId}
-                            className="inline-flex items-center p-0.5 rounded bg-[#0A0A0A] text-[#3DDC10]"
+                            className="inline-flex items-center p-0.5 rounded bg-[#FFFFFF] text-[#0A0A0A] border border-[#E5E7EB]"
                             title={pId}
                           >
                             <IconComp className="w-2.5 h-2.5" />
@@ -251,7 +251,7 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
                     </div>
                   </div>
 
-                  <p className="font-space font-bold text-[#0A0A0A] text-xs truncate">
+                  <p className="font-inter font-normal text-xs text-[#0A0A0A] truncate">
                     {post.title}
                   </p>
 
@@ -260,7 +260,7 @@ export const FeedSidebar: React.FC<FeedSidebarProps> = React.memo(({ onNavigateT
                       <button
                         type="button"
                         onClick={() => handlePublishPost(post.id)}
-                        className="inline-flex items-center gap-1 text-[10px] font-rajdhani font-extrabold uppercase px-2 py-0.5 rounded bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] border border-[#0A0A0A]"
+                        className="inline-flex items-center gap-1 text-[10px] font-rajdhani font-bold uppercase px-2.5 py-1 rounded-sm bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] shadow-sm transition-all"
                       >
                         <Send className="w-2.5 h-2.5" /> Publish Now
                       </button>

@@ -120,10 +120,10 @@ export const PostChip: React.FC<PostChipProps> = React.memo(
 
     const statusBadgeStyle =
       post.status === "published"
-        ? "bg-[#3DDC10]/15 text-[#3DDC10] border-[#3DDC10]/50"
+        ? "bg-[#3DDC10]/20 text-[#15803D] border-[#3DDC10]"
         : post.status === "scheduled"
-        ? "bg-[#FF7A00]/15 text-[#FF7A00] border-[#FF7A00]/50"
-        : "bg-[#71717A]/15 text-[#71717A] border-[#71717A]/50";
+        ? "bg-[#FF7A00]/20 text-[#C2410C] border-[#FF7A00]"
+        : "bg-[#F4F4F5] text-[#52525B] border-[#E5E7EB]";
 
     return (
       <div
@@ -135,9 +135,9 @@ export const PostChip: React.FC<PostChipProps> = React.memo(
         tabIndex={0}
         role="button"
         aria-label={`${post.title}, ${post.status}, scheduled at ${formattedTime}`}
-        className={`group relative bg-[#0A0A0A] text-[#FFFFFF] border border-[#2A2A2A] hover:border-[#3DDC10] rounded-sm p-1.5 transition-all text-xs shadow-sm flex flex-col gap-1 select-none focus:outline-none focus:ring-2 focus:ring-[#3DDC10] ${
+        className={`group relative bg-[#FFFFFF] text-[#0A0A0A] border-2 border-[#0A0A0A] hover:border-[#15803D] rounded-sm p-1.5 transition-all text-xs shadow-sm flex flex-col gap-1 select-none focus:outline-none focus:ring-2 focus:ring-[#3DDC10] ${
           isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"
-        } ${isDragging ? "opacity-40 border-dashed border-[#3DDC10]" : ""}`}
+        } ${isDragging ? "opacity-40 border-dashed border-[#15803D]" : ""}`}
       >
         <div className="flex items-center justify-between gap-1">
           <span
@@ -148,7 +148,7 @@ export const PostChip: React.FC<PostChipProps> = React.memo(
           <span className="text-[10px] font-mono text-[#71717A] shrink-0">{formattedTime}</span>
         </div>
 
-        <p className="font-space text-[11px] font-bold text-[#FFFFFF] truncate leading-snug">
+        <p className="font-space text-[11px] font-bold text-[#0A0A0A] truncate leading-snug">
           {post.title || "Untitled Post"}
         </p>
 
@@ -157,7 +157,7 @@ export const PostChip: React.FC<PostChipProps> = React.memo(
             {post.platforms.map((pId) => {
               const IconComp = BRAND_SVGS[pId];
               return IconComp ? (
-                <span key={pId} className="text-[#3DDC10]" title={pId}>
+                <span key={pId} className="text-[#0A0A0A]" title={pId}>
                   <IconComp className="w-3 h-3" />
                 </span>
               ) : null;
@@ -165,7 +165,7 @@ export const PostChip: React.FC<PostChipProps> = React.memo(
           </div>
 
           {isDraggable && (
-            <span className="text-[#71717A] group-hover:text-[#3DDC10] transition-colors">
+            <span className="text-[#71717A] group-hover:text-[#15803D] transition-colors">
               <GripVertical className="w-3 h-3" />
             </span>
           )}
@@ -269,21 +269,21 @@ export const DayCell: React.FC<DayCellProps> = React.memo(
         tabIndex={0}
         role="button"
         aria-label={`${dateStr}, ${posts.length} posts scheduled`}
-        className={`min-h-[110px] p-2 border border-[#0A0A0A] rounded-sm flex flex-col justify-between transition-all focus:outline-none focus:ring-2 focus:ring-[#3DDC10] ${
-          isCurrentMonth ? "bg-[#FFFFFF]" : "bg-[#F8F9FA]/60 text-[#71717A]"
-        } ${isToday ? "ring-2 ring-[#3DDC10] bg-[#3DDC10]/5" : ""} ${
-          isDragTarget ? "border-2 border-[#3DDC10] bg-[#3DDC10]/10 shadow-omni scale-[1.01]" : ""
+        className={`min-h-[110px] p-2 border-2 rounded-sm flex flex-col justify-between transition-all focus:outline-none focus:ring-1 focus:ring-[#3DDC10] ${
+          isCurrentMonth ? "bg-[#FFFFFF] border-[#E5E7EB]" : "bg-[#F8F9FA] border-[#E5E7EB] text-[#A1A1AA]"
+        } ${isToday ? "border-[#3DDC10] ring-1 ring-[#3DDC10] bg-[#3DDC10]/10" : ""} ${
+          isDragTarget ? "border-2 border-[#15803D] bg-[#3DDC10]/15 shadow-md scale-[1.01]" : ""
         }`}
       >
         {/* Cell Header: Day number + Add affordance */}
-        <div className="flex items-center justify-between border-b border-[#0A0A0A]/10 pb-1 mb-1">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-1 mb-1">
           <span
             className={`font-mono text-xs font-bold px-1.5 py-0.5 rounded-sm ${
               isToday
                 ? "bg-[#3DDC10] text-[#0A0A0A]"
                 : isCurrentMonth
                 ? "text-[#0A0A0A]"
-                : "text-[#71717A]"
+                : "text-[#A1A1AA]"
             }`}
           >
             {dayNumber}
@@ -292,7 +292,7 @@ export const DayCell: React.FC<DayCellProps> = React.memo(
           {canCreate && (
             <span
               title="Add post for this date"
-              className="opacity-0 group-hover:opacity-100 hover:opacity-100 p-0.5 text-[#0A0A0A] hover:text-[#3DDC10] transition-opacity cursor-pointer"
+              className="opacity-0 group-hover:opacity-100 hover:opacity-100 p-0.5 text-[#71717A] hover:text-[#0A0A0A] transition-opacity cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
             </span>
@@ -320,7 +320,7 @@ export const DayCell: React.FC<DayCellProps> = React.memo(
                 e.stopPropagation();
                 onSelectDay(dateStr, posts);
               }}
-              className="w-full text-center py-0.5 text-[10px] font-mono font-bold text-[#FF7A00] bg-[#FF7A00]/10 hover:bg-[#FF7A00]/20 rounded border border-[#FF7A00]/30 transition-colors"
+              className="w-full text-center py-0.5 text-[10px] font-mono font-bold text-[#C2410C] bg-[#FFF7ED] hover:bg-[#FFEDD5] rounded border border-[#FED7AA] transition-colors"
             >
               +{overflowCount} MORE
             </button>
@@ -403,25 +403,25 @@ export const WeekColumn: React.FC<WeekColumnProps> = React.memo(
         onDragLeave={onDragLeave}
         onDrop={handleDropLocal}
         className={`min-h-[350px] bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm p-3 flex flex-col space-y-3 transition-all ${
-          isToday ? "border-[#3DDC10] shadow-omni bg-[#3DDC10]/5" : ""
-        } ${isDragTarget ? "border-2 border-[#3DDC10] bg-[#3DDC10]/10 scale-[1.01]" : ""}`}
+          isToday ? "border-[#3DDC10] shadow-md bg-[#3DDC10]/5" : ""
+        } ${isDragTarget ? "border-2 border-[#15803D] bg-[#3DDC10]/15 scale-[1.01]" : ""}`}
       >
         {/* Day Header */}
-        <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-2">
+        <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-2">
           <div>
             <span className="text-[10px] font-space font-extrabold uppercase text-[#71717A] block">
               {dayName}
             </span>
             <span
               className={`font-mono text-sm font-bold ${
-                isToday ? "text-[#3DDC10] bg-[#0A0A0A] px-1.5 py-0.5 rounded-sm" : "text-[#0A0A0A]"
+                isToday ? "text-[#15803D] bg-[#F4F4F5] border border-[#3DDC10] px-1.5 py-0.5 rounded-sm" : "text-[#0A0A0A]"
               }`}
             >
               {dayNumber}
             </span>
           </div>
 
-          <span className="text-[10px] font-mono text-[#71717A] font-bold bg-[#F8F9FA] px-1.5 py-0.5 rounded border border-[#0A0A0A]">
+          <span className="badge-omni badge-omni-neutral">
             {posts.length} POSTS
           </span>
         </div>
@@ -429,7 +429,7 @@ export const WeekColumn: React.FC<WeekColumnProps> = React.memo(
         {/* Full Posts Stack */}
         <div className="flex-1 space-y-2 overflow-y-auto">
           {posts.length === 0 ? (
-            <div className="py-8 text-center text-xs font-inter text-[#71717A] border-2 border-dashed border-[#0A0A0A]/20 rounded-sm">
+            <div className="py-8 text-center text-xs font-inter font-normal text-[#71717A] border border-dashed border-[#E5E7EB] rounded-sm bg-[#F8F9FA]">
               No posts scheduled
             </div>
           ) : (
@@ -501,7 +501,7 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
 
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A0A0A]/85 backdrop-blur-md animate-fade-in"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A0A0A]/60 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       >
         <div
@@ -513,9 +513,9 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
           className="bg-[#FFFFFF] text-[#0A0A0A] border-4 border-[#0A0A0A] rounded-sm p-6 max-w-xl w-full space-y-5 shadow-card-white max-h-[85vh] flex flex-col"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b-2 border-[#0A0A0A] pb-3 shrink-0">
+          <div className="flex items-center justify-between border-b border-[#E5E7EB] pb-3 shrink-0">
             <div className="flex items-center gap-2">
-              <CalendarIcon className="w-5 h-5 text-[#3DDC10]" />
+              <CalendarIcon className="w-5 h-5 text-[#15803D]" />
               <h3 className="text-base font-sekuya uppercase font-bold text-[#0A0A0A] tracking-wider">
                 POSTS FOR {dateStr} ({posts.length})
               </h3>
@@ -531,7 +531,7 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
           {/* Body List */}
           <div className="flex-1 overflow-y-auto space-y-3 pr-1">
             {posts.length === 0 ? (
-              <div className="bg-[#F8F9FA] border-2 border-dashed border-[#0A0A0A] rounded-sm p-8 text-center space-y-2">
+              <div className="bg-[#F8F9FA] border border-dashed border-[#E5E7EB] rounded-sm p-8 text-center space-y-2">
                 <Clock className="w-8 h-8 text-[#71717A] mx-auto" />
                 <p className="text-xs font-space uppercase font-bold text-[#0A0A0A]">
                   NO POSTS SCHEDULED ON THIS DAY
@@ -550,18 +550,18 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
                 return (
                   <div
                     key={post.id}
-                    className="bg-[#F8F9FA] border-2 border-[#0A0A0A] rounded-sm p-4 space-y-3 shadow-sm hover:border-[#3DDC10] transition-colors"
+                    className="bg-[#F8F9FA] border border-[#E5E7EB] rounded-sm p-4 space-y-3 shadow-sm hover:border-[#0A0A0A] transition-colors"
                   >
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#0A0A0A]/10 pb-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E5E7EB] pb-2">
                       <div className="flex items-center gap-2">
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                          className={
                             post.status === "published"
-                              ? "bg-[#3DDC10]/20 text-[#0A0A0A] border border-[#3DDC10]"
+                              ? "badge-omni badge-omni-green"
                               : post.status === "scheduled"
-                              ? "bg-[#FF7A00]/20 text-[#0A0A0A] border border-[#FF7A00]"
-                              : "bg-[#71717A]/20 text-[#0A0A0A] border border-[#71717A]"
-                          }`}
+                              ? "badge-omni badge-omni-warning"
+                              : "badge-omni badge-omni-neutral"
+                          }
                         >
                           {post.status}
                         </span>
@@ -576,7 +576,7 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
                           return IconComp ? (
                             <span
                               key={pId}
-                              className="px-1.5 py-0.5 rounded bg-[#0A0A0A] text-[#3DDC10] text-[9px] font-mono font-bold uppercase flex items-center gap-1"
+                              className="px-1.5 py-0.5 rounded-sm bg-[#FFFFFF] text-[#0A0A0A] text-[9px] font-mono font-bold uppercase flex items-center gap-1 border border-[#E5E7EB]"
                             >
                               <IconComp className="w-3 h-3" />
                               {pId}
@@ -590,13 +590,13 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
                       <h4 className="text-sm font-sekuya font-bold text-[#0A0A0A]">
                         {post.title || "Untitled Post"}
                       </h4>
-                      <p className="text-xs font-switzer text-[#71717A] mt-1 line-clamp-3 leading-relaxed">
+                      <p className="text-xs font-inter font-normal text-[#52525B] mt-1 line-clamp-3 leading-relaxed">
                         {post.content}
                       </p>
                     </div>
 
                     {/* RBAC Gated Action Controls */}
-                    <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-[#0A0A0A]/10 text-xs font-rajdhani font-extrabold uppercase">
+                    <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-[#E5E7EB]">
                       {canPublish && post.status !== "published" && onPublishNow && (
                         <button
                           type="button"
@@ -604,7 +604,7 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
                             onPublishNow(post.id);
                             onClose();
                           }}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm bg-[#3DDC10] hover:bg-[#34C20C] text-[#0A0A0A] border border-[#0A0A0A] transition-colors"
+                          className="btn-omni-primary h-8 px-3 text-xs inline-flex items-center gap-1.5"
                         >
                           <Send className="w-3.5 h-3.5" /> PUBLISH NOW
                         </button>
@@ -617,7 +617,7 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
                             onReschedulePost(post);
                             onClose();
                           }}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm bg-[#FF7A00] hover:bg-[#E66E00] text-[#FFFFFF] border border-[#0A0A0A] transition-colors"
+                          className="btn-omni-secondary h-8 px-3 text-xs text-[#FF7A00] border-[#FF7A00]/40 hover:border-[#FF7A00] inline-flex items-center gap-1.5"
                         >
                           <Clock className="w-3.5 h-3.5" /> RESCHEDULE
                         </button>
@@ -630,7 +630,7 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
                             onEditPost(post);
                             onClose();
                           }}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm bg-[#FFFFFF] hover:bg-[#0A0A0A] hover:text-[#FFFFFF] text-[#0A0A0A] border border-[#0A0A0A] transition-colors"
+                          className="btn-omni-secondary h-8 px-3 text-xs inline-flex items-center gap-1.5"
                         >
                           <Edit3 className="w-3.5 h-3.5" /> EDIT
                         </button>
@@ -645,7 +645,7 @@ export const DayDetailPanel: React.FC<DayDetailPanelProps> = React.memo(
                               onClose();
                             }
                           }}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-sm bg-[#FF4D4D]/10 hover:bg-[#FF4D4D] hover:text-[#FFFFFF] text-[#FF4D4D] border border-[#FF4D4D] transition-colors"
+                          className="btn-omni-ghost h-8 px-3 text-xs text-[#FF4D4D] hover:bg-[#FF4D4D]/10 inline-flex items-center gap-1.5"
                         >
                           <Trash2 className="w-3.5 h-3.5" /> DELETE
                         </button>
@@ -1007,12 +1007,12 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
     );
 
     return (
-      <div className="bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm p-4 sm:p-6 space-y-5 shadow-card-white text-[#0A0A0A]">
+      <div className="bg-[#FFFFFF] text-[#0A0A0A] border-2 border-[#0A0A0A] rounded-sm p-4 sm:p-6 space-y-5 shadow-card-white">
         {/* Top Control Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b-2 border-[#0A0A0A] pb-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#E5E7EB] pb-4">
           {/* Header Title + Month/Week Indicator */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-sm bg-[#3DDC10] text-[#0A0A0A] border-2 border-[#0A0A0A] flex items-center justify-center font-bold shadow-omni shrink-0">
+            <div className="w-10 h-10 rounded-sm bg-[#FFFFFF] text-[#15803D] border-2 border-[#0A0A0A] flex items-center justify-center font-bold shadow-sm shrink-0">
               <CalendarIcon className="w-5 h-5" />
             </div>
             <div>
@@ -1021,7 +1021,7 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
                   ? `${monthGrid.monthName} ${monthGrid.year}`
                   : `${weekGrid.startDateStr} – ${weekGrid.endDateStr}`}
               </h2>
-              <p className="text-xs font-switzer text-[#71717A]">
+              <p className="text-xs font-inter font-normal text-[#71717A]">
                 Drag &amp; drop post chips between day cells to reschedule instantly across channels.
               </p>
             </div>
@@ -1030,11 +1030,11 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
           {/* Navigation Controls + View Switcher */}
           <div className="flex flex-wrap items-center gap-3">
             {/* Prev / Today / Next Buttons */}
-            <div className="flex items-center gap-1 bg-[#F8F9FA] p-1 border-2 border-[#0A0A0A] rounded-sm font-rajdhani text-xs font-bold uppercase">
+            <div className="flex items-center gap-1 bg-[#F8F9FA] p-1 border border-[#E5E7EB] rounded-sm font-rajdhani text-xs font-bold uppercase">
               <button
                 type="button"
                 onClick={handlePrev}
-                className="p-1.5 rounded-sm hover:bg-[#0A0A0A] hover:text-[#3DDC10] transition-colors"
+                className="p-1.5 rounded-sm text-[#71717A] hover:bg-[#FFFFFF] hover:text-[#0A0A0A] transition-colors"
                 title="Previous"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -1042,14 +1042,14 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
               <button
                 type="button"
                 onClick={handleToday}
-                className="px-3 py-1.5 rounded-sm hover:bg-[#0A0A0A] hover:text-[#3DDC10] transition-colors"
+                className="px-3 py-1.5 rounded-sm text-[#0A0A0A] hover:bg-[#FFFFFF] transition-colors"
               >
                 TODAY
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="p-1.5 rounded-sm hover:bg-[#0A0A0A] hover:text-[#3DDC10] transition-colors"
+                className="p-1.5 rounded-sm text-[#71717A] hover:bg-[#FFFFFF] hover:text-[#0A0A0A] transition-colors"
                 title="Next"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -1057,14 +1057,14 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
             </div>
 
             {/* Month / Week View Segmented Toggle (Reusing MainLayout button style) */}
-            <div className="flex items-center gap-1 bg-[#0A0A0A] p-1 rounded-sm border-2 border-[#0A0A0A]">
+            <div className="flex items-center gap-1 bg-[#F8F9FA] p-1 rounded-sm border border-[#E5E7EB]">
               <button
                 type="button"
                 onClick={() => setViewMode("month")}
                 className={`px-3.5 py-1.5 rounded-sm text-xs font-rajdhani uppercase tracking-wider font-extrabold transition-all ${
                   viewMode === "month"
-                    ? "bg-[#3DDC10] text-[#0A0A0A] shadow-omni"
-                    : "text-[#FFFFFF] hover:text-[#3DDC10]"
+                    ? "bg-[#3DDC10] text-[#0A0A0A] shadow-sm"
+                    : "text-[#71717A] hover:text-[#0A0A0A]"
                 }`}
               >
                 MONTH
@@ -1074,8 +1074,8 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
                 onClick={() => setViewMode("week")}
                 className={`px-3.5 py-1.5 rounded-sm text-xs font-rajdhani uppercase tracking-wider font-extrabold transition-all ${
                   viewMode === "week"
-                    ? "bg-[#3DDC10] text-[#0A0A0A] shadow-omni"
-                    : "text-[#FFFFFF] hover:text-[#3DDC10]"
+                    ? "bg-[#3DDC10] text-[#0A0A0A] shadow-sm"
+                    : "text-[#71717A] hover:text-[#0A0A0A]"
                 }`}
               >
                 WEEK
@@ -1085,17 +1085,17 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
         </div>
 
         {/* Filter Bar (Platform & Status Filters) */}
-        <div className="bg-[#F8F9FA] border-2 border-[#0A0A0A] rounded-sm p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-space">
+        <div className="bg-[#F8F9FA] border border-[#E5E7EB] rounded-sm p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-inter">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="flex items-center gap-1.5 font-bold text-[#0A0A0A] uppercase">
-              <Filter className="w-3.5 h-3.5 text-[#3DDC10]" /> FILTER CALENDAR:
+            <span className="flex items-center gap-1.5 font-bold text-[#52525B] uppercase font-mono">
+              <Filter className="w-3.5 h-3.5 text-[#15803D]" /> FILTER CALENDAR:
             </span>
 
             {/* Platform Filter */}
             <select
               value={platformFilter}
               onChange={(e) => setPlatformFilter(e.target.value as any)}
-              className="px-2.5 py-1 bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm text-xs font-mono font-bold focus:outline-none focus:border-[#3DDC10]"
+              className="px-2.5 py-1 bg-[#FFFFFF] border-2 border-[#0A0A0A] text-[#0A0A0A] rounded-sm text-xs font-mono font-bold focus:outline-none"
             >
               <option value="all">ALL PLATFORMS</option>
               <option value="twitter">Twitter / X</option>
@@ -1108,7 +1108,7 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="px-2.5 py-1 bg-[#FFFFFF] border-2 border-[#0A0A0A] rounded-sm text-xs font-mono font-bold focus:outline-none focus:border-[#3DDC10]"
+              className="px-2.5 py-1 bg-[#FFFFFF] border-2 border-[#0A0A0A] text-[#0A0A0A] rounded-sm text-xs font-mono font-bold focus:outline-none"
             >
               <option value="all">ALL STATUSES</option>
               <option value="draft">Drafts</option>
@@ -1118,7 +1118,7 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
           </div>
 
           <div className="text-[11px] font-mono text-[#71717A] font-bold">
-            Showing <strong className="text-[#0A0A0A]">{totalVisiblePosts}</strong> visible posts
+            Showing <strong className="text-[#15803D]">{totalVisiblePosts}</strong> visible posts
           </div>
         </div>
 
@@ -1127,7 +1127,7 @@ export const CalendarView: React.FC<CalendarViewProps> = React.memo(
           /* Month View Grid */
           <div className="space-y-1">
             {/* Weekday Column Headers */}
-            <div className="grid grid-cols-7 gap-1 text-center border-b-2 border-[#0A0A0A] pb-2 text-xs font-space font-extrabold uppercase tracking-wider text-[#0A0A0A]">
+            <div className="grid grid-cols-7 gap-1 text-center border-b border-[#E5E7EB] pb-2 text-xs font-mono font-bold uppercase tracking-wider text-[#71717A]">
               {WEEKDAY_NAMES.map((day) => (
                 <div key={day} className="py-1">
                   {day}

@@ -181,23 +181,23 @@ export const LoginBackground: React.FC = () => {
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0"
     >
-      {/* LAYER 1: Base Void Radial Gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#0F1810_0%,_#0A0A0A_55%,_#040605_100%)]" />
+      {/* LAYER 1: Base Clean White Background */}
+      <div className="absolute inset-0 bg-[#FFFFFF]" />
 
       {/* LAYER 1.5: Cursor Spotlight Energy Glow */}
       <div
-        className="absolute inset-0 transition-opacity duration-500 opacity-90"
+        className="absolute inset-0 transition-opacity duration-500 opacity-60"
         style={{
           background:
-            "radial-gradient(circle 440px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(61, 220, 16, 0.15), transparent 70%)",
+            "radial-gradient(circle 440px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(61, 220, 16, 0.12), transparent 70%)",
         }}
       />
 
-      {/* LAYER 2: Energy Grid Layer (Slow diagonal continuous scroll + Parallax) */}
+      {/* LAYER 2: Energy Grid Layer (Light CAD grid + Parallax) */}
       <div
-        className="absolute -inset-10 opacity-[0.08] animate-login-grid"
+        className="absolute -inset-10 opacity-[0.35] animate-login-grid"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40' fill='none' stroke='%233DDC10' stroke-width='1'/%3E%3Ccircle cx='20' cy='20' r='1.5' fill='%233DDC10'/%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40' fill='none' stroke='%23D4D4D8' stroke-width='1'/%3E%3Ccircle cx='20' cy='20' r='1.5' fill='%233DDC10'/%3E%3C/svg%3E")`,
           transform:
             "translate3d(calc(var(--parallax-x, 0px) * 0.25), calc(var(--parallax-y, 0px) * 0.25), 0)",
         }}
@@ -212,14 +212,14 @@ export const LoginBackground: React.FC = () => {
             "translate3d(calc(var(--parallax-x, 0px) * 0.45), calc(var(--parallax-y, 0px) * 0.45), 0)",
         }}
       >
-        <svg viewBox="0 0 100 100" className="w-full h-full text-[#3DDC10]">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.6" />
+        <svg viewBox="0 0 100 100" className="w-full h-full text-[#0A0A0A]">
+          <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.4" />
           <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" strokeWidth="2" />
-          <circle cx="50" cy="50" r="28" fill="#0A0A0A" stroke="currentColor" strokeWidth="1.5" />
+          <circle cx="50" cy="50" r="28" fill="#F4F4F5" stroke="currentColor" strokeWidth="1.5" />
           {/* Hourglass */}
-          <path d="M 28 28 L 72 28 L 56 46 L 44 46 Z" fill="currentColor" opacity="0.85" />
-          <path d="M 28 72 L 72 72 L 56 54 L 44 54 Z" fill="currentColor" opacity="0.85" />
-          <circle cx="50" cy="50" r="6" fill="#0A0A0A" stroke="currentColor" strokeWidth="2" />
+          <path d="M 28 28 L 72 28 L 56 46 L 44 46 Z" fill="#3DDC10" opacity="0.85" />
+          <path d="M 28 72 L 72 72 L 56 54 L 44 54 Z" fill="#3DDC10" opacity="0.85" />
+          <circle cx="50" cy="50" r="6" fill="#0A0A0A" stroke="#3DDC10" strokeWidth="2" />
         </svg>
       </div>
 
@@ -231,12 +231,12 @@ export const LoginBackground: React.FC = () => {
             "translate3d(calc(var(--parallax-x, 0px) * -0.35), calc(var(--parallax-y, 0px) * -0.35), 0)",
         }}
       >
-        <svg viewBox="0 0 100 100" className="w-full h-full text-[#3DDC10]">
-          <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="12 6" opacity="0.5" />
+        <svg viewBox="0 0 100 100" className="w-full h-full text-[#0A0A0A]">
+          <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="12 6" opacity="0.4" />
           <circle cx="50" cy="50" r="36" fill="none" stroke="currentColor" strokeWidth="2" />
-          <path d="M 30 30 L 70 30 L 55 45 L 45 45 Z" fill="currentColor" opacity="0.7" />
-          <path d="M 30 70 L 70 70 L 55 55 L 45 55 Z" fill="currentColor" opacity="0.7" />
-          <circle cx="50" cy="50" r="7" fill="#0A0A0A" stroke="currentColor" strokeWidth="2" />
+          <path d="M 30 30 L 70 30 L 55 45 L 45 45 Z" fill="#3DDC10" opacity="0.7" />
+          <path d="M 30 70 L 70 70 L 55 55 L 45 55 Z" fill="#3DDC10" opacity="0.7" />
+          <circle cx="50" cy="50" r="7" fill="#0A0A0A" stroke="#3DDC10" strokeWidth="2" />
         </svg>
       </div>
 
@@ -251,13 +251,13 @@ export const LoginBackground: React.FC = () => {
       />
 
       {/* LAYER 5: Sweeping Scanline Accent */}
-      <div className="absolute left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-[#3DDC10]/35 to-transparent animate-login-scanline" />
+      <div className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#3DDC10]/25 to-transparent animate-login-scanline" />
 
       {/* LAYER 5.5: Corner Sci-Fi Hazard Brackets */}
-      <div className="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-[#3DDC10]/40" />
-      <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-[#3DDC10]/40" />
-      <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-[#3DDC10]/40" />
-      <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-[#3DDC10]/40" />
+      <div className="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-[#0A0A0A]/20" />
+      <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-[#0A0A0A]/20" />
+      <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-[#0A0A0A]/20" />
+      <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-[#0A0A0A]/20" />
     </div>
   );
 };
